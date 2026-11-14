@@ -1,0 +1,34 @@
+# Cores e direção visual
+
+As cores abaixo são a referência fornecida. A distribuição no tema claro, componentes e combinações finais dependem do protótipo e de verificação de contraste; não presumir que todas as combinações sejam acessíveis.
+
+## Tema escuro
+
+| Uso | Cor |
+| --- | --- |
+| Fundo da página | `#100E24` |
+| Superfícies e cartões | `#1B1831` |
+| Texto principal | `#FAF5F7` |
+| Texto secundário | `#C7BDD0` |
+| Destaques e botões | `#DBA3ED` |
+| Fundo de tags e detalhes | `#413050` |
+| Bordas | `#51405E` |
+| Áreas de apoio | `#211B35` |
+| Texto sobre botões lilás | `#20102C` |
+
+## Paleta clara e elementos decorativos
+
+| Uso | Cor |
+| --- | --- |
+| Papel claro da moldura | `#FFF9EF` |
+| Borda da moldura | `#C5AD99` |
+| Borda da imagem | `#DDC6DC` |
+| Borda da moldura ao passar o cursor | `#AD8D77` |
+| Fita decorativa | `#A96CBA`, `#B681C2` |
+| Símbolo na fita | `#FFFFFF` |
+| Texto e símbolos dos marcadores | `#4F215E` |
+| Fundo dos marcadores | `#EED9F2` |
+| Borda dos marcadores | `#9A6CA2` |
+| Coração da moldura | `#754080` |
+
+O tema claro completo ainda precisa de definição de fundo, superfície, textos, estados e contraste. Usar essas cores como inspiração, sem assumir que cada uma é adequada a qualquer texto ou botão. Complementar a paleta apenas quando necessário e registrar as escolhas após validação visual.
