@@ -104,3 +104,7 @@ Cada livro poderá ter uma avaliação de até cinco estrelas e um breve coment�
 ## Estado atual da implementação
 
 A migração inicial de banco e os módulos de ISBN, contagem e verificação de identidade têm testes locais. A autenticação ainda não está integrada a uma API, e a migração ainda não foi aplicada ao D1: a tela atual continua sendo uma prévia sem persistência. A identidade permitida será configurada no servidor, sem dados reais no repositório.
+
+## Progresso do D1 local
+
+O projeto tem configuração de Worker e D1 local e a migração inicial foi aplicada no ambiente de desenvolvimento. A API disponibiliza apenas uma verificação de conexão sem dados da biblioteca; a autenticação e os endpoints privados seguem pendentes de integração. O identificador do banco no arquivo de configuração é fictício e não representa um banco remoto.

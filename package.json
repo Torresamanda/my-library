@@ -10,7 +10,9 @@
     "lint": "eslint .",
     "format": "prettier --write . && eslint . --fix --fix-type layout",
     "prepare": "husky",
-    "typecheck": "vue-tsc --noEmit"
+    "typecheck": "vue-tsc --noEmit",
+    "dev:api": "wrangler dev --local --ip 127.0.0.1 --port 8787",
+    "db:migrate:local": "wrangler d1 migrations apply biblioteca-local --local"
   },
   "keywords": [],
   "author": "",
@@ -45,6 +47,7 @@
     "typescript-eslint": "^8.72.2",
     "vite": "^8.3.8",
     "vitest": "^5.1.0",
-    "vue-tsc": "^3.3.14"
+    "vue-tsc": "^3.3.14",
+    "wrangler": "^4.162.0"
   }
 }

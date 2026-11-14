@@ -213,3 +213,11 @@ Estas decisões substituem dúvidas e propostas anteriores conflitantes neste ar
 
 - [x] Organizar a funcionalidade de biblioteca e as regras de ISBN em `src/features` e manter os testes em `tests/`, separados por área.
 - [x] Registrar `src/ui` como local de componentes genéricos reutilizáveis quando eles forem criados; preservar `src/icons` como pasta central de ícones.
+
+### D1 e API locais
+
+- [x] Configurar Worker e vínculo D1 para desenvolvimento local com Wrangler, sem vincular banco remoto.
+- [x] Aplicar a migração inicial ao D1 local e conectar o Worker ao banco com verificação de disponibilidade sem dados privados.
+- [x] Encaminhar `/api` da interface de desenvolvimento para o Worker local e documentar execução.
+- [ ] Integrar autenticação aos endpoints de dados antes de criá-los ou expor livros; implementar operações da coleção em etapa posterior.
+- [ ] Criar e vincular banco real apenas na implantação autorizada; substituir o identificador fictício e configurar segredos fora do repositório.

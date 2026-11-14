@@ -6,7 +6,7 @@ import prettier from 'eslint-config-prettier'
 import stylistic from '@stylistic/eslint-plugin'
 
 export default [
-  { ignores: ['dist/**', 'node_modules/**', 'coverage/**'] },
+  { ignores: ['dist/**', 'node_modules/**', 'coverage/**', '.wrangler/**'] },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   ...vue.configs['flat/recommended'],
