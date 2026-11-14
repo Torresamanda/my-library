@@ -19,4 +19,3 @@ Execute `npm run typecheck` para conferir os tipos, `npm run lint` para análise
 Ao instalar as dependências com `npm install`, o comando `prepare` ativa os ganchos do Husky. Antes de cada commit, são executados o ESLint, a verificação de tipos e os testes. A mensagem deve seguir Conventional Commits, em inglês, por exemplo `feat: add book` ou `fix: correct search`.
 
 O comando `npm run format` executa o Prettier e aplica as correções de formatação do ESLint, incluindo linha em branco entre declarações consecutivas de funções, classes e exportações.
-

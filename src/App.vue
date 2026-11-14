@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import LibraryStats from './components/LibraryStats.vue'
+import LibraryStats from './features/library/components/LibraryStats.vue'
 import {
   PhBookOpen,
   PhBooks,

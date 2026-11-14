@@ -58,3 +58,9 @@
 - Escrever todas as mensagens de commit em inglês, seguindo Conventional Commits, por exemplo `feat: add book search` ou `fix: validate ISBN`.
 - Ao concluir cada tarefa de implementação, executar `npm run lint` para identificar erros e `npm run format` para formatar o código; corrigir falhas e repetir a verificação quando a formatação ou correção alterar o código.
 - Executar também verificação de tipos e testes adequados à alteração. Revisar o resultado da formatação para preservar mudanças existentes.
+
+## Organização de pastas
+
+- Agrupar código próprio de uma funcionalidade em `src/features/<funcionalidade>`, incluindo seus componentes e regras de domínio. Componentes genéricos e reutilizáveis entre funcionalidades devem ficar em `src/ui`; criar a pasta quando houver um componente desse tipo.
+- Manter testes em `tests/`, organizados por funcionalidade ou área (`tests/features`, `tests/worker`, `tests/database`), sem espalhá-los pelas pastas de produção.
+- Manter ícones centralizados em `src/icons`, código do servidor em `worker` e migrações em `migrations`. Evitar pastas vazias e abstrações sem uso.

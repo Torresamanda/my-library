@@ -1,6 +1,6 @@
 import { beforeAll, describe, expect, it } from 'vitest'
 import { generateKeyPair, SignJWT } from 'jose'
-import { authenticate } from '../worker/auth'
+import { authenticate } from '../../worker/auth'
 
 const env = { FIREBASE_PROJECT_ID: 'test-project', ALLOWED_FIREBASE_UID: 'owner-uid' }
 let privateKey: CryptoKey

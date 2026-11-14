@@ -33,3 +33,5 @@ Leia [docs/README.md](docs/README.md), [docs/PLANEJAMENTO.md](docs/PLANEJAMENTO.
 - Priorize TypeScript para código novo de frontend, backend e testes; confira tipos nas fronteiras, valide entradas externas em tempo de execução e migre JavaScript existente gradualmente. Consulte `docs/REGRAS.md`.
 
 - Escreva todas as mensagens de commit em inglês e no padrão Conventional Commits. Ao concluir cada tarefa de implementação, execute `npm run lint` e `npm run format`, corrija eventuais erros e repita as verificações necessárias após alterações; preserve o trabalho existente.
+
+- Organize funcionalidades em `src/features/<funcionalidade>`; componentes genéricos reutilizáveis ficam em `src/ui`. Os testes permanecem em `tests/`, separados por funcionalidade ou área. Ícones permanecem em `src/icons`; veja `docs/REGRAS.md`.

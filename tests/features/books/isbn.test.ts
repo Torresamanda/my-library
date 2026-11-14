@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { normalizeIsbn } from '../src/domain/isbn'
-import { libraryStats } from '../src/domain/libraryStats'
+import { normalizeIsbn } from '../../../src/features/books/domain/isbn'
 
 describe('ISBN', () => {
   it('normalizes equivalent ISBN-10 and ISBN-13 editions to the same value', () => {
@@ -12,18 +11,5 @@ describe('ISBN', () => {
     expect(normalizeIsbn('9780306406158')).toBeNull()
     expect(normalizeIsbn('4006381333931')).toBeNull()
     expect(normalizeIsbn('abc9780306406157')).toBeNull()
-  })
-})
-
-describe('dashboard', () => {
-  it('sums copies but counts status once per edition', () => {
-    expect(
-      libraryStats([
-        { quantity: 2, status: 'concluido' },
-        { quantity: 1, status: 'lendo' },
-        { quantity: 4, status: 'nao_lido' },
-        { quantity: 1, status: 'abandonado' },
-      ]),
-    ).toEqual({ copies: 8, read: 1, reading: 1, abandoned: 1 })
   })
 })

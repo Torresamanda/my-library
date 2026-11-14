@@ -208,3 +208,8 @@ Estas decisões substituem dúvidas e propostas anteriores conflitantes neste ar
 
 - [x] Registrar que todas as mensagens de commit devem ser em inglês e seguir Conventional Commits.
 - [x] Registrar a execução de ESLint e formatação ao concluir cada tarefa de implementação, com correção e nova verificação quando necessário.
+
+### Estrutura por funcionalidade
+
+- [x] Organizar a funcionalidade de biblioteca e as regras de ISBN em `src/features` e manter os testes em `tests/`, separados por área.
+- [x] Registrar `src/ui` como local de componentes genéricos reutilizáveis quando eles forem criados; preservar `src/icons` como pasta central de ícones.

@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs'
 import { DatabaseSync } from 'node:sqlite'
 import { describe, expect, it } from 'vitest'
 
-const schema = readFileSync(new URL('../migrations/0001_initial.sql', import.meta.url), 'utf8')
+const schema = readFileSync(new URL('../../migrations/0001_initial.sql', import.meta.url), 'utf8')
 function database() {
   const db = new DatabaseSync(':memory:')
   db.exec('PRAGMA foreign_keys = ON')

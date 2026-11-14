@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PhBookOpen, PhBooks, PhCheckCircle, PhXCircle } from '../icons'
+import { PhBookOpen, PhBooks, PhCheckCircle, PhXCircle } from '../../../icons'
 const stats = [
   { label: 'Exemplares', icon: PhBooks },
   { label: 'Lidos', icon: PhCheckCircle },
