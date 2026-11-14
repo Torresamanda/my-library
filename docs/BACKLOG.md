@@ -221,3 +221,11 @@ Estas decisões substituem dúvidas e propostas anteriores conflitantes neste ar
 - [x] Encaminhar `/api` da interface de desenvolvimento para o Worker local e documentar execução.
 - [ ] Integrar autenticação aos endpoints de dados antes de criá-los ou expor livros; implementar operações da coleção em etapa posterior.
 - [ ] Criar e vincular banco real apenas na implantação autorizada; substituir o identificador fictício e configurar segredos fora do repositório.
+
+### Proteção da API
+
+- [x] Exigir verificação de token e identidade autorizada em todas as rotas privadas da API; manter apenas a verificação de saúde sem dados como pública.
+- [x] Criar `GET /api/session` para confirmar uma sessão válida sem expor a identidade e tratar configurações ausentes sem liberar acesso.
+- [x] Testar autorização, erros de assinatura e validade e garantir que chamadas não autorizadas não consultem o banco.
+- [ ] Integrar login Google/Firebase na interface e configurar o projeto e a conta autorizada no ambiente real.
+- [ ] Avaliar e implementar revogação antecipada de sessões antes de produção se for necessário invalidá-las imediatamente.

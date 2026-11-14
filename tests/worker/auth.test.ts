@@ -67,3 +67,34 @@ describe('private access', () => {
     ).toBe(false)
   })
 })
+
+it('rejects expired and incorrectly signed tokens', async () => {
+  const now = Math.floor(Date.now() / 1000)
+  const expired = await new SignJWT({
+    auth_time: now - 120,
+    firebase: { sign_in_provider: 'google.com' },
+  })
+    .setProtectedHeader({ alg: 'RS256' })
+    .setIssuer('https://securetoken.google.com/test-project')
+    .setAudience('test-project')
+    .setSubject('owner-uid')
+    .setIssuedAt(now - 120)
+    .setExpirationTime(now - 60)
+    .sign(privateKey)
+  const otherKeys = await generateKeyPair('RS256')
+  expect(await authenticate(request(expired), env, publicKey)).toBe(false)
+  expect(await authenticate(request(await token()), env, otherKeys.publicKey)).toBe(false)
+})
+
+it('keeps the actual session route closed when configuration or a token is missing', async () => {
+  const { handleRequest } = await import('../../worker/index')
+  const unavailableDb = {
+    prepare: () => {
+      throw new Error('Must not query database')
+    },
+  }
+  const response = await handleRequest(new Request('http://localhost/api/session'), {
+    DB: unavailableDb,
+  })
+  expect(response.status).toBe(401)
+})

@@ -7,6 +7,7 @@ A aplicação está em desenvolvimento; a tela atual é apenas uma prévia visua
 - [Backlog de tarefas](docs/BACKLOG.md)
 - [Regras de código e trabalho](docs/REGRAS.md)
 - [Cores e direção visual](docs/CORES.md)
+- [Variáveis de ambiente e locais de configuração](docs/VARIAVEIS.md)
 
 As instruções para agentes estão no [AGENTS.md](AGENTS.md), na raiz do projeto. Em caso de conflito entre decisões antigas e atualizações posteriores, siga a decisão mais recente da proprietária e registre o ajuste.
 
@@ -29,3 +30,9 @@ O comando `npm run format` executa o Prettier e aplica as correções de formata
 O identificador de banco em `wrangler.jsonc` é apenas um valor fictício para desenvolvimento local. Antes de qualquer implantação futura, será necessário criar e configurar um banco D1 real, vincular a identidade autorizada e configurar segredos. Não aplique migrações remotas nem publique sem autorização. O login e os endpoints de dados ainda não foram integrados; o site continua sendo uma prévia sem persistência de livros.
 
 Para informações sensíveis de desenvolvimento futuro, utilize `.dev.vars` local, que não deve ser versionado. Nenhuma credencial é necessária para o teste local descrito acima.
+
+## Proteção das rotas da API
+
+A rota `/api/health` é pública e não retorna dados da coleção. As demais rotas `/api/` exigem um token de ID Firebase válido, emitido para o projeto configurado e para a conta autorizada com login Google. `GET /api/session` confirma uma sessão autorizada sem retornar a identidade. Requisições sem autorização recebem resposta 401; dados da coleção ainda não têm endpoints.
+
+Para desenvolvimento, copie `.dev.vars.example` para `.dev.vars` e preencha `FIREBASE_PROJECT_ID` e `ALLOWED_FIREBASE_UID` com os valores do seu projeto e da conta autorizada. Nunca inclua valores reais nos arquivos versionados. A integração do login na interface e a configuração das contas ainda precisam ser feitas. A validação verifica assinatura, emissor, público, validade e identidade, mas não consulta revogação antecipada do token; esse comportamento deve ser tratado antes da implantação se for necessário invalidar sessões imediatamente.

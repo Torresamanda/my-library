@@ -64,3 +64,5 @@
 - Agrupar código próprio de uma funcionalidade em `src/features/<funcionalidade>`, incluindo seus componentes e regras de domínio. Componentes genéricos e reutilizáveis entre funcionalidades devem ficar em `src/ui`; criar a pasta quando houver um componente desse tipo.
 - Manter testes em `tests/`, organizados por funcionalidade ou área (`tests/features`, `tests/worker`, `tests/database`), sem espalhá-los pelas pastas de produção.
 - Manter ícones centralizados em `src/icons`, código do servidor em `worker` e migrações em `migrations`. Evitar pastas vazias e abstrações sem uso.
+
+- Manter `docs/VARIAVEIS.md` e os exemplos sem valores reais atualizados a cada variável adicionada, alterada ou removida, indicando onde configurá-la em desenvolvimento e produção.

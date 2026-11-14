@@ -108,3 +108,7 @@ A migração inicial de banco e os módulos de ISBN, contagem e verificação de
 ## Progresso do D1 local
 
 O projeto tem configuração de Worker e D1 local e a migração inicial foi aplicada no ambiente de desenvolvimento. A API disponibiliza apenas uma verificação de conexão sem dados da biblioteca; a autenticação e os endpoints privados seguem pendentes de integração. O identificador do banco no arquivo de configuração é fictício e não representa um banco remoto.
+
+## Proteção atual da API
+
+As rotas privadas da API verificam o token Firebase e restringem o acesso à identidade Google configurada; o endpoint de saúde não retorna dados pessoais. Existe uma rota de confirmação de sessão, mas ainda não há login na interface nem endpoints de livros. A verificação atual não consulta revogação antecipada dos tokens.

@@ -1,8 +1,10 @@
+import { authenticate, type AuthEnvironment } from './auth'
+
 interface Database {
   prepare(query: string): { first<T>(): Promise<T | null> }
 }
 
-export interface Environment {
+export interface Environment extends AuthEnvironment {
   DB: Database
 }
 
@@ -13,12 +15,7 @@ function json(body: object, status: number): Response {
   })
 }
 
-/** Public health check returns no library data; all future data routes must authorize first. */
-export async function handleRequest(request: Request, env: Environment): Promise<Response> {
-  const url = new URL(request.url)
-  if (url.pathname !== '/api/health') return json({ error: 'Não encontrado' }, 404)
-  if (request.method !== 'GET') return json({ error: 'Método não permitido' }, 405)
-
+async function health(env: Environment): Promise<Response> {
   try {
     const result = await env.DB.prepare('SELECT COUNT(*) AS total FROM books').first<{
       total: number
@@ -28,6 +25,22 @@ export async function handleRequest(request: Request, env: Environment): Promise
   } catch {
     return json({ error: 'Serviço temporariamente indisponível' }, 503)
   }
+}
+
+/** All API routes require authorization except the data-free health check. */
+export async function handleRequest(request: Request, env: Environment): Promise<Response> {
+  const { pathname } = new URL(request.url)
+  if (pathname === '/api/health') {
+    return request.method === 'GET' ? health(env) : json({ error: 'Método não permitido' }, 405)
+  }
+  if (!pathname.startsWith('/api/')) return json({ error: 'Não encontrado' }, 404)
+  if (!(await authenticate(request, env))) return json({ error: 'Acesso não autorizado' }, 401)
+  if (pathname === '/api/session') {
+    return request.method === 'GET'
+      ? json({ authenticated: true }, 200)
+      : json({ error: 'Método não permitido' }, 405)
+  }
+  return json({ error: 'Não encontrado' }, 404)
 }
 
 export default { fetch: handleRequest }
