@@ -1,0 +1,42 @@
+import { beforeAll, describe, expect, it } from 'vitest'
+import { exportJWK, generateKeyPair, importJWK, SignJWT } from 'jose'
+import { authenticate } from '../worker/auth.js'
+
+const env = { FIREBASE_PROJECT_ID: 'test-project', ALLOWED_FIREBASE_UID: 'owner-uid' }
+let privateKey
+let publicKey
+beforeAll(async () => {
+  const keys = await generateKeyPair('RS256', { extractable: true })
+  privateKey = keys.privateKey
+  publicKey = await importJWK(await exportJWK(keys.publicKey), 'RS256')
+})
+async function token(overrides = {}) {
+  const now = Math.floor(Date.now() / 1000)
+  return new SignJWT({ auth_time: now, firebase: { sign_in_provider: 'google.com' }, ...overrides })
+    .setProtectedHeader({ alg: 'RS256' })
+    .setIssuer('https://securetoken.google.com/test-project')
+    .setAudience('test-project')
+    .setSubject('owner-uid')
+    .setIssuedAt(now)
+    .setExpirationTime(now + 60)
+    .sign(privateKey)
+}
+function request(value) {
+  return new Request('https://example.test/api/books', { headers: value ? { Authorization: `Bearer ${value}` } : {} })
+}
+describe('private access', () => {
+  it('accepts a valid signed Google token only for the configured owner', async () => {
+    expect(await authenticate(request(await token()), env, publicKey)).toBe(true)
+    expect(await authenticate(request(await token()), { ...env, ALLOWED_FIREBASE_UID: 'someone-else' }, publicKey)).toBe(false)
+  })
+  it('fails closed for missing configuration, missing or invalid tokens, and other providers', async () => {
+    expect(await authenticate(request(await token()), {}, publicKey)).toBe(false)
+    expect(await authenticate(request(), env, publicKey)).toBe(false)
+    expect(await authenticate(request('invalid'), env, publicKey)).toBe(false)
+    expect(await authenticate(request(await token({ firebase: { sign_in_provider: 'password' } })), env, publicKey)).toBe(false)
+  })
+  it('rejects future authentication time and a token for another project', async () => {
+    expect(await authenticate(request(await token({ auth_time: Math.floor(Date.now() / 1000) + 500 })), env, publicKey)).toBe(false)
+    expect(await authenticate(request(await token()), { ...env, FIREBASE_PROJECT_ID: 'other-project' }, publicKey)).toBe(false)
+  })
+})

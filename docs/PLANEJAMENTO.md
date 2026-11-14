@@ -100,3 +100,7 @@ Cada livro poderá ter uma avaliação de até cinco estrelas e um breve coment�
 - Avaliação opcional, em estrelas inteiras de 1 a 5; permitir deixar sem avaliação.
 - Comentário opcional de até 500 caracteres de texto visível, com editor de texto rico: negrito, emojis e diferentes níveis de título. A contagem não deve incluir a marcação de formatação; definir e apresentar uma regra consistente para emojis e quebras de linha.
 - Escolher um editor compatível com Vue e teclado/toque, com versão mantida e verificada. Definir uma lista explícita de formatações permitidas e validar e sanitizar conteúdo no servidor, antes de armazenar e ao renderizar conforme necessário; nunca executar scripts ou HTML arbitrário. Testar conteúdos maliciosos e preservação da formatação válida.
+
+## Estado atual da implementação
+
+A migração inicial de banco e os módulos de ISBN, contagem e verificação de identidade têm testes locais. A autenticação ainda não está integrada a uma API, e a migração ainda não foi aplicada ao D1: a tela atual continua sendo uma prévia sem persistência. A identidade permitida será configurada no servidor, sem dados reais no repositório.

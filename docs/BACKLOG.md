@@ -177,3 +177,11 @@ Estas decisões substituem dúvidas e propostas anteriores conflitantes neste ar
 - [ ] Escolher editor Vue mantido e verificar vulnerabilidades; definir e documentar contagem consistente de emojis e quebras de linha, sem contar marcação de formatação.
 - [ ] Validar limite e formato no cliente e no servidor; permitir somente formatações aprovadas e sanitizar armazenamento/renderização contra conteúdo malicioso.
 - [ ] Testar limite, emojis, formatação permitida, remoção de conteúdo perigoso, salvamento e edição.
+
+### Progresso da base de dados e segurança
+
+- [x] Criar migração SQLite inicial para livros, gêneros e relacionamentos, com restrições de quantidade, status, avaliação e ISBN único.
+- [x] Implementar normalização e validação de ISBN-10 e ISBN-13 e contagem do dashboard, com testes.
+- [x] Preparar verificação de token Firebase para identidade Google autorizada, com testes de acesso permitido e negado.
+- [ ] Integrar a verificação a todos os endpoints da API e configurar identidade autorizada como segredo; o módulo isolado ainda não protege aplicação alguma.
+- [ ] Configurar e aplicar a migração no Cloudflare D1 e implementar operações de dados com validação completa, incluindo conteúdo rico seguro.
