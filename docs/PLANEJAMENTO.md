@@ -112,3 +112,7 @@ O projeto tem configuração de Worker e D1 local e a migração inicial foi apl
 ## Proteção atual da API
 
 As rotas privadas da API verificam o token Firebase e restringem o acesso à identidade Google configurada; o endpoint de saúde não retorna dados pessoais. Existe uma rota de confirmação de sessão, mas ainda não há login na interface nem endpoints de livros. A verificação atual não consulta revogação antecipada dos tokens.
+
+## Progresso da API de livros
+
+A API privada agora oferece operações de livros com nome, autor, ISBN, quantidade, status, série e gêneros. A interface continua em prévia; capas, avaliação, comentário rico e integração com serviços externos permanecem pendentes. Os testes de operações usam SQLite isolado e autenticação simulada; a integração com conta Firebase e D1 remoto precisa ser validada posteriormente.

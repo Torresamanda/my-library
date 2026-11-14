@@ -94,7 +94,7 @@ it('keeps the actual session route closed when configuration or a token is missi
     },
   }
   const response = await handleRequest(new Request('http://localhost/api/session'), {
-    DB: unavailableDb,
+    DB: unavailableDb as unknown as import('../../worker/database').Database,
   })
   expect(response.status).toBe(401)
 })

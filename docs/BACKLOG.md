@@ -229,3 +229,11 @@ Estas decisões substituem dúvidas e propostas anteriores conflitantes neste ar
 - [x] Testar autorização, erros de assinatura e validade e garantir que chamadas não autorizadas não consultem o banco.
 - [ ] Integrar login Google/Firebase na interface e configurar o projeto e a conta autorizada no ambiente real.
 - [ ] Avaliar e implementar revogação antecipada de sessões antes de produção se for necessário invalidá-las imediatamente.
+
+### API de livros — primeira versão
+
+- [x] Criar operações privadas para listar, consultar, cadastrar, editar e excluir livros no D1, com consultas parametrizadas.
+- [x] Validar dados básicos, quantidade, status, nome e volume da série, gêneros e ISBN; normalizar ISBN e rejeitar duplicatas com resposta 409.
+- [x] Salvar a edição e seus gêneros em lote transacional e testar os fluxos com SQLite isolado e autorização simulada.
+- [ ] Implementar e testar capas, avaliação e comentário rico com validação e sanitização; integrar busca externa, câmera e interface.
+- [ ] Validar a API completa com autenticação Google e D1 reais após configuração das contas, antes de implantação.

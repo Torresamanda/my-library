@@ -8,7 +8,7 @@ function database(result: unknown): Environment {
   return {
     DB: {
       prepare: vi.fn().mockReturnValue({ first: vi.fn().mockResolvedValue(result) }),
-    },
+    } as unknown as Environment['DB'],
   }
 }
 
@@ -29,7 +29,7 @@ describe('API health', () => {
             throw new Error('private details')
           },
         }),
-      },
+      } as unknown as Environment['DB'],
     }
     const response = await handleRequest(new Request('http://localhost/api/health'), env)
     expect(response.status).toBe(503)
@@ -68,7 +68,7 @@ describe('private API routes', () => {
     expect(response.status).toBe(200)
     expect(await response.json()).toEqual({ authenticated: true })
     expect(env.DB.prepare).not.toHaveBeenCalled()
-    expect((await handleRequest(new Request('http://localhost/api/books'), env)).status).toBe(404)
+    expect((await handleRequest(new Request('http://localhost/api/unknown'), env)).status).toBe(404)
     expect(
       (await handleRequest(new Request('http://localhost/api/session', { method: 'POST' }), env))
         .status,
