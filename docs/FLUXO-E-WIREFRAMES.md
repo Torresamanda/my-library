@@ -119,7 +119,6 @@ A exclusão exige confirmação e remove o cadastro da edição e sua quantidade
 - Se a consulta por ISBN não encontrar o livro, permitir preencher os dados manualmente; usar capa padrão se não houver capa e não oferecer envio manual para livros com ISBN.
 - Se a sugestão para ISBN duplicado deve abrir a edição existente ou oferecer outro comportamento.
 
-
 ## Agrupamento por série — proposta
 
 Na estante inicial, apresentar os livros agrupados por série (ou saga). Cada série aparece como um cartão quadrado com uma grade de até quatro miniaturas e um título como “Série Trono de Vidro”; ao tocar, abrir seus livros ordenados pelo número do volume. Livros sem série continuam visíveis individualmente. Cada edição permanece independente, com sua própria quantidade e detalhes.
@@ -146,14 +145,9 @@ Na estante inicial, apresentar os livros agrupados por série (ou saga). Cada s�
 
 A busca e os filtros devem continuar funcionando com o agrupamento ativo; grupos sem resultados ficam ocultos. Se várias edições corresponderem ao mesmo volume, apresentar cada uma separadamente. A composição do cartão quando houver menos ou mais de quatro capas será detalhada no protótipo.
 
-
-
 ## Mini dashboard na entrada
 
 A estante continua sendo a tela inicial. Antes da busca e dos filtros, apresentar quatro indicadores compactos: total de livros na estante, concluídos (lidos), lendo e abandonados. Em uma biblioteca vazia, mostrar zero. Atualizar os indicadores após adicionar, editar ou excluir um livro. O total soma todos os exemplares: uma edição com quantidade 2 contribui com 2. Os indicadores de status contam cada livro cadastrado uma vez, independentemente da quantidade de exemplares.
-
-
-
 
 ## Erros e notificações
 

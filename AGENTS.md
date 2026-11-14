@@ -30,3 +30,6 @@ Leia [docs/README.md](docs/README.md), [docs/PLANEJAMENTO.md](docs/PLANEJAMENTO.
 
 - Documentação de projeto fica em `docs/`; este `AGENTS.md` permanece na raiz para descoberta automática por ferramentas e chats.
 - Não exponha dados pessoais nas alterações ou exemplos. Não sobrescreva trabalho preexistente sem necessidade.
+- Priorize TypeScript para código novo de frontend, backend e testes; confira tipos nas fronteiras, valide entradas externas em tempo de execução e migre JavaScript existente gradualmente. Consulte `docs/REGRAS.md`.
+
+- Escreva todas as mensagens de commit em inglês e no padrão Conventional Commits. Ao concluir cada tarefa de implementação, execute `npm run lint` e `npm run format`, corrija eventuais erros e repita as verificações necessárias após alterações; preserve o trabalho existente.

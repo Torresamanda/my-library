@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { normalizeIsbn } from '../src/domain/isbn.js'
-import { libraryStats } from '../src/domain/libraryStats.js'
+import { normalizeIsbn } from '../src/domain/isbn'
+import { libraryStats } from '../src/domain/libraryStats'
 
 describe('ISBN', () => {
   it('normalizes equivalent ISBN-10 and ISBN-13 editions to the same value', () => {
@@ -17,6 +17,13 @@ describe('ISBN', () => {
 
 describe('dashboard', () => {
   it('sums copies but counts status once per edition', () => {
-    expect(libraryStats([{ quantity: 2, status: 'concluido' }, { quantity: 1, status: 'lendo' }, { quantity: 4, status: 'nao_lido' }, { quantity: 1, status: 'abandonado' }])).toEqual({ copies: 8, read: 1, reading: 1, abandoned: 1 })
+    expect(
+      libraryStats([
+        { quantity: 2, status: 'concluido' },
+        { quantity: 1, status: 'lendo' },
+        { quantity: 4, status: 'nao_lido' },
+        { quantity: 1, status: 'abandonado' },
+      ]),
+    ).toEqual({ copies: 8, read: 1, reading: 1, abandoned: 1 })
   })
 })

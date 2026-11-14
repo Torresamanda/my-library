@@ -185,3 +185,26 @@ Estas decisões substituem dúvidas e propostas anteriores conflitantes neste ar
 - [x] Preparar verificação de token Firebase para identidade Google autorizada, com testes de acesso permitido e negado.
 - [ ] Integrar a verificação a todos os endpoints da API e configurar identidade autorizada como segredo; o módulo isolado ainda não protege aplicação alguma.
 - [ ] Configurar e aplicar a migração no Cloudflare D1 e implementar operações de dados com validação completa, incluindo conteúdo rico seguro.
+
+### TypeScript
+
+- [x] Configurar TypeScript e verificação de tipos para interface, servidor e testes.
+- [x] Migrar o código existente e priorizar TypeScript em código novo, com validação em tempo de execução nas fronteiras.
+
+### Migração realizada
+
+- [x] Configurar TypeScript estrito, verificação de tipos com `vue-tsc` e análise de arquivos TypeScript e Vue no ESLint.
+- [x] Migrar a aplicação existente, regras de domínio, autenticação, testes e configuração do Vite para TypeScript. Configurações de ferramentas que continuam em JavaScript não fazem parte do código da aplicação.
+- [x] Executar verificação de tipos, testes, lint e compilação.
+- [ ] Acompanhar a correção do alerta moderado de `minimatch`, dependência transitiva da ferramenta de desenvolvimento `typescript-eslint`. Auditoria de produção sem alertas conhecidos; evitar substituir dependências à força por versões incompatíveis.
+
+### Ganchos e formatação
+
+- [x] Configurar Husky para executar lint, verificação de tipos e testes antes do commit.
+- [x] Validar mensagens de commit com Conventional Commits.
+- [x] Aplicar linha em branco entre declarações consecutivas de funções, classes e exportações no comando de formatação.
+
+### Padrão de commits e tarefas
+
+- [x] Registrar que todas as mensagens de commit devem ser em inglês e seguir Conventional Commits.
+- [x] Registrar a execução de ESLint e formatação ao concluir cada tarefa de implementação, com correção e nova verificação quando necessário.

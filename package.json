@@ -4,12 +4,13 @@
   "description": "",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
     "test": "vitest run",
     "lint": "eslint .",
-    "format": "prettier --write .",
-    "prepare": "husky"
+    "format": "prettier --write . && eslint . --fix --fix-type layout",
+    "prepare": "husky",
+    "typecheck": "vue-tsc --noEmit"
   },
   "keywords": [],
   "author": "",
@@ -29,7 +30,9 @@
     "@commitlint/cli": "^21.2.4",
     "@commitlint/config-conventional": "^21.2.4",
     "@eslint/js": "^10.0.1",
+    "@stylistic/eslint-plugin": "^5.10.0",
     "@tailwindcss/vite": "^4.3.5",
+    "@types/node": "^26.6.6",
     "@vitejs/plugin-vue": "^6.0.11",
     "eslint": "^10.15.0",
     "eslint-config-prettier": "^10.1.8",
@@ -38,7 +41,10 @@
     "husky": "^9.1.7",
     "prettier": "^3.10.1",
     "tailwindcss": "^4.3.5",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.72.2",
     "vite": "^8.3.8",
-    "vitest": "^5.1.0"
+    "vitest": "^5.1.0",
+    "vue-tsc": "^3.3.14"
   }
 }

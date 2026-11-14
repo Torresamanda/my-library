@@ -44,3 +44,17 @@
 - Ícones que representem ações devem ter nomes acessíveis; ícones puramente decorativos devem ser ignorados por leitores de tela.
 
 - Conteúdo rico informado pela usuária é dado não confiável: validar e sanitizar no servidor com uma lista de permissões e renderizar com segurança; testar scripts, atributos e URLs maliciosos, além da preservação dos formatos aceitos.
+
+## TypeScript
+
+- Priorizar TypeScript no código novo do frontend, backend e testes, com tipos explícitos nas fronteiras entre componentes, API, dados externos e banco.
+- Adotar verificação de tipos e configuração estrita adequada ao projeto, sem recorrer a `any` para contornar erros; tratar entradas externas como não confiáveis e validá-las em tempo de execução.
+- Migrar arquivos JavaScript existentes gradualmente, conforme forem alterados e sem interromper o funcionamento; não tratar tipagem como substituta de validação, testes ou medidas de segurança.
+
+- O comando de formatação deve manter uma linha em branco entre declarações consecutivas de funções, classes e exportações. O Husky verifica lint, tipos e testes antes dos commits; as mensagens seguem Conventional Commits.
+
+## Idioma dos commits e conclusão de tarefas
+
+- Escrever todas as mensagens de commit em inglês, seguindo Conventional Commits, por exemplo `feat: add book search` ou `fix: validate ISBN`.
+- Ao concluir cada tarefa de implementação, executar `npm run lint` para identificar erros e `npm run format` para formatar o código; corrigir falhas e repetir a verificação quando a formatação ou correção alterar o código.
+- Executar também verificação de tipos e testes adequados à alteração. Revisar o resultado da formatação para preservar mudanças existentes.
