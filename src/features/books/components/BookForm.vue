@@ -84,7 +84,9 @@ async function lookup() {
     form.title = title
     form.author = author
     coverUrl.value = result.coverUrl
-    lookupMessage.value = 'Confira e complete os dados encontrados antes de salvar.'
+    lookupMessage.value = result.author
+      ? 'Confira e complete os dados encontrados antes de salvar.'
+      : 'A fonte não informou a autoria. Preencha o autor ou os autores antes de salvar.'
   } catch {
     if (version === lookupVersion)
       lookupMessage.value =

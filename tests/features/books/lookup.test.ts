@@ -41,3 +41,50 @@ describe('ISBN lookup', () => {
     await expect(lookupIsbn('9780306406157')).rejects.toThrow()
   })
 })
+
+it('retrieves edition author names when the search result omits them', async () => {
+  const fetchMock = vi
+    .fn()
+    .mockResolvedValueOnce(
+      new Response(JSON.stringify({ docs: [{ title: 'Livro', isbn: ['9780306406157'] }] }), {
+        status: 200,
+      }),
+    )
+    .mockResolvedValueOnce(
+      new Response(
+        JSON.stringify({
+          authors: [
+            { key: '/authors/OL1A' },
+            { key: '/authors/OL2A' },
+            { key: '/authors/OL1A' },
+            { key: '/authors/../../malicious' },
+          ],
+        }),
+        { status: 200 },
+      ),
+    )
+    .mockResolvedValueOnce(new Response(JSON.stringify({ name: 'Autora' }), { status: 200 }))
+    .mockResolvedValueOnce(new Response(JSON.stringify({ name: 'Outro autor' }), { status: 200 }))
+  vi.stubGlobal('fetch', fetchMock)
+  expect(await lookupIsbn('9780306406157')).toEqual({
+    title: 'Livro',
+    author: 'Autora, Outro autor',
+    coverUrl: null,
+  })
+  expect(fetchMock).toHaveBeenCalledTimes(4)
+})
+
+it('keeps the title if the edition author lookup fails', async () => {
+  vi.stubGlobal(
+    'fetch',
+    vi
+      .fn()
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ docs: [{ title: 'Livro', isbn: ['9780306406157'] }] }), {
+          status: 200,
+        }),
+      )
+      .mockRejectedValueOnce(new Error('offline')),
+  )
+  expect(await lookupIsbn('9780306406157')).toEqual({ title: 'Livro', author: '', coverUrl: null })
+})

@@ -321,3 +321,8 @@ Estas decisões substituem dúvidas e propostas anteriores conflitantes neste ar
 
 - [x] Ao digitar um ISBN válido, iniciar a consulta automaticamente após uma breve pausa; a leitura pela câmera continua iniciando a consulta imediatamente.
 - [x] Preencher título e autores disponíveis, preservando alterações manuais e ignorando respostas de consultas antigas. A consulta pode ser repetida pelo botão e o preenchimento manual permanece disponível.
+
+### Autoria na consulta por ISBN
+
+- [x] Consultar os autores vinculados à edição quando a busca inicial não trouxer nomes; informar quando a fonte não disponibilizar autoria e manter o preenchimento manual.
+- [ ] Validar com o ISBN específico que apresentou ausência de autor e em dispositivo real.
