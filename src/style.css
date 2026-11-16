@@ -412,11 +412,17 @@ select:focus-visible {
   gap: 8px;
   margin-top: 24px;
 }
-.form-error {
+.form-error,
+.feedback-message {
   padding: 12px;
   border-left: 4px solid var(--accent);
   border-radius: var(--radius-small);
   background: var(--support);
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+.scanner .feedback-message {
+  color: var(--text);
 }
 .isbn-lookup {
   display: grid;

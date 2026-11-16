@@ -62,6 +62,6 @@ onBeforeUnmount(() => scanner.stop())
       ></video>
       <button type="button" @click="stop">Parar câmera</button>
     </template>
-    <p v-if="message" role="status">{{ message }}</p>
+    <p v-if="message" class="feedback-message" role="status">{{ message }}</p>
   </div>
 </template>

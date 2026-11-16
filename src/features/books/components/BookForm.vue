@@ -123,7 +123,7 @@ async function lookup() {
   scheduler.cancel()
   const isbn = normalizeIsbn(form.isbn)
   if (!isbn) {
-    lookupMessage.value = 'Informe um ISBN válido para consultar.'
+    lookupMessage.value = 'Confira o ISBN e tente novamente. Ele deve ter 10 ou 13 dígitos válidos.'
     return
   }
   const version = ++lookupVersion
@@ -138,7 +138,8 @@ async function lookup() {
     const result = await lookupIsbn(isbn, AbortSignal.timeout(10000))
     if (version !== lookupVersion) return
     if (!result) {
-      lookupMessage.value = 'Livro não encontrado. Preencha os dados manualmente.'
+      lookupMessage.value =
+        'Não encontramos este ISBN na Open Library. Confira o número ou preencha os dados do livro manualmente abaixo.'
       return
     }
     const title = autofillField(form.title, initialTitle, automaticTitle, result.title)
@@ -167,12 +168,12 @@ async function lookup() {
     coverUrl.value =
       result.coverUrl ?? (originalIsbn === isbn ? (props.book?.coverUrl ?? null) : null)
     lookupMessage.value = result.author
-      ? 'Confira e complete os dados encontrados antes de salvar.'
-      : 'A fonte não informou a autoria. Preencha o autor ou os autores antes de salvar.'
+      ? 'Encontramos dados para este ISBN. Confira as informações e complete o que faltar antes de salvar.'
+      : 'Encontramos a edição, mas a fonte não informou a autoria. Preencha o campo Autor antes de salvar.'
   } catch {
     if (version === lookupVersion)
       lookupMessage.value =
-        'Não foi possível consultar agora. Tente novamente ou preencha os dados manualmente.'
+        'Não foi possível consultar a Open Library agora. Tente novamente ou preencha os dados manualmente abaixo.'
   } finally {
     if (version === lookupVersion) lookingUp.value = false
   }
@@ -191,15 +192,16 @@ async function submit() {
     return
   }
   if (!form.title.trim() || !form.author.trim()) {
-    error.value = 'Informe o título e o autor.'
+    error.value = 'Preencha o título e o autor para salvar o livro.'
     return
   }
   if (form.isbn && !normalizeIsbn(form.isbn)) {
-    error.value = 'Informe um ISBN válido.'
+    error.value =
+      'Confira o ISBN: informe um número válido de 10 ou 13 dígitos, ou deixe o campo vazio.'
     return
   }
   if (form.seriesVolume && !form.seriesName.trim()) {
-    error.value = 'Informe o nome da série para adicionar um volume.'
+    error.value = 'Para informar o volume, preencha também o nome da série.'
     return
   }
   if (
@@ -207,7 +209,8 @@ async function submit() {
     genres.some((genre) => genre.length > 80) ||
     new Set(genres.map((genre) => genre.toLowerCase())).size !== genres.length
   ) {
-    error.value = 'Informe até 4 gêneros diferentes, com até 80 caracteres cada.'
+    error.value =
+      'Use até 4 gêneros diferentes, separados por vírgula. Cada gênero pode ter até 80 caracteres.'
     return
   }
   const volume = form.seriesVolume ? Number(form.seriesVolume) : null
@@ -252,10 +255,10 @@ async function submit() {
   } catch (cause) {
     error.value =
       cause instanceof LibraryRequestError && cause.status === 409
-        ? 'Este livro já está na biblioteca.'
+        ? 'Este ISBN já está cadastrado na biblioteca. Confira a edição existente antes de tentar novamente.'
         : cause instanceof LibraryRequestError && cause.status === 401
-          ? 'Sua sessão expirou ou o acesso foi negado. Entre novamente.'
-          : 'Não foi possível salvar. Confira os dados e tente novamente.'
+          ? 'Não foi possível confirmar seu acesso. Entre novamente e tente salvar o livro.'
+          : 'Não foi possível salvar o livro. Seus dados continuam no formulário; confira sua conexão e tente novamente.'
     toast.error(error.value, { toasterId: 'drawer' })
   } finally {
     saving.value = false
@@ -313,7 +316,7 @@ async function submit() {
             </div>
           </div>
           <div class="full">
-            <p v-if="lookupMessage" role="status">{{ lookupMessage }}</p>
+            <p v-if="lookupMessage" class="feedback-message" role="status">{{ lookupMessage }}</p>
           </div>
           <h3 class="form-section-title full">Sobre a edição</h3>
           <div class="genre-field full">

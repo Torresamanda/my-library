@@ -419,6 +419,7 @@ As combinações principais de texto, texto secundário e botões dos temas clar
 - [x] Substituir a confirmação do navegador ao descartar edição por uma notificação persistente com opções de continuar editando ou descartar.
 - [x] Reservar espaço para a prévia da capa junto ao título e autor e apresentar avaliação em uma única linha de estrelas douradas, com opção de limpar.
 - [x] Apresentar gêneros como etiquetas destacadas no cadastro e nos detalhes, permitindo removê-los no formulário.
+- [x] Esclarecer mensagens de consulta, validação, salvamento e exclusão, destacando os retornos de consulta e câmera junto à área correspondente.
 
 ### Publicação da versão 1.3.0
 

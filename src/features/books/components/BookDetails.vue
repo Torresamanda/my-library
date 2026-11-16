@@ -41,10 +41,10 @@ async function remove() {
   } catch (cause) {
     error.value =
       cause instanceof LibraryRequestError && cause.status === 401
-        ? 'Sua sessão expirou ou o acesso foi negado. Entre novamente.'
+        ? 'Não foi possível confirmar seu acesso. Entre novamente e tente excluir o livro.'
         : cause instanceof LibraryRequestError && cause.status === 404
           ? 'Este livro não foi encontrado. Feche os detalhes e atualize a estante.'
-          : 'Não foi possível excluir. Confira sua conexão e tente novamente.'
+          : 'Não foi possível excluir o livro. Confira sua conexão e tente novamente.'
     toast.error(error.value, { toasterId: 'drawer' })
   } finally {
     deleting.value = false

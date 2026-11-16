@@ -94,7 +94,7 @@ const labels = {
     <p>
       {{
         search.trim() || filters.genre || filters.status || filters.series
-          ? 'Tente buscar por outro título, autor, gênero ou série.'
+          ? 'Confira a busca ou os filtros selecionados. Você pode ajustá-los ou limpar tudo para ver a estante completa.'
           : 'Adicione seu primeiro livro para começar sua estante.'
       }}
     </p>
