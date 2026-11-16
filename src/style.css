@@ -946,6 +946,167 @@ select:focus-visible {
     600 20px/1.2 Georgia,
     serif;
 }
+.redesigned-form > p {
+  font-size: 14px;
+}
+.redesigned-form .form-section {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+.redesigned-form .form-section h3 {
+  margin: 0 0 4px;
+  font:
+    600 20px/1.2 Georgia,
+    serif;
+}
+.redesigned-form .section-hint {
+  margin: 4px 0 16px;
+  color: var(--secondary);
+  font-size: 14px;
+  font-weight: 400;
+}
+.redesigned-form .field-hint {
+  color: var(--secondary);
+  font-size: 14px;
+  font-weight: 400;
+}
+.redesigned-form .isbn-lookup {
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: end;
+}
+.redesigned-form .isbn-actions {
+  display: flex;
+  gap: 8px;
+  align-items: start;
+}
+.redesigned-form .isbn-actions > button,
+.redesigned-form .isbn-actions .scanner button {
+  width: auto;
+}
+.redesigned-form .isbn-lookup > label,
+.redesigned-form .form-book-fields label,
+.redesigned-form .genre-field > label,
+.redesigned-form .edition-fields label,
+.redesigned-form .quantity-field {
+  display: grid;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.redesigned-form input:not([type='radio']):not([type='checkbox']) {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-small);
+  background: var(--background);
+  color: var(--text);
+  font-weight: 400;
+}
+.redesigned-form .field-block {
+  margin-top: 20px;
+}
+.form-choice-group {
+  padding: 0;
+  margin-inline: 0;
+  border: 0;
+  min-width: 0;
+}
+.form-choice-group legend {
+  margin-bottom: 8px;
+  padding: 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+.form-choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.form-choice {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-medium);
+  background: var(--background);
+  cursor: pointer;
+  font-size: 14px;
+}
+.form-choice:has(input:checked) {
+  border-color: var(--accent);
+  background: var(--tag);
+  font-weight: 700;
+}
+.form-choice:has(input:checked) span::before {
+  content: '✓ ';
+}
+.form-choice:has(input:focus-visible) {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.form-choice input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+.form-text-button {
+  min-height: 44px;
+  border: 0;
+  padding: 8px;
+  background: transparent;
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.edition-details {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-medium);
+  background: var(--background);
+}
+.edition-details summary {
+  padding: 12px 16px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.edition-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  padding: 0 16px 16px;
+}
+.field-error {
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 400;
+}
+.redesigned-form .quantity-field {
+  max-width: 240px;
+}
+@media (max-width: 560px) {
+  .redesigned-form .isbn-lookup {
+    grid-template-columns: 1fr;
+  }
+  .redesigned-form .isbn-actions > button,
+  .redesigned-form .isbn-actions .scanner {
+    flex: 1;
+  }
+  .redesigned-form .isbn-actions .scanner button {
+    width: 100%;
+  }
+  .edition-fields {
+    grid-template-columns: 1fr;
+  }
+  .redesigned-form .form-actions button[type='submit'] {
+    width: 100%;
+  }
+}
 .form-grid > .form-section-title:first-child {
   margin-top: 0;
 }

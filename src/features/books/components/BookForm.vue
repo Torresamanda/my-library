@@ -43,6 +43,17 @@ const form = reactive({
   status: (props.book?.status ?? 'nao_lido') as BookDraft['status'],
 })
 const ownsCopies = computed(() => hasOwned(form.ownership))
+const extraOpen = ref(
+  Boolean(form.publisher || form.pageCount || form.seriesName || form.seriesVolume),
+)
+const hasExtra = computed(() =>
+  Boolean(form.publisher || form.pageCount || form.seriesName || form.seriesVolume),
+)
+
+function revealInvalid(event: Event) {
+  if (event.target instanceof HTMLElement && event.target.closest('.edition-details'))
+    extraOpen.value = true
+}
 const unowned = computed({
   get: () => hasUnowned(form.ownership),
   set: (checked: boolean) => {
@@ -179,6 +190,7 @@ async function lookup() {
     automaticGenres = genres === foundGenres ? genres : ''
     form.publisher = publisher
     form.pageCount = pageCount
+    if (publisher || pageCount) extraOpen.value = true
     form.genres = genres
     automaticIsbn = isbn
     form.title = title
@@ -219,6 +231,7 @@ async function submit() {
     return
   }
   if (form.seriesVolume && !form.seriesName.trim()) {
+    extraOpen.value = true
     error.value = 'Para informar o volume, preencha também o nome da série.'
     return
   }
@@ -237,6 +250,7 @@ async function submit() {
     pageCount !== null &&
     (!Number.isInteger(pageCount) || pageCount < 1 || pageCount > 1000000)
   ) {
+    extraOpen.value = true
     error.value = 'O número de páginas deve ser um inteiro entre 1 e 1000000.'
     return
   }
@@ -246,6 +260,8 @@ async function submit() {
     (ownsCopies.value && !quantityValid) ||
     (volume !== null && (!Number.isInteger(volume) || volume < 1 || volume > 10000))
   ) {
+    if (volume !== null && (!Number.isInteger(volume) || volume < 1 || volume > 10000))
+      extraOpen.value = true
     error.value = 'Quantidade e volume devem ser números inteiros entre 1 e 10000.'
     return
   }
@@ -293,17 +309,22 @@ async function submit() {
     :close-disabled="saving"
     @close="requestCancel"
   >
-    <div class="book-form">
-      <p>Preencha os dados desta edição. Campos com * são obrigatórios.</p>
-      <form @submit.prevent="submit">
-        <div class="form-grid">
-          <h3 class="form-section-title full">Identificação</h3>
-          <div class="isbn-lookup full">
+    <div class="book-form redesigned-form">
+      <p>
+        Comece pelo ISBN ou preencha os dados manualmente. Apenas título e autor são obrigatórios.
+      </p>
+      <form @submit.prevent="submit" @invalid.capture="revealInvalid">
+        <section class="form-section" aria-labelledby="find-book-title">
+          <h3 id="find-book-title">Encontre seu livro</h3>
+          <p class="section-hint">O ISBN pode ajudar a preencher os dados da edição.</p>
+          <div class="isbn-lookup">
             <label
-              >ISBN (opcional)<input
+              >ISBN <span class="field-hint">Opcional</span
+              ><input
                 v-model="form.isbn"
                 maxlength="32"
                 inputmode="text"
+                placeholder="Digite o ISBN"
                 @input="isbnChanged"
             /></label>
             <div class="isbn-actions">
@@ -313,13 +334,22 @@ async function submit() {
                 :disabled="lookingUp || saving"
                 @click="lookup"
               >
-                <LoadingIndicator v-if="lookingUp" compact text="Consultando..." />
-                <template v-else>Consultar ISBN</template>
+                <LoadingIndicator v-if="lookingUp" compact text="Consultando..." /><template v-else
+                  >Consultar</template
+                >
               </button>
               <BarcodeScanner @scanned="scanned" />
             </div>
           </div>
-          <div class="form-book-preview full">
+          <p class="section-hint">
+            Sem ISBN? Continue preenchendo abaixo. Um ISBN válido é consultado automaticamente.
+          </p>
+          <p v-if="lookupMessage" class="feedback-message" role="status">{{ lookupMessage }}</p>
+        </section>
+        <section class="form-section" aria-labelledby="book-info-title">
+          <h3 id="book-info-title">Sobre o livro</h3>
+          <p class="section-hint">Confira ou complete as informações principais.</p>
+          <div class="form-book-preview">
             <div class="form-cover">
               <BookCover :url="coverUrl" :title="form.title || 'livro'" /><span
                 >Prévia da capa</span
@@ -327,26 +357,50 @@ async function submit() {
             </div>
             <div class="form-book-fields">
               <label
-                ><span>Título <span aria-hidden="true">*</span></span
-                ><input v-model="form.title" required maxlength="250" autocomplete="off"
+                >Título *<input v-model="form.title" required maxlength="250" autocomplete="off"
               /></label>
               <label
-                ><span>Autor <span aria-hidden="true">*</span></span
-                ><input v-model="form.author" required maxlength="250" autocomplete="off"
+                >Autor *<input v-model="form.author" required maxlength="250" autocomplete="off"
               /></label>
             </div>
           </div>
-          <div class="full">
-            <p v-if="lookupMessage" class="feedback-message" role="status">{{ lookupMessage }}</p>
-          </div>
-          <h3 class="form-section-title full">Sobre a edição</h3>
-          <div class="genre-field full">
-            <label for="book-genres">Gêneros (até 4, separados por vírgula)</label>
-            <input id="book-genres" v-model="form.genres" placeholder="Ex.: Fantasia, Romance" />
+          <fieldset class="form-choice-group field-block">
+            <legend>Tipo de obra <span class="field-hint">· opcional</span></legend>
+            <div class="form-choices">
+              <label
+                v-for="option in [
+                  { value: 'livro', label: 'Livro' },
+                  { value: 'quadrinho', label: 'Quadrinho' },
+                  { value: 'manga', label: 'Mangá' },
+                  { value: 'outro', label: 'Outro' },
+                ]"
+                :key="option.value"
+                class="form-choice"
+                ><input
+                  v-model="form.mediaType"
+                  type="radio"
+                  name="mediaType"
+                  :value="option.value"
+                /><span>{{ option.label }}</span></label
+              >
+              <button
+                v-if="form.mediaType"
+                type="button"
+                class="form-text-button"
+                @click="form.mediaType = ''"
+              >
+                Limpar tipo
+              </button>
+            </div>
+          </fieldset>
+          <div class="genre-field field-block">
+            <label for="book-genres"
+              >Gêneros <span class="field-hint">Até 4, separados por vírgula</span></label
+            ><input id="book-genres" v-model="form.genres" placeholder="Ex.: Fantasia, Romance" />
             <ul v-if="genreTags.length" class="genre-tags" aria-label="Gêneros informados">
               <li v-for="(genre, index) in genreTags" :key="`${index}-${genre}`">
-                <span>{{ genre }}</span>
-                <button
+                <span>{{ genre }}</span
+                ><button
                   type="button"
                   :aria-label="`Remover gênero ${genre}`"
                   @click="removeGenre(index)"
@@ -356,87 +410,130 @@ async function submit() {
               </li>
             </ul>
           </div>
-          <label>Editora (opcional)<input v-model="form.publisher" maxlength="250" /></label>
-          <label
-            >Número de páginas (opcional)<input
-              v-model="form.pageCount"
-              type="number"
-              min="1"
-              max="1000000"
-              step="1"
-          /></label>
-          <h3 class="form-section-title full">Organização</h3>
-          <label
-            >Tipo de obra<select v-model="form.mediaType">
-              <option value="">Não informado</option>
-              <option value="livro">Livro</option>
-              <option value="quadrinho">Quadrinho</option>
-              <option value="manga">Mangá</option>
-              <option value="outro">Outro</option>
-            </select></label
+          <details
+            class="edition-details field-block"
+            :open="extraOpen"
+            @toggle="extraOpen = ($event.target as HTMLDetailsElement).open"
           >
-          <fieldset class="ownership-field full">
-            <legend>Formato ou origem (opcional)</legend>
-            <label :class="{ 'choice-selected': form.ownership.includes('fisico') }"
-              ><input v-model="form.ownership" type="checkbox" value="fisico" /> Tenho físico</label
-            >
-            <label :class="{ 'choice-selected': form.ownership.includes('ebook') }"
-              ><input v-model="form.ownership" type="checkbox" value="ebook" /> Tenho e-book</label
-            >
-            <label :class="{ 'choice-selected': unowned }"
-              ><input v-model="unowned" type="checkbox" /> Não tenho (ex.: empréstimo ou
-              assinatura)</label
-            >
+            <summary>
+              Mais dados da edição
+              <span class="field-hint"
+                >· editora, páginas e série<span v-if="hasExtra"> · preenchido</span></span
+              >
+            </summary>
+            <div class="edition-fields">
+              <label
+                >Editora <span class="field-hint">Opcional</span
+                ><input v-model="form.publisher" maxlength="250"
+              /></label>
+              <label
+                >Páginas <span class="field-hint">Opcional</span
+                ><input v-model="form.pageCount" type="number" min="1" max="1000000" step="1"
+              /></label>
+              <label
+                >Série <span class="field-hint">Opcional</span
+                ><input
+                  v-model="form.seriesName"
+                  maxlength="200"
+                  :aria-invalid="Boolean(form.seriesVolume && !form.seriesName.trim())"
+                  :aria-describedby="
+                    form.seriesVolume && !form.seriesName.trim() ? 'series-error' : undefined
+                  "
+                /><span
+                  v-if="form.seriesVolume && !form.seriesName.trim()"
+                  id="series-error"
+                  class="field-error"
+                  >Informe a série para adicionar um volume.</span
+                ></label
+              >
+              <label
+                >Volume <span class="field-hint">Opcional</span
+                ><input v-model="form.seriesVolume" type="number" min="1" max="10000" step="1"
+              /></label>
+            </div>
+          </details>
+        </section>
+        <section class="form-section" aria-labelledby="collection-title">
+          <h3 id="collection-title">Na minha biblioteca</h3>
+          <p class="section-hint">Conte como você tem acesso a esta edição.</p>
+          <fieldset class="form-choice-group">
+            <legend>
+              Formato ou origem
+              <span class="field-hint">· opcional; escolha quantos se aplicarem</span>
+            </legend>
+            <div class="form-choices">
+              <label class="form-choice"
+                ><input v-model="form.ownership" type="checkbox" value="fisico" /><span
+                  >Tenho físico</span
+                ></label
+              >
+              <label class="form-choice"
+                ><input v-model="form.ownership" type="checkbox" value="ebook" /><span
+                  >Tenho e-book</span
+                ></label
+              >
+              <label class="form-choice"
+                ><input v-model="unowned" type="checkbox" /><span>Não tenho</span></label
+              >
+            </div>
+            <p class="section-hint">Por exemplo, uma leitura por empréstimo ou assinatura.</p>
           </fieldset>
-          <label>Série (opcional)<input v-model="form.seriesName" maxlength="200" /></label>
-          <label
-            >Volume (opcional)<input
-              v-model="form.seriesVolume"
-              type="number"
-              min="1"
-              max="10000"
-              step="1"
-          /></label>
-          <label v-if="ownsCopies"
-            ><span>Quantidade de exemplares registrados <span aria-hidden="true">*</span></span
-            ><input
+          <label v-if="ownsCopies" class="quantity-field field-block"
+            >Exemplares *<input
               v-model.number="form.quantity"
               type="number"
               required
               min="1"
               max="10000"
               step="1"
-          /></label>
-          <p v-if="ownsCopies" class="full">
-            Cada edição que você tem conta uma vez no painel, independentemente da quantidade ou do
-            formato.
-          </p>
-          <p v-else class="full">
+            /><span class="section-hint"
+              >Cada edição que você tem conta uma vez no painel, independentemente da quantidade ou
+              do formato.</span
+            ></label
+          >
+          <p v-else class="section-hint field-block">
             Para contabilizar exemplares, marque “Tenho físico” ou “Tenho e-book”.
           </p>
-          <label class="full"
-            >Status de leitura<select v-model="form.status">
-              <option value="nao_lido">Não lido</option>
-              <option value="lendo">Lendo</option>
-              <option value="concluido">Concluído</option>
-              <option value="abandonado">Abandonado</option>
-            </select></label
+        </section>
+        <section class="form-section" aria-labelledby="reading-title">
+          <h3 id="reading-title">Minha leitura</h3>
+          <p class="section-hint">Você pode preencher esta parte depois.</p>
+          <fieldset class="form-choice-group">
+            <legend>Status de leitura</legend>
+            <div class="form-choices">
+              <label
+                v-for="option in [
+                  { value: 'nao_lido', label: 'Não lido' },
+                  { value: 'lendo', label: 'Lendo' },
+                  { value: 'concluido', label: 'Concluído' },
+                  { value: 'abandonado', label: 'Abandonado' },
+                ]"
+                :key="option.value"
+                class="form-choice"
+                ><input
+                  v-model="form.status"
+                  type="radio"
+                  name="status"
+                  :value="option.value"
+                /><span>{{ option.label }}</span></label
+              >
+            </div>
+          </fieldset>
+          <label class="favorite-field field-block"
+            ><input v-model="form.favorite" type="checkbox" /> Marcar como favorito</label
           >
-        </div>
-        <h3 class="form-section-title">Sua leitura</h3>
-        <label class="favorite-field"
-          ><input v-model="form.favorite" type="checkbox" /> Marcar como favorito</label
-        >
-        <ReviewEditor
-          v-model:rating="rating"
-          v-model:review="review"
-          @invalid="reviewInvalid = $event"
-        />
+          <ReviewEditor
+            v-model:rating="rating"
+            v-model:review="review"
+            @invalid="reviewInvalid = $event"
+          />
+        </section>
         <p v-if="error" role="alert" class="form-error">{{ error }}</p>
         <div class="form-actions">
           <button type="submit" :disabled="saving || lookingUp">
-            <LoadingIndicator v-if="saving" compact text="Salvando..." />
-            <template v-else>Salvar livro</template></button
+            <LoadingIndicator v-if="saving" compact text="Salvando..." /><template v-else
+              >Salvar livro</template
+            ></button
           ><button type="button" class="secondary-button" :disabled="saving" @click="requestCancel">
             Cancelar
           </button>
