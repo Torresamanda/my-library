@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { EditorContent, useEditor } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
-import { PhStar } from '../../../icons'
+import { PhStar, PhTextB, PhTextT, PhTextHOne, PhTextHTwo, PhTextHThree } from '../../../icons'
 import { reviewDraftSchema, reviewLength, type Review } from '../domain/review'
 
 const props = defineProps<{ review: Review | null; rating: number | null }>()
@@ -13,6 +13,7 @@ const emit = defineEmits<{
 }>()
 const empty: Review = { type: 'doc', content: [{ type: 'paragraph' }] }
 const count = computed(() => (props.review ? reviewLength(props.review) : 0))
+const headingIcons = { 1: PhTextHOne, 2: PhTextHTwo, 3: PhTextHThree }
 const editor = useEditor({
   content: props.review ?? empty,
   extensions: [
@@ -79,26 +80,32 @@ const editor = useEditor({
     <div v-if="editor" class="review-toolbar" role="group" aria-label="Formatação do comentário">
       <button
         type="button"
+        aria-label="Negrito"
+        title="Negrito"
         :aria-pressed="editor.isActive('bold')"
         @click="editor.chain().focus().toggleBold().run()"
       >
-        <strong>Negrito</strong>
+        <PhTextB :size="20" aria-hidden="true" />
       </button>
       <button
         type="button"
+        aria-label="Texto normal"
+        title="Texto normal"
         :aria-pressed="editor.isActive('paragraph')"
         @click="editor.chain().focus().setParagraph().run()"
       >
-        Texto
+        <PhTextT :size="20" aria-hidden="true" />
       </button>
       <button
         v-for="level in [1, 2, 3] as const"
         :key="level"
         type="button"
+        :aria-label="`Título ${level}`"
+        :title="`Título ${level}`"
         :aria-pressed="editor.isActive('heading', { level })"
         @click="editor.chain().focus().toggleHeading({ level }).run()"
       >
-        Título {{ level }}
+        <component :is="headingIcons[level]" :size="20" aria-hidden="true" />
       </button>
     </div>
     <EditorContent :editor="editor" class="review-editor" />
