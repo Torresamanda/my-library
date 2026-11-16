@@ -2,6 +2,7 @@
 import { onBeforeUnmount, reactive, ref } from 'vue'
 import { normalizeIsbn } from '../domain/isbn'
 import BarcodeScanner from './BarcodeScanner.vue'
+import BaseDrawer from '../../../ui/BaseDrawer.vue'
 import { lookupIsbn } from '../services/lookup'
 import { autofillField, createLookupScheduler } from '../services/automaticLookup'
 import { createBook, LibraryRequestError, type BookDraft } from '../../library/services/books'
@@ -157,89 +158,91 @@ async function submit() {
 </script>
 
 <template>
-  <section class="book-form" aria-labelledby="form-title">
-    <h2 id="form-title">Adicionar livro</h2>
-    <p>Preencha os dados desta edição. Título e autor são obrigatórios.</p>
-    <BarcodeScanner @scanned="scanned" />
-    <form @submit.prevent="submit">
-      <div class="form-grid">
-        <label class="full"
-          >Título <span aria-hidden="true">*</span
-          ><input v-model="form.title" required maxlength="250" autocomplete="off"
-        /></label>
-        <label class="full"
-          >Autor <span aria-hidden="true">*</span
-          ><input v-model="form.author" required maxlength="250" autocomplete="off"
-        /></label>
-        <div class="isbn-lookup">
+  <BaseDrawer title="Adicionar livro" :close-disabled="saving" @close="emit('cancel')">
+    <div class="book-form">
+      <p>Preencha os dados desta edição. Campos com * são obrigatórios.</p>
+      <form @submit.prevent="submit">
+        <div class="form-grid">
+          <label class="full"
+            ><span>Título <span aria-hidden="true">*</span></span
+            ><input v-model="form.title" required maxlength="250" autocomplete="off"
+          /></label>
+          <label class="full"
+            ><span>Autor <span aria-hidden="true">*</span></span
+            ><input v-model="form.author" required maxlength="250" autocomplete="off"
+          /></label>
+          <div class="isbn-lookup full">
+            <label
+              >ISBN (opcional)<input
+                v-model="form.isbn"
+                maxlength="32"
+                inputmode="text"
+                @input="isbnChanged" /></label
+            ><button
+              type="button"
+              class="secondary-button"
+              :disabled="lookingUp || saving"
+              @click="lookup"
+            >
+              {{ lookingUp ? 'Consultando...' : 'Consultar ISBN' }}
+            </button>
+            <BarcodeScanner @scanned="scanned" />
+          </div>
           <label
-            >ISBN (opcional)<input
-              v-model="form.isbn"
-              maxlength="32"
-              inputmode="text"
-              @input="isbnChanged" /></label
-          ><button
+            >Gêneros (separados por vírgula)<input
+              v-model="form.genres"
+              placeholder="Ex.: Fantasia, Romance"
+          /></label>
+          <label>Série (opcional)<input v-model="form.seriesName" maxlength="200" /></label>
+          <label
+            >Volume (opcional)<input
+              v-model="form.seriesVolume"
+              type="number"
+              min="1"
+              max="10000"
+              step="1"
+          /></label>
+          <label
+            ><span>Quantidade de exemplares <span aria-hidden="true">*</span></span
+            ><input
+              v-model.number="form.quantity"
+              type="number"
+              required
+              min="1"
+              max="10000"
+              step="1"
+          /></label>
+          <label
+            >Status de leitura<select v-model="form.status">
+              <option value="nao_lido">Não lido</option>
+              <option value="lendo">Lendo</option>
+              <option value="concluido">Concluído</option>
+              <option value="abandonado">Abandonado</option>
+            </select></label
+          >
+        </div>
+        <p v-if="lookupMessage" role="status">{{ lookupMessage }}</p>
+        <img
+          v-if="coverUrl"
+          :src="coverUrl"
+          alt="Capa encontrada na Open Library"
+          class="lookup-cover"
+          referrerpolicy="no-referrer"
+          @error="coverUrl = null"
+        />
+        <p v-if="error" role="alert" class="form-error">{{ error }}</p>
+        <div class="form-actions">
+          <button type="submit" :disabled="saving || lookingUp">
+            {{ saving ? 'Salvando...' : 'Salvar livro' }}</button><button
             type="button"
             class="secondary-button"
-            :disabled="lookingUp || saving"
-            @click="lookup"
+            :disabled="saving"
+            @click="emit('cancel')"
           >
-            {{ lookingUp ? 'Consultando...' : 'Consultar ISBN' }}
+            Cancelar
           </button>
         </div>
-        <label
-          >Gêneros (separados por vírgula)<input
-            v-model="form.genres"
-            placeholder="Ex.: Fantasia, Romance"
-        /></label>
-        <label>Série (opcional)<input v-model="form.seriesName" maxlength="200" /></label>
-        <label
-          >Volume (opcional)<input
-            v-model="form.seriesVolume"
-            type="number"
-            min="1"
-            max="10000"
-            step="1"
-        /></label>
-        <label
-          >Quantidade de exemplares<input
-            v-model.number="form.quantity"
-            type="number"
-            required
-            min="1"
-            max="10000"
-            step="1"
-        /></label>
-        <label
-          >Status de leitura<select v-model="form.status">
-            <option value="nao_lido">Não lido</option>
-            <option value="lendo">Lendo</option>
-            <option value="concluido">Concluído</option>
-            <option value="abandonado">Abandonado</option>
-          </select></label
-        >
-      </div>
-      <p v-if="lookupMessage" role="status">{{ lookupMessage }}</p>
-      <img
-        v-if="coverUrl"
-        :src="coverUrl"
-        alt="Capa encontrada na Open Library"
-        class="lookup-cover"
-        referrerpolicy="no-referrer"
-        @error="coverUrl = null"
-      />
-      <p v-if="error" role="alert" class="form-error">{{ error }}</p>
-      <div class="form-actions">
-        <button type="submit" :disabled="saving || lookingUp">
-          {{ saving ? 'Salvando...' : 'Salvar livro' }}</button><button
-          type="button"
-          class="secondary-button"
-          :disabled="saving"
-          @click="emit('cancel')"
-        >
-          Cancelar
-        </button>
-      </div>
-    </form>
-  </section>
+      </form>
+    </div>
+  </BaseDrawer>
 </template>

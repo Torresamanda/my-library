@@ -350,15 +350,32 @@ select:focus-visible {
 .standalone li {
   margin: 0;
 }
-.book-form {
-  max-width: 800px;
-  margin: 24px auto;
+.drawer {
+  position: fixed;
+  inset: 0 0 0 auto;
+  width: min(100%, 680px);
+  max-width: 100%;
+  height: 100%;
+  max-height: 100%;
+  margin: 0;
   padding: 24px;
+  overflow-y: auto;
+  border: 0;
+  border-left: 1px solid var(--border);
   background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-medium);
+  color: var(--text);
 }
-.book-form h2 {
+.drawer::backdrop {
+  background: rgb(16 14 36 / 70%);
+}
+.drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+.drawer-header h2 {
   margin: 0 0 8px;
 }
 .book-form > p {
@@ -417,7 +434,7 @@ select:focus-visible {
   margin-top: 16px;
 }
 .scanner {
-  margin: 0 0 24px;
+  margin: 0;
 }
 .scanner video {
   display: block;
@@ -455,7 +472,7 @@ select:focus-visible {
     align-items: stretch;
     flex-direction: column;
   }
-  .book-form {
+  .drawer {
     padding: 16px;
   }
   .form-grid {

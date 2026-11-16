@@ -1,5 +1,9 @@
 # Fluxo e wireframes — proposta para validação
 
+## Atualização do cadastro
+
+O cadastro abre em um painel lateral sobre a estante, adaptado ao celular e ao computador. A leitura pela câmera fica junto ao campo ISBN; os asteriscos aparecem ao lado dos nomes dos campos obrigatórios. Fechar o painel cancela o cadastro em andamento.
+
 Estas telas são esquemas de organização e navegação, não representam o desenho visual final. O protótipo virá depois da validação do fluxo.
 
 ## Fluxo principal

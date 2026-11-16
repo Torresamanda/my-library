@@ -4,6 +4,8 @@ Status inicial: planejamento. Itens são propostas, não funcionalidades já imp
 
 ## Manual visual
 
+- [x] Abrir o cadastro em painel lateral responsivo e posicionar a câmera junto ao ISBN e os indicadores de obrigatoriedade junto aos rótulos.
+- [ ] Validar o painel, o foco e a leitura da câmera em navegadores e dispositivos reais.
 - [x] Criar manual visual e wireframe em HTML com exemplos para celular e computador, escala de espaçamento, cantos e paletas.
 - [ ] Validar o manual visual e o tema claro com a proprietária antes de mudanças relevantes na aparência.
 - [x] Adaptar a estante, o dashboard, o acesso e o cadastro existentes às cores, aos espaçamentos e aos cantos do manual visual.

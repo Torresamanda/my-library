@@ -151,12 +151,6 @@ onBeforeUnmount(() => {
         <p>Confira sua conexão e tente novamente.</p>
         <button type="button" @click="user && loadBooks(user)">Tentar novamente</button>
       </section>
-      <BookForm
-        v-else-if="adding && user"
-        :token="() => user!.getIdToken()"
-        @cancel="adding = false"
-        @saved="bookSaved"
-      />
       <template v-else
         ><p v-if="success" role="status">{{ success }}</p>
         <LibraryStats :stats="stats" />
@@ -174,6 +168,12 @@ onBeforeUnmount(() => {
         <LibraryShelf :books="books" :search="search" />
         <p class="notice">A exibição de capas na estante está em preparação.</p></template
       >
+      <BookForm
+        v-if="adding && user && view === 'ready'"
+        :token="() => user!.getIdToken()"
+        @cancel="adding = false"
+        @saved="bookSaved"
+      />
     </main>
   </div>
 </template>

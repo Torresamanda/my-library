@@ -877,25 +877,35 @@
           <div>
             <p class="eyebrow">04 · Wireframe</p>
             <h2>Adicionar ou editar livro</h2>
+            <p>
+              O cadastro abre em um painel lateral responsivo sobre a estante. A câmera fica junto
+              ao ISBN, e os asteriscos ficam ao lado dos nomes dos campos obrigatórios.
+            </p>
             <p>Campos agrupados, instruções próximas e ações sempre identificáveis.</p>
           </div>
         </div>
         <div class="panel">
-          <div class="component-row" style="margin: 0 0 24px">
-            <button type="button" class="btn btn-secondary" disabled>Ler código de barras</button
-            ><button type="button" class="btn btn-secondary" disabled>Buscar ISBN</button>
-          </div>
           <form class="form">
             <label class="full"
               >Título <span class="help">Obrigatório</span
               ><input class="field" placeholder="Nome do livro" disabled /></label
             ><label class="full"
               >Autor <span class="help">Obrigatório</span
-              ><input class="field" placeholder="Nome do autor ou autora" disabled /></label
-            ><label
-              >ISBN <span class="help">Opcional</span
-              ><input class="field" placeholder="Digite o ISBN" disabled /></label
-            ><label
+              ><input class="field" placeholder="Nome do autor ou autora" disabled
+            /></label>
+            <div class="full">
+              <label
+                >ISBN <span class="help">Opcional</span
+                ><input class="field" placeholder="Digite o ISBN" disabled
+              /></label>
+              <div class="component-row">
+                <button type="button" class="btn btn-secondary" disabled>Consultar ISBN</button>
+                <button type="button" class="btn btn-secondary" disabled>
+                  Ler código de barras
+                </button>
+              </div>
+            </div>
+            <label
               >Gêneros <span class="help">É possível selecionar mais de um</span
               ><input class="field" placeholder="Selecione ou crie" disabled /></label
             ><label
