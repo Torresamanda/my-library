@@ -300,3 +300,8 @@ Estas decisões substituem dúvidas e propostas anteriores conflitantes neste ar
 - [x] Tratar indisponibilidade, recusa de permissão e interrupção, com testes de regras e liberação após cancelamento.
 - [ ] Validar leitura e permissões em dispositivos e navegadores reais, inclusive iOS e Android, antes da publicação.
 - Auditoria npm: sete alertas moderados ligados ao `minimatch` transitivo de ferramentas de desenvolvimento; nenhum alerta atribuído à biblioteca de leitura. A correção sugerida exige avaliação de compatibilidade, sem aplicação forçada.
+
+### Preparação da versão 1.1.0
+
+- [x] Identificar por versão semântica o cadastro manual, a consulta por ISBN e a leitura pela câmera.
+- [ ] Validar os fluxos publicados em dispositivos reais. A integração Git ainda não foi confirmada: a consulta à configuração de builds retornou acesso negado; não enviar alterações ao repositório remoto até verificá-la.
