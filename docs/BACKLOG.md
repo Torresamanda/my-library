@@ -343,3 +343,10 @@ Estas decisões substituem dúvidas e propostas anteriores conflitantes neste ar
 - [x] Abrir detalhes da edição a partir da estante, consultar os dados, editar pelo formulário e confirmar a exclusão antes de chamar a API protegida.
 - [x] Preservar dados de edição em erros de salvamento, tratar conflito de ISBN e falhas de exclusão e atualizar os indicadores após alterações.
 - [ ] Validar interações, foco, temas e responsividade em navegadores e dispositivos reais. A publicação depende também da migração de metadados já pendente no D1 remoto.
+
+### Capas — decisões e progresso
+
+- [x] Limite aprovado pela proprietária: 2 MB por imagem; formatos JPG, JPEG e PNG, somente para livros sem ISBN.
+- [x] Escolher o Cloudflare R2 como armazenamento privado, sem ativar recursos pagos ou presumir uso ilimitado; sua ativação e configuração devem ser tratadas antes da publicação.
+- [x] Exibir capas automáticas na estante e nos detalhes, com imagem padrão quando estiverem ausentes ou indisponíveis.
+- [ ] Implementar e testar envio privado com validação de conteúdo e tamanho no servidor; associar ao livro sem ISBN e tratar exclusão e falhas.

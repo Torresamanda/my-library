@@ -218,8 +218,7 @@ onBeforeUnmount(() => {
           <button class="add-book" type="button" @click="startAdding">Adicionar livro</button>
         </div>
         <LibraryShelf :books="books" :search="search" @select="selectBook" />
-        <p class="notice">A exibição de capas na estante está em preparação.</p></template
-      >
+      </template>
       <BookDetails
         v-if="selectedBook && user && view === 'ready'"
         :book="selectedBook"

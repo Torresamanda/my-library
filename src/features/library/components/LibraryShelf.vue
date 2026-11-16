@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import BookCover from '../../books/components/BookCover.vue'
 import { groupBooks } from '../domain/groupBooks'
 import type { LibraryBook } from '../services/books'
 const props = defineProps<{ books: LibraryBook[]; search: string }>()
@@ -20,9 +21,13 @@ const labels = {
         <details v-for="series in groups.series" :key="series.name" class="series-card">
           <summary>
             <div class="cover-grid" aria-hidden="true">
-              <span v-for="n in 4" :key="n">{{
-                series.books[n - 1]?.title?.slice(0, 1) || '✦'
-              }}</span>
+              <template v-for="n in 4" :key="n"
+                ><BookCover
+                  v-if="series.books[n - 1]"
+                  :url="series.books[n - 1]?.coverUrl"
+                  :title="series.books[n - 1]?.title ?? ''"
+                /><span v-else>✦</span></template
+              >
             </div>
             <div>
               <small>SÉRIE</small>
@@ -35,6 +40,7 @@ const labels = {
           </summary>
           <ul class="book-list">
             <li v-for="book in series.books" :key="book.id">
+              <BookCover :url="book.coverUrl" :title="book.title" />
               <div>
                 <button class="book-link" type="button" @click="emit('select', book)">
                   {{ book.title }}
@@ -62,8 +68,11 @@ const labels = {
       <h2>Livros sem série</h2>
       <ul class="book-list standalone">
         <li v-for="book in groups.standalone" :key="book.id">
+          <BookCover :url="book.coverUrl" :title="book.title" />
           <div>
-            <strong>{{ book.title }}</strong>
+            <button class="book-link" type="button" @click="emit('select', book)">
+              {{ book.title }}
+            </button>
             <p>{{ book.author }}</p>
             <p v-if="book.publisher || book.pageCount">
               {{

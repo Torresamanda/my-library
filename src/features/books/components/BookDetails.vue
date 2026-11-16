@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { nextTick, ref } from 'vue'
+import BookCover from './BookCover.vue'
 import BaseDrawer from '../../../ui/BaseDrawer.vue'
 import LoadingIndicator from '../../../ui/LoadingIndicator.vue'
 import { deleteBook, LibraryRequestError, type LibraryBook } from '../../library/services/books'
@@ -50,6 +51,7 @@ async function remove() {
 <template>
   <BaseDrawer title="Detalhes do livro" :close-disabled="deleting" @close="emit('close')">
     <div class="book-details">
+      <BookCover :url="book.coverUrl" :title="book.title" />
       <h3>{{ book.title }}</h3>
       <dl>
         <div>

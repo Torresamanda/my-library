@@ -653,3 +653,40 @@ select:focus-visible {
 .delete-confirmation p {
   margin: 0 0 8px;
 }
+
+.book-cover {
+  width: 64px;
+  min-width: 64px;
+  aspect-ratio: 2 / 3;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-small);
+  background: var(--tag);
+}
+.book-cover img,
+.cover-placeholder {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.cover-placeholder {
+  place-items: center;
+  color: var(--text);
+}
+.cover-grid .book-cover {
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  aspect-ratio: auto;
+}
+.book-list li > .book-cover {
+  flex: none;
+}
+.book-list li > div:not(.book-cover) {
+  flex: 1;
+}
+.book-details > .book-cover {
+  width: 128px;
+  margin-bottom: 16px;
+}
