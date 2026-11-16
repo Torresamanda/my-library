@@ -1,0 +1,632 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Protótipo de cadastro · Minha biblioteca</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      :root {
+        color-scheme: dark;
+        font-family: system-ui, sans-serif;
+        --bg: #100e24;
+        --surface: #1b1831;
+        --support: #211b35;
+        --text: #faf5f7;
+        --muted: #c7bdd0;
+        --accent: #dba3ed;
+        --on: #20102c;
+        --border: #51405e;
+        --tag: #413050;
+      }
+      body.light {
+        color-scheme: light;
+        --bg: #fff9ef;
+        --surface: #fff9ef;
+        --support: #eed9f2;
+        --text: #4f215e;
+        --muted: #754080;
+        --accent: #4f215e;
+        --on: #fff9ef;
+        --border: #9a6ca2;
+        --tag: #eed9f2;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.5;
+      }
+      button,
+      input,
+      textarea {
+        font: inherit;
+      }
+      button {
+        cursor: pointer;
+      }
+      button:focus-visible,
+      input:focus-visible,
+      textarea:focus-visible,
+      summary:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+      .banner {
+        padding: 12px 16px;
+        text-align: center;
+        background: var(--support);
+        font-size: 14px;
+      }
+      .shell {
+        width: min(100% - 32px, 720px);
+        margin: 24px auto 48px;
+      }
+      .top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 16px;
+      }
+      .top p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 14px;
+      }
+      .icon-button {
+        min-width: 44px;
+        min-height: 44px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--surface);
+        color: var(--text);
+      }
+      .panel {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 24px;
+      }
+      h1,
+      h2 {
+        font-family: Georgia, serif;
+      }
+      h1 {
+        font-size: 28px;
+        margin: 0 0 4px;
+      }
+      h2 {
+        font-size: 20px;
+        margin: 0 0 4px;
+      }
+      .intro,
+      .subtle,
+      .hint {
+        color: var(--muted);
+      }
+      .intro {
+        margin: 0;
+        font-size: 14px;
+      }
+      .subtle,
+      .hint {
+        font-size: 14px;
+        margin: 0;
+      }
+      section {
+        border-top: 1px solid var(--border);
+        margin-top: 24px;
+        padding-top: 24px;
+      }
+      .section-heading {
+        margin-bottom: 16px;
+      }
+      .section-heading p {
+        margin: 4px 0 0;
+      }
+      .field {
+        display: grid;
+        gap: 8px;
+        font-weight: 600;
+        font-size: 14px;
+        min-width: 0;
+      }
+      input:not([type='radio']):not([type='checkbox']),
+      textarea {
+        width: 100%;
+        min-width: 0;
+        min-height: 44px;
+        padding: 8px 12px;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        background: var(--bg);
+        color: var(--text);
+        font-weight: 400;
+      }
+      textarea {
+        min-height: 112px;
+        resize: vertical;
+      }
+      .isbn {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto auto;
+        gap: 8px;
+        align-items: end;
+      }
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 44px;
+        padding: 8px 12px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--surface);
+        color: var(--text);
+        font-weight: 600;
+      }
+      .primary {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: var(--on);
+      }
+      .isbn-note {
+        margin: 8px 0 0;
+      }
+      .book-intro {
+        display: grid;
+        grid-template-columns: 112px minmax(0, 1fr);
+        gap: 16px;
+      }
+      .cover {
+        aspect-ratio: 2/3;
+        display: grid;
+        place-items: center;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        background: var(--tag);
+        color: var(--accent);
+      }
+      .cover svg {
+        width: 40px;
+        height: 40px;
+      }
+      .cover-label {
+        margin: 8px 0 0;
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .book-fields {
+        display: grid;
+        gap: 16px;
+        align-content: start;
+      }
+      .field-block {
+        margin-top: 20px;
+      }
+      fieldset {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        min-width: 0;
+      }
+      legend {
+        font-weight: 600;
+        font-size: 14px;
+        padding: 0;
+        margin-bottom: 8px;
+      }
+      .choices {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .choice {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+        padding: 8px 12px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--bg);
+        font-size: 14px;
+        cursor: pointer;
+      }
+      .choice:has(input:checked) {
+        border-color: var(--accent);
+        background: var(--tag);
+        font-weight: 700;
+      }
+      .choice:has(input:focus-visible) {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+      .choice input {
+        position: absolute;
+        opacity: 0;
+        width: 1px;
+        height: 1px;
+      }
+      .choice input:checked + span::before {
+        content: '✓ ';
+      }
+      .text-button {
+        min-height: 44px;
+        border: 0;
+        padding: 8px;
+        background: transparent;
+        color: var(--accent);
+        text-decoration: underline;
+        text-underline-offset: 4px;
+      }
+      .genres {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 8px;
+      }
+      .tag {
+        padding: 4px 8px;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        background: var(--tag);
+        font-size: 14px;
+      }
+      details {
+        margin-top: 20px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--bg);
+      }
+      summary {
+        padding: 12px 16px;
+        cursor: pointer;
+        font-weight: 600;
+      }
+      .details-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        padding: 0 16px 16px;
+      }
+      .quantity {
+        max-width: 160px;
+      }
+      .rating {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        flex-wrap: wrap;
+      }
+      .star {
+        position: relative;
+        display: grid;
+        place-items: center;
+        width: 44px;
+        height: 44px;
+        cursor: pointer;
+        color: #e8bb55;
+        font-size: 28px;
+      }
+      .light .star {
+        color: #805600;
+      }
+      .star input {
+        position: absolute;
+        opacity: 0;
+      }
+      .star:has(input:focus-visible) {
+        outline: 2px solid var(--accent);
+      }
+      .favorite {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 44px;
+      }
+      .toolbar {
+        display: flex;
+        gap: 4px;
+        margin-bottom: 8px;
+      }
+      .toolbar button {
+        min-width: 44px;
+        min-height: 44px;
+        border: 0;
+        border-radius: 4px;
+        background: var(--bg);
+        color: var(--text);
+      }
+      .actions {
+        display: flex;
+        gap: 8px;
+        margin-top: 24px;
+        flex-wrap: wrap;
+      }
+      .feedback {
+        padding: 12px;
+        border-left: 4px solid var(--accent);
+        border-radius: 4px;
+        background: var(--support);
+      }
+      @media (max-width: 560px) {
+        .shell {
+          margin-top: 16px;
+        }
+        .panel {
+          padding: 16px;
+        }
+        .isbn {
+          grid-template-columns: 1fr 1fr;
+        }
+        .isbn .field {
+          grid-column: 1/-1;
+        }
+        .isbn .button {
+          width: 100%;
+        }
+        .book-intro {
+          grid-template-columns: 80px minmax(0, 1fr);
+        }
+        .details-content {
+          grid-template-columns: 1fr;
+        }
+        .actions .primary {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="banner">Protótipo para validação · Nenhum dado é salvo ou consultado</div>
+    <main class="shell">
+      <div class="top">
+        <p>Minha biblioteca · Prévia do cadastro</p>
+        <button
+          id="theme"
+          class="icon-button"
+          type="button"
+          aria-label="Ativar tema claro"
+          title="Alternar tema"
+        >
+          ☼
+        </button>
+      </div>
+      <div class="panel">
+        <h1>Adicionar livro</h1>
+        <p class="intro">
+          Comece pelo ISBN ou preencha os dados manualmente. Apenas título e autor são obrigatórios.
+        </p>
+        <form id="book-form">
+          <section aria-labelledby="find-title">
+            <div class="section-heading">
+              <h2 id="find-title">Encontre seu livro</h2>
+              <p class="subtle">O ISBN pode ajudar a preencher os dados da edição.</p>
+            </div>
+            <div class="isbn">
+              <label class="field"
+                >ISBN <span class="hint">Opcional</span
+                ><input placeholder="Digite o ISBN" inputmode="text" /></label
+              ><button class="button demo" type="button">Consultar</button
+              ><button class="button demo" type="button">Ler com câmera</button>
+            </div>
+            <p class="hint isbn-note">
+              Sem ISBN? Continue preenchendo abaixo. A consulta automática permanece disponível no
+              site.
+            </p>
+            <p id="demo-feedback" class="feedback" role="status" hidden>
+              Esta é uma prévia: a consulta e a câmera não são executadas aqui.
+            </p>
+          </section>
+          <section aria-labelledby="book-title">
+            <div class="section-heading">
+              <h2 id="book-title">Sobre o livro</h2>
+              <p class="subtle">Confira ou complete as informações principais.</p>
+            </div>
+            <div class="book-intro">
+              <div>
+                <div class="cover" role="img" aria-label="Espaço reservado para a capa">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path
+                      d="M12 6c-3-2-6-2-9-1v13c3-1 6-1 9 1m0-13c3-2 6-2 9-1v13c-3-1-6-1-9 1m0-13v13"
+                    />
+                  </svg>
+                </div>
+                <p class="cover-label">Prévia da capa</p>
+              </div>
+              <div class="book-fields">
+                <label class="field">Título *<input required /></label
+                ><label class="field">Autor *<input required /></label>
+              </div>
+            </div>
+            <fieldset class="field-block">
+              <legend>Tipo de obra <span class="hint">· opcional</span></legend>
+              <div class="choices">
+                <label class="choice"
+                  ><input type="radio" name="media" value="livro" /><span>Livro</span></label
+                ><label class="choice"
+                  ><input type="radio" name="media" value="quadrinho" /><span
+                    >Quadrinho</span
+                  ></label
+                ><label class="choice"
+                  ><input type="radio" name="media" value="manga" /><span>Mangá</span></label
+                ><label class="choice"
+                  ><input type="radio" name="media" value="outro" /><span>Outro</span></label
+                ><button id="clear-media" class="text-button" type="button">Limpar tipo</button>
+              </div>
+            </fieldset>
+            <div class="field-block">
+              <label class="field"
+                >Gêneros <span class="hint">Até 4, separados por vírgula</span
+                ><input id="genres" placeholder="Ex.: Fantasia, Romance"
+              /></label>
+              <div id="genre-preview" class="genres" aria-live="polite"></div>
+            </div>
+            <details id="extra">
+              <summary>
+                Mais dados da edição <span class="hint">· editora, páginas e série</span>
+              </summary>
+              <div class="details-content">
+                <label class="field">Editora <span class="hint">Opcional</span><input /></label
+                ><label class="field"
+                  >Páginas <span class="hint">Opcional</span><input type="number" min="1" /></label
+                ><label class="field">Série <span class="hint">Opcional</span><input /></label
+                ><label class="field"
+                  >Volume <span class="hint">Opcional</span><input type="number" min="1"
+                /></label>
+              </div>
+            </details>
+          </section>
+          <section aria-labelledby="collection-title">
+            <div class="section-heading">
+              <h2 id="collection-title">Na minha biblioteca</h2>
+              <p class="subtle">Conte como você tem acesso a esta edição.</p>
+            </div>
+            <fieldset>
+              <legend>
+                Formato ou origem <span class="hint">· opcional; escolha quantos se aplicarem</span>
+              </legend>
+              <div class="choices">
+                <label class="choice"><input type="checkbox" /><span>Tenho físico</span></label
+                ><label class="choice"><input type="checkbox" /><span>Tenho e-book</span></label
+                ><label class="choice"><input type="checkbox" /><span>Não tenho</span></label>
+              </div>
+              <p class="hint">Por exemplo, uma leitura por empréstimo ou assinatura.</p>
+            </fieldset>
+            <label class="field field-block quantity"
+              >Exemplares *<input type="number" value="1" min="1" max="10000" required
+            /></label>
+          </section>
+          <section aria-labelledby="reading-title">
+            <div class="section-heading">
+              <h2 id="reading-title">Minha leitura</h2>
+              <p class="subtle">Você pode preencher esta parte depois.</p>
+            </div>
+            <fieldset>
+              <legend>Status de leitura</legend>
+              <div class="choices">
+                <label class="choice"
+                  ><input type="radio" name="status" checked /><span>Não lido</span></label
+                ><label class="choice"><input type="radio" name="status" /><span>Lendo</span></label
+                ><label class="choice"
+                  ><input type="radio" name="status" /><span>Concluído</span></label
+                ><label class="choice"
+                  ><input type="radio" name="status" /><span>Abandonado</span></label
+                >
+              </div>
+            </fieldset>
+            <label class="favorite field-block"
+              ><input type="checkbox" /> Marcar como favorito</label
+            >
+            <fieldset class="field-block">
+              <legend>Avaliação <span class="hint">· opcional</span></legend>
+              <div class="rating" id="rating">
+                <label class="star"
+                  ><input type="radio" name="rating" value="1" aria-label="1 estrela" /><span
+                    >☆</span
+                  ></label
+                ><label class="star"
+                  ><input type="radio" name="rating" value="2" aria-label="2 estrelas" /><span
+                    >☆</span
+                  ></label
+                ><label class="star"
+                  ><input type="radio" name="rating" value="3" aria-label="3 estrelas" /><span
+                    >☆</span
+                  ></label
+                ><label class="star"
+                  ><input type="radio" name="rating" value="4" aria-label="4 estrelas" /><span
+                    >☆</span
+                  ></label
+                ><label class="star"
+                  ><input type="radio" name="rating" value="5" aria-label="5 estrelas" /><span
+                    >☆</span
+                  ></label
+                ><button id="clear-rating" class="text-button" type="button">
+                  Limpar avaliação
+                </button>
+              </div>
+            </fieldset>
+            <div class="field-block">
+              <label class="field" for="comment"
+                >Comentário pessoal <span class="hint">Opcional</span></label
+              >
+              <div class="toolbar" aria-label="Exemplo da barra de formatação">
+                <button type="button" class="demo" aria-label="Negrito"><strong>B</strong></button
+                ><button type="button" class="demo" aria-label="Texto normal">T</button
+                ><button type="button" class="demo" aria-label="Título 1">H1</button
+                ><button type="button" class="demo" aria-label="Título 2">H2</button
+                ><button type="button" class="demo" aria-label="Título 3">H3</button>
+              </div>
+              <textarea id="comment" placeholder="O que achou desta leitura?"></textarea>
+              <p class="hint" id="count">0 de 500 caracteres</p>
+            </div>
+          </section>
+          <div class="actions">
+            <button class="button primary" type="submit">Salvar livro</button
+            ><button class="button demo" type="button">Cancelar</button>
+          </div>
+          <p class="hint">Esta prévia não envia nem guarda informações.</p>
+        </form>
+      </div>
+    </main>
+    <script>
+      const theme = document.querySelector('#theme')
+      theme.addEventListener('click', () => {
+        const light = document.body.classList.toggle('light')
+        theme.textContent = light ? '☾' : '☼'
+        theme.setAttribute('aria-label', light ? 'Ativar tema escuro' : 'Ativar tema claro')
+      })
+      document.querySelectorAll('.demo').forEach((button) =>
+        button.addEventListener('click', () => {
+          const feedback = document.querySelector('#demo-feedback')
+          feedback.hidden = false
+          feedback.scrollIntoView({ block: 'nearest' })
+        }),
+      )
+      document.querySelector('#clear-media').addEventListener('click', () => {
+        document.querySelectorAll('[name=media]').forEach((input) => (input.checked = false))
+      })
+      const rating = document.querySelector('#rating')
+      function renderRating() {
+        const selected = Number(document.querySelector('[name=rating]:checked')?.value || 0)
+        rating
+          .querySelectorAll('.star')
+          .forEach(
+            (label, index) =>
+              (label.querySelector('span').textContent = index < selected ? '★' : '☆'),
+          )
+      }
+      rating.addEventListener('change', renderRating)
+      document.querySelector('#clear-rating').addEventListener('click', () => {
+        rating.querySelectorAll('input').forEach((input) => (input.checked = false))
+        renderRating()
+      })
+      document.querySelector('#genres').addEventListener('input', (event) => {
+        const preview = document.querySelector('#genre-preview')
+        preview.replaceChildren()
+        event.target.value
+          .split(',')
+          .map((value) => value.trim())
+          .filter(Boolean)
+          .forEach((value) => {
+            const tag = document.createElement('span')
+            tag.className = 'tag'
+            tag.textContent = value
+            preview.append(tag)
+          })
+      })
+      document.querySelector('#comment').addEventListener('input', (event) => {
+        document.querySelector('#count').textContent =
+          Array.from(event.target.value).length + ' de 500 caracteres'
+      })
+      document.querySelector('#book-form').addEventListener('submit', (event) => {
+        event.preventDefault()
+        alert('Prévia visual: nenhum livro foi salvo.')
+      })
+    </script>
+  </body>
+</html>

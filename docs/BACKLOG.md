@@ -460,7 +460,8 @@ As combinações principais de texto, texto secundário e botões dos temas clar
 ### Reorganização do cadastro
 
 - [x] Preparar [wireframe de reorganização do cadastro](WIREFRAME-CADASTRO.md), incluindo os campos e comportamentos existentes.
-- [ ] Validar sequência, escolhas visíveis e seção de dados adicionais com a proprietária; depois, preparar e validar o protótipo visual antes de implementar.
+- [x] Validar sequência, escolhas visíveis e seção de dados adicionais com a proprietária e preparar [protótipo visual](PROTOTIPO-CADASTRO.html).
+- [ ] Validar aparência e interações do protótipo em ambos os temas antes de implementar o formulário real.
 
 ### Contagem de exemplares próprios
 
