@@ -499,3 +499,8 @@ As combinações principais de texto, texto secundário e botões dos temas clar
 - [x] Validar o protótipo visual e implementar pesquisa e seleção, atribuição e links do Google Books, configuração segura e testes.
 - [ ] Configurar a chave privada do Google Books e validar a pesquisa com o serviço real, nos temas e dispositivos suportados.
 - [ ] Implementar envio privado ao R2 para livros sem ISBN, com limite de 2 MB e validação de tipo e conteúdo no servidor; não ativar serviços pagos.
+
+### Melhoria da pesquisa de capas
+
+- [x] Preparar [wireframe da pesquisa visual de capas](WIREFRAME-MELHORIA-PESQUISA-CAPAS.md), com seleção, identificação da edição e estados.
+- [ ] Validar o wireframe com a proprietária; após aprovação, preparar e validar protótipo visual antes de alterar a interface.
