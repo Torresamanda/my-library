@@ -60,6 +60,7 @@ function requestCancel() {
   toast('Descartar as alterações feitas neste livro?', {
     id: discardToastId,
     toasterId: 'drawer',
+    position: 'bottom-center',
     duration: Infinity,
     cancel: { label: 'Continuar editando', onClick: () => {} },
     action: {

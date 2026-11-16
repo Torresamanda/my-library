@@ -422,6 +422,7 @@ As combinações principais de texto, texto secundário e botões dos temas clar
 - [x] Esclarecer mensagens de consulta, validação, salvamento e exclusão, destacando os retornos de consulta e câmera junto à área correspondente.
 - [x] Apresentar as opções do editor de comentário com ícones, nomes acessíveis e indicação da formatação ativa.
 - [x] Evitar corte dos rótulos caso uma versão anterior do editor apareça durante a atualização da interface.
+- [x] Manter a confirmação de descarte visível na parte inferior da tela ao percorrer o formulário, inclusive após a animação do painel.
 
 ### Publicação da versão 1.3.0
 
