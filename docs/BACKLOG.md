@@ -398,6 +398,12 @@ Estas decisões substituem dúvidas e propostas anteriores conflitantes neste ar
 
 As combinações principais de texto, texto secundário e botões dos temas claro e escuro foram verificadas por cálculo de contraste e atingem pelo menos 4,5:1. Isso não substitui a inspeção dos componentes, foco, imagens e estados em telas reais.
 
+### Evolução da experiência — proposta
+
+- [x] Preparar [wireframes de estante, cadastro e detalhes](WIREFRAMES-EVOLUCAO.md) para celular e computador, incluindo estados essenciais.
+- [ ] Validar com a proprietária a organização proposta e a confirmação ao descartar alterações; ajustar os wireframes conforme as decisões.
+- [ ] Após validação dos wireframes, preparar e validar protótipo visual nos dois temas antes de implementar mudanças.
+
 ### Publicação da versão 1.3.0
 
 - [x] Executar lint, verificação de tipos, 53 testes e compilação; criar commit e tag, aplicar a migração remota e publicar a versão identificada.
