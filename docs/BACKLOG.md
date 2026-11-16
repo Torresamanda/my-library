@@ -287,3 +287,9 @@ Estas decisões substituem dúvidas e propostas anteriores conflitantes neste ar
 - [x] Formulário responsivo para título, autor, ISBN opcional, gêneros, série, volume, quantidade e status, com validação e salvamento na API protegida.
 - [x] Informar ISBN duplicado e preservar os dados em caso de falha; atualizar estante e indicadores após salvar.
 - [ ] Validar visualmente o cadastro em dispositivos e temas; consulta externa, câmera e capas continuam pendentes.
+
+### Consulta por ISBN
+
+- [x] Consultar a Open Library pelo ISBN validado, permitir revisão e preenchimento manual e preservar a capa automática encontrada para livros com ISBN.
+- [ ] Verificar visualmente e com serviços reais em celular e computador; a exibição de capas na estante, imagem padrão e envio manual continuam na tarefa de capas.
+- [ ] Avaliar integração adicional ao Google Books: sua documentação exige identificação para consultas públicas. A Open Library pode não encontrar todas as edições ou capas e está sujeita a disponibilidade e limites do serviço.

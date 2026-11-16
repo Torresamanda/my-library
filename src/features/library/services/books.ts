@@ -9,6 +9,7 @@ const bookSchema = z.object({
   seriesName: z.string().nullable(),
   seriesVolume: z.number().int().nullable(),
   genres: z.array(z.string()),
+  coverUrl: z.string().nullable().optional(),
 })
 export type LibraryBook = z.infer<typeof bookSchema>
 
@@ -32,6 +33,7 @@ export type BookDraft = {
   title: string
   author: string
   isbn: string | null
+  coverUrl?: string | null
   quantity: number
   status: LibraryBook['status']
   seriesName: string | null

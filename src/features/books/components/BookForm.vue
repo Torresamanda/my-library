@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import { normalizeIsbn } from '../domain/isbn'
+import { lookupIsbn } from '../services/lookup'
 import { createBook, LibraryRequestError, type BookDraft } from '../../library/services/books'
 
 const props = defineProps<{ token: () => Promise<string> }>()
@@ -17,6 +18,47 @@ const form = reactive({
 })
 const error = ref('')
 const saving = ref(false)
+const lookingUp = ref(false)
+const lookupMessage = ref('')
+const coverUrl = ref<string | null>(null)
+let lookupVersion = 0
+
+function isbnChanged() {
+  lookupVersion++
+  coverUrl.value = null
+  lookupMessage.value = ''
+  lookingUp.value = false
+}
+
+async function lookup() {
+  const isbn = normalizeIsbn(form.isbn)
+  if (!isbn) {
+    lookupMessage.value = 'Informe um ISBN válido para consultar.'
+    return
+  }
+  const version = ++lookupVersion
+  lookingUp.value = true
+  lookupMessage.value = ''
+  coverUrl.value = null
+  try {
+    const result = await lookupIsbn(isbn, AbortSignal.timeout(10000))
+    if (version !== lookupVersion) return
+    if (!result) {
+      lookupMessage.value = 'Livro não encontrado. Preencha os dados manualmente.'
+      return
+    }
+    form.title = result.title || form.title
+    form.author = result.author || form.author
+    coverUrl.value = result.coverUrl
+    lookupMessage.value = 'Confira e complete os dados encontrados antes de salvar.'
+  } catch {
+    if (version === lookupVersion)
+      lookupMessage.value =
+        'Não foi possível consultar agora. Tente novamente ou preencha os dados manualmente.'
+  } finally {
+    if (version === lookupVersion) lookingUp.value = false
+  }
+}
 
 async function submit() {
   error.value = ''
@@ -60,6 +102,7 @@ async function submit() {
       title: form.title.trim(),
       author: form.author.trim(),
       isbn: form.isbn.trim() || null,
+      coverUrl: coverUrl.value,
       genres,
       seriesName: form.seriesName.trim() || null,
       seriesVolume: volume,
@@ -94,7 +137,22 @@ async function submit() {
           >Autor <span aria-hidden="true">*</span
           ><input v-model="form.author" required maxlength="250" autocomplete="off"
         /></label>
-        <label>ISBN (opcional)<input v-model="form.isbn" maxlength="32" inputmode="text" /></label>
+        <div class="isbn-lookup">
+          <label
+            >ISBN (opcional)<input
+              v-model="form.isbn"
+              maxlength="32"
+              inputmode="text"
+              @input="isbnChanged" /></label
+          ><button
+            type="button"
+            class="secondary-button"
+            :disabled="lookingUp || saving"
+            @click="lookup"
+          >
+            {{ lookingUp ? 'Consultando...' : 'Consultar ISBN' }}
+          </button>
+        </div>
         <label
           >Gêneros (separados por vírgula)<input
             v-model="form.genres"
@@ -127,9 +185,18 @@ async function submit() {
           </select></label
         >
       </div>
+      <p v-if="lookupMessage" role="status">{{ lookupMessage }}</p>
+      <img
+        v-if="coverUrl"
+        :src="coverUrl"
+        alt="Capa encontrada na Open Library"
+        class="lookup-cover"
+        referrerpolicy="no-referrer"
+        @error="coverUrl = null"
+      />
       <p v-if="error" role="alert" class="form-error">{{ error }}</p>
       <div class="form-actions">
-        <button type="submit" :disabled="saving">
+        <button type="submit" :disabled="saving || lookingUp">
           {{ saving ? 'Salvando...' : 'Salvar livro' }}</button><button
           type="button"
           class="secondary-button"

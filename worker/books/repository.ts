@@ -8,6 +8,7 @@ export interface BookRow {
   title: string
   author: string
   isbn: string | null
+  coverUrl: string | null
   quantity: number
   status: string
   seriesName: string | null
@@ -18,7 +19,7 @@ export interface BookRow {
 }
 
 const selectBook = `SELECT id, title, author, isbn, quantity, status, series_name AS seriesName,
-  series_volume AS seriesVolume, rating, created_at AS createdAt, updated_at AS updatedAt FROM books`
+  series_volume AS seriesVolume, cover_url AS coverUrl, rating, created_at AS createdAt, updated_at AS updatedAt FROM books`
 
 async function genresFor(db: Database, id: string): Promise<string[]> {
   const result = await db
@@ -93,16 +94,17 @@ export async function saveBook(
     book.status,
     book.seriesName,
     book.seriesVolume,
+    book.coverUrl,
   ]
   const statement = existing
     ? db
         .prepare(
-          `UPDATE books SET title = ?, author = ?, isbn = ?, quantity = ?, status = ?, series_name = ?, series_volume = ?, updated_at = datetime('now') WHERE id = ?`,
+          `UPDATE books SET title = ?, author = ?, isbn = ?, quantity = ?, status = ?, series_name = ?, series_volume = ?, cover_url = ?, updated_at = datetime('now') WHERE id = ?`,
         )
         .bind(...values, id)
     : db
         .prepare(
-          `INSERT INTO books (title, author, isbn, quantity, status, series_name, series_volume, id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+          `INSERT INTO books (title, author, isbn, quantity, status, series_name, series_volume, cover_url, id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         )
         .bind(...values, id)
   await db.batch([statement, ...genreStatements(db, id, book.genres)])

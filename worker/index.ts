@@ -74,7 +74,16 @@ async function books(request: Request, db: Database, id: string | null): Promise
     }
     const book = validateBook(raw)
     if (!book) return json({ error: 'Confira os dados do livro' }, 400)
-    if (id && !(await getBook(db, id))) return json({ error: 'Livro não encontrado' }, 404)
+    const existing = id ? await getBook(db, id) : null
+    if (id && !existing) return json({ error: 'Livro não encontrado' }, 404)
+    if (
+      existing &&
+      existing.isbn === book.isbn &&
+      raw !== null &&
+      typeof raw === 'object' &&
+      !Object.hasOwn(raw, 'coverUrl')
+    )
+      book.coverUrl = existing.coverUrl
     const bookId = id ?? crypto.randomUUID()
     if (book.isbn && (await isbnExists(db, book.isbn, bookId)))
       return json({ error: 'Este livro já está na biblioteca' }, 409)

@@ -402,3 +402,25 @@ summary:focus-visible {
     padding: 18px;
   }
 }
+
+.isbn-lookup {
+  display: grid;
+  gap: 8px;
+  align-content: start;
+}
+.isbn-lookup button {
+  justify-self: start;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 14px;
+  background: var(--surface);
+  color: inherit;
+  font: inherit;
+}
+.lookup-cover {
+  display: block;
+  max-width: 140px;
+  max-height: 200px;
+  object-fit: contain;
+  margin-top: 16px;
+}

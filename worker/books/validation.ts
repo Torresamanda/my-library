@@ -15,6 +15,12 @@ const bookSchema = z
     title: z.string().trim().min(1).max(250),
     author: z.string().trim().min(1).max(250),
     isbn: z.string().trim().max(32).nullable().optional(),
+    coverUrl: z
+      .string()
+      .regex(/^https:\/\/covers\.openlibrary\.org\/b\/id\/[1-9][0-9]{0,15}-M\.jpg$/)
+      .nullable()
+      .optional()
+      .transform((v) => v ?? null),
     quantity: z.number().int().min(1).max(10000),
     status: z.enum(['nao_lido', 'lendo', 'concluido', 'abandonado']),
     seriesName: optionalText(200),
@@ -30,6 +36,8 @@ const bookSchema = z
   })
   .strict()
   .superRefine((book, ctx) => {
+    if (book.coverUrl && !book.isbn)
+      ctx.addIssue({ code: 'custom', message: 'Capa automática exige ISBN', path: ['coverUrl'] })
     if (book.isbn && !normalizeIsbn(book.isbn))
       ctx.addIssue({ code: 'custom', message: 'ISBN inválido', path: ['isbn'] })
     if (book.seriesVolume !== null && !book.seriesName)
