@@ -408,7 +408,13 @@ As combinações principais de texto, texto secundário e botões dos temas clar
 
 - [x] Registrar aprovação dos wireframes e preparar [protótipo visual responsivo](PROTOTIPO-ESTANTE.html), com temas e dados fictícios.
 - [x] Propor ícones acessíveis para fechar e sair e fechamento dos painéis ao clicar fora; preservar confirmação ao descartar formulário alterado.
-- [ ] Validar o protótipo, os dois temas e as interações com a proprietária antes de alterar o site. O protótipo não salva dados nem representa funcionalidades concluídas.
+- [x] Receber aprovação da proprietária para aplicar o protótipo. A validação prática dos dois temas e interações em dispositivos permanece pendente.
+
+### Aplicação do protótipo
+
+- [x] Registrar aprovação da proprietária e aplicar a organização da estante, filtros, cadastro e detalhes, com ícones de saída e fechamento.
+- [x] Fechar painéis pelo fundo e confirmar descarte de alterações no formulário; manter bloqueio durante operações em andamento.
+- [ ] Validar temas, foco, toque, fechamento e fluxos autenticados em navegadores e dispositivos reais antes de publicar.
 
 ### Publicação da versão 1.3.0
 

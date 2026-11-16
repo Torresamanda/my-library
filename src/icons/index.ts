@@ -4,6 +4,7 @@ export {
   PhCheckCircle,
   PhMagnifyingGlass,
   PhLockKey,
+  PhSignOut,
   PhMoon,
   PhPlus,
   PhSlidersHorizontal,
@@ -11,4 +12,5 @@ export {
   PhStar,
   PhWarningCircle,
   PhXCircle,
+  PhX,
 } from '@phosphor-icons/vue'

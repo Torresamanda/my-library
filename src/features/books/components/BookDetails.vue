@@ -54,13 +54,16 @@ async function remove() {
 <template>
   <BaseDrawer title="Detalhes do livro" :close-disabled="deleting" @close="emit('close')">
     <div class="book-details">
-      <BookCover :url="book.coverUrl" :title="book.title" />
-      <h3>{{ book.title }}</h3>
-      <dl>
+      <div class="detail-hero">
+        <BookCover :url="book.coverUrl" :title="book.title" />
         <div>
-          <dt>Autor</dt>
-          <dd>{{ book.author }}</dd>
+          <h3>{{ book.title }}</h3>
+          <p>{{ book.author }}</p>
+          <span class="badge">{{ labels[book.status] }}</span>
         </div>
+      </div>
+      <h4 class="form-section-title">Sobre esta edição</h4>
+      <dl>
         <div>
           <dt>ISBN</dt>
           <dd>{{ book.isbn || 'Não informado' }}</dd>

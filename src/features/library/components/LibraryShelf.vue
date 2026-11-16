@@ -4,7 +4,7 @@ import BookCover from '../../books/components/BookCover.vue'
 import { groupBooks, type LibraryFilters } from '../domain/groupBooks'
 import type { LibraryBook } from '../services/books'
 const props = defineProps<{ books: LibraryBook[]; search: string; filters: LibraryFilters }>()
-const emit = defineEmits<{ select: [book: LibraryBook]; clear: [] }>()
+const emit = defineEmits<{ select: [book: LibraryBook]; clear: []; add: [] }>()
 const groups = computed(() => groupBooks(props.books, props.search, props.filters))
 const labels = {
   nao_lido: 'Não lido',
@@ -35,7 +35,8 @@ const labels = {
               <p>
                 {{ series.books.length }} {{ series.books.length === 1 ? 'edição' : 'edições' }}
               </p>
-              <span>Abrir série ▾</span>
+              <span class="series-open">Abrir série ▾</span
+              ><span class="series-close">Fechar série ▴</span>
             </div>
           </summary>
           <ul class="book-list">
@@ -67,23 +68,17 @@ const labels = {
     <section v-if="groups.standalone.length">
       <h2>Livros sem série</h2>
       <ul class="book-list standalone">
-        <li v-for="book in groups.standalone" :key="book.id">
-          <BookCover :url="book.coverUrl" :title="book.title" />
-          <div>
-            <button class="book-link" type="button" @click="emit('select', book)">
-              {{ book.title }}
-            </button>
-            <p>{{ book.author }}</p>
-            <p v-if="book.publisher || book.pageCount">
-              {{
-                [book.publisher, book.pageCount ? `${book.pageCount} páginas` : null]
-                  .filter(Boolean)
-                  .join(' · ')
-              }}
-            </p>
-            <p v-if="book.genres.length">{{ book.genres.join(' · ') }}</p>
-          </div>
-          <span class="badge">{{ labels[book.status] }}</span>
+        <li v-for="book in groups.standalone" :key="book.id" class="standalone-card">
+          <button class="standalone-button" type="button" @click="emit('select', book)">
+            <BookCover :url="book.coverUrl" :title="book.title" />
+            <div>
+              <strong class="standalone-title">
+                {{ book.title }}
+              </strong>
+              <p>{{ book.author }}</p>
+              <span class="badge">{{ labels[book.status] }}</span>
+            </div>
+          </button>
         </li>
       </ul>
     </section>
@@ -100,7 +95,7 @@ const labels = {
       {{
         search.trim() || filters.genre || filters.status || filters.series
           ? 'Tente buscar por outro título, autor, gênero ou série.'
-          : 'Os livros cadastrados aparecerão aqui.'
+          : 'Adicione seu primeiro livro para começar sua estante.'
       }}
     </p>
     <button
@@ -110,5 +105,6 @@ const labels = {
     >
       Limpar busca e filtros
     </button>
+    <button v-else type="button" @click="emit('add')">Adicionar primeiro livro</button>
   </section>
 </template>

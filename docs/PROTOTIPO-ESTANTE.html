@@ -1,36 +1,907 @@
 <!doctype html>
 <html lang="pt-BR">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Protótipo · Minha biblioteca</title>
-  <style>
-    *{box-sizing:border-box} :root{font-family:system-ui,sans-serif;line-height:1.5;color-scheme:dark;--bg:#100e24;--surface:#1b1831;--support:#211b35;--text:#faf5f7;--muted:#c7bdd0;--accent:#dba3ed;--on:#20102c;--tag:#413050;--border:#51405e} body.light{color-scheme:light;--bg:#fff9ef;--surface:#fff9ef;--support:#eed9f2;--text:#4f215e;--muted:#754080;--accent:#4f215e;--on:#fff9ef;--tag:#eed9f2;--border:#9a6ca2} body{margin:0;background:var(--bg);color:var(--text)} button,input,select,textarea{font:inherit} button{cursor:pointer} button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px} .notice{padding:8px 16px;text-align:center;background:var(--support);color:var(--text);font-size:14px} .wrap{width:min(100% - 32px,1200px);margin:auto;padding:32px 0 48px} header,.brand,.actions,.tools,.section-title,.filter-head{display:flex;align-items:center;gap:12px} header,.section-title,.filter-head{justify-content:space-between} header{margin-bottom:32px}.brand-mark,.icon-button{display:grid;place-items:center;width:44px;height:44px;flex:none;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--accent)} .brand h1{font:600 32px/1.2 Georgia,serif;margin:0}.brand em{color:var(--accent);font-weight:400}.brand p,.muted{color:var(--muted);margin:4px 0 0;font-size:14px} svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.stat{padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:8px}.stat span{display:block;color:var(--muted);font-size:14px}.stat strong{display:block;font:600 28px/1.2 Georgia,serif;margin-top:8px}.caption{font-size:12px;color:var(--muted);margin:8px 0 0}.tools{margin:32px 0 16px}.search{flex:1;display:flex;align-items:center;gap:8px;border:1px solid var(--border);border-radius:8px;background:var(--surface);padding:0 12px;color:var(--muted)}.search input{width:100%;height:48px;border:0;outline:0;background:transparent;color:var(--text)}.primary,.secondary{min-height:48px;padding:8px 16px;border-radius:8px;font-weight:700}.primary{border:1px solid var(--accent);background:var(--accent);color:var(--on)}.secondary{border:1px solid var(--border);background:var(--surface);color:var(--text)}.filters{border:1px solid var(--border);border-radius:8px;background:var(--surface);padding:16px}.filter-head{display:none}.filter-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.field{display:grid;gap:8px;font-size:14px;font-weight:600}.field input,.field select,.field textarea{width:100%;min-height:44px;padding:8px 12px;border:1px solid var(--border);border-radius:4px;background:var(--bg);color:var(--text);font-weight:400}.result-line{display:flex;justify-content:space-between;gap:8px;align-items:center;color:var(--muted);font-size:14px;margin:16px 0}.text-button{border:0;padding:4px;background:none;color:var(--accent);text-decoration:underline;text-underline-offset:4px}.section-title{margin:32px 0 16px}.section-title h2{font:600 26px Georgia,serif;margin:0}.section-title span{font-size:14px;color:var(--muted)}.series-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.series{padding:16px;text-align:left;background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:8px}.series-inner{display:flex;gap:16px;align-items:center}.mosaic{width:128px;flex:none;aspect-ratio:1;display:grid;grid-template-columns:1fr 1fr;gap:4px}.mini,.cover{display:grid;place-items:center;text-align:center;background:var(--tag);border:1px solid var(--border);border-radius:4px;color:var(--text);font:600 13px Georgia,serif;padding:8px}.mini:nth-child(2),.cover.alt{background:var(--support)}.series h3,.book h3{margin:0;font:600 19px Georgia,serif}.series p,.book p{margin:4px 0;color:var(--muted);font-size:14px}.series .open{display:block;margin-top:12px;color:var(--accent);font-size:14px}.books{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}.book{display:block;width:100%;padding:12px;text-align:left;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text)}.cover{aspect-ratio:2/3;margin-bottom:12px;font-size:18px;letter-spacing:.04em}.badge{display:inline-block;margin-top:8px;padding:4px 8px;border:1px solid var(--border);border-radius:4px;background:var(--tag);font-size:12px}.overlay{position:fixed;inset:0;background:rgb(16 14 36 / 70%);display:flex;justify-content:flex-end;z-index:5}.overlay[hidden]{display:none}.drawer{width:min(100%,680px);height:100%;overflow:auto;background:var(--surface);border-left:1px solid var(--border);padding:24px}.drawer-head{display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:-24px;background:var(--surface);padding:0 0 16px;z-index:1}.drawer-head h2{font:600 28px Georgia,serif;margin:0}.drawer section{padding:24px 0;border-top:1px solid var(--border)}.drawer section h3{font:600 20px Georgia,serif;margin:0 0 16px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.full{grid-column:1/-1}.form-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:24px}.detail-hero{display:flex;gap:24px;align-items:start}.detail-hero .cover{width:128px;flex:none}.detail-hero h3{font:600 26px Georgia,serif;margin:0}.details-list{display:grid;grid-template-columns:1fr 1fr;gap:16px}.details-list p{margin:0}.details-list span{display:block;color:var(--muted);font-size:14px}.placeholder{padding:16px;background:var(--support);border:1px solid var(--border);border-radius:8px}.hidden{display:none!important}.series-books{margin-top:16px;border-top:1px solid var(--border);padding-top:16px}.series-books button{width:100%;text-align:left;margin:4px 0}.warning{color:var(--muted);font-size:14px}.button-row{display:flex;gap:8px;flex-wrap:wrap}.button-row button{flex:1}.dialog{border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);padding:24px;max-width:420px}.dialog::backdrop{background:rgb(16 14 36 / 70%)}
-    @media(max-width:700px){.wrap{padding-top:16px}.brand h1{font-size:24px}.brand p{font-size:12px}.stats{grid-template-columns:repeat(2,1fr);gap:8px}.stat{padding:12px}.stat strong{font-size:24px}.tools{flex-direction:column;align-items:stretch;margin-top:24px}.filter-head{display:flex}.filter-grid{grid-template-columns:repeat(2,1fr);margin-top:16px}.filters:not(.expanded) .filter-grid{display:none}.series-grid{grid-template-columns:1fr}.books{grid-template-columns:repeat(2,1fr)}.drawer{padding:16px}.drawer-head{top:-16px}.form-grid{grid-template-columns:1fr}.full{grid-column:auto}.detail-hero{gap:16px}.detail-hero .cover{width:104px}.details-list{grid-template-columns:1fr 1fr}.section-title h2{font-size:22px}} @media(max-width:360px){.brand-mark{display:none}.brand h1{font-size:20px}.detail-hero{display:block}}
-  </style>
-</head>
-<body>
-<div class="notice">Protótipo para validação · Dados fictícios · Nenhuma alteração é salva</div>
-<main class="wrap">
-  <header><div class="brand"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 6c-3-2-6-2-9-1v13c3-1 6-1 9 1m0-13c3-2 6-2 9-1v13c-3-1-6-1-9 1m0-13v13"/></svg></span><div><h1>Minha <em>biblioteca</em></h1><p>Seu cantinho para organizar suas leituras</p></div></div><div class="actions"><button class="icon-button" id="theme" aria-label="Ativar tema claro" title="Alternar tema"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M19 5l-1.5 1.5m-11 11L5 19"/></svg></button><button class="icon-button" id="logout" aria-label="Sair da biblioteca" title="Sair"><svg viewBox="0 0 24 24"><path d="M10 4H5v16h5m5-12 4 4-4 4m4-4H9"/></svg></button></div></header>
-  <section aria-label="Resumo da biblioteca"><div class="stats"><div class="stat"><span>Exemplares</span><strong>12</strong></div><div class="stat"><span>Lidos</span><strong>4</strong></div><div class="stat"><span>Lendo</span><strong>2</strong></div><div class="stat"><span>Abandonados</span><strong>1</strong></div></div><p class="caption">Exemplares somam quantidades; os status contam edições.</p></section>
-  <div class="tools"><label class="search"><span aria-hidden="true">⌕</span><input id="search" type="search" aria-label="Buscar na biblioteca" placeholder="Buscar título, autor, gênero ou série..."></label><button class="primary" id="add">＋ Adicionar livro</button></div>
-  <section class="filters" id="filters" aria-label="Filtros da estante"><div class="filter-head"><strong>Filtros</strong><button class="secondary" id="filter-toggle" aria-expanded="false">Mostrar filtros ▾</button></div><div class="filter-grid"><label class="field">Gênero<select><option>Todos os gêneros</option><option>Fantasia</option></select></label><label class="field">Status<select><option>Todos os status</option><option>Lendo</option><option>Não lido</option><option>Concluído</option><option>Abandonado</option></select></label><label class="field">Série<select><option>Todas as séries</option><option>Série Aurora</option><option>Sem série</option></select></label><label class="field">Ordenar por título<select><option>A–Z</option><option>Z–A</option></select></label></div></section>
-  <div class="result-line"><span>Exemplo de estante</span><button class="text-button" id="clear">Limpar busca e filtros</button></div>
-  <div class="section-title"><h2>Minhas séries</h2><span>1 série</span></div><div class="series-grid"><div class="series"><div class="series-inner"><div class="mosaic" aria-hidden="true"><div class="mini">AURORA<br>I</div><div class="mini">AURORA<br>II</div><div class="mini">✦</div><div class="mini">✦</div></div><div><h3>Série Aurora</h3><p>2 edições</p><button class="text-button open" id="series-toggle" aria-expanded="false">Abrir série ▾</button></div></div><div class="series-books hidden" id="series-books"><button class="secondary sample-book">Volume 1 · O primeiro amanhecer</button><button class="secondary sample-book">Volume 2 · Além do horizonte</button></div></div></div>
-  <div class="section-title"><h2>Livros sem série</h2><span>3 edições</span></div><div class="books"><button class="book sample-book"><span class="cover">JARDIM<br>DE PAPEL</span><h3>Jardim de papel</h3><p>Autora Exemplo</p><span class="badge">Lendo</span></button><button class="book sample-book"><span class="cover alt">ENTRE<br>ESTRELAS</span><h3>Entre estrelas</h3><p>Autor Exemplo</p><span class="badge">Não lido</span></button><button class="book sample-book"><span class="cover">UM LUGAR<br>CALMO</span><h3>Um lugar calmo</h3><p>Autora Exemplo</p><span class="badge">Concluído</span></button></div>
-</main>
-<div class="overlay" id="overlay" hidden><aside class="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title"><div class="drawer-head"><h2 id="drawer-title">Adicionar livro</h2><button class="icon-button" id="close" aria-label="Fechar painel" title="Fechar"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
-<div id="form-view"><p class="muted">Confira os dados antes de salvar. * Campos obrigatórios.</p><form id="form"><section><h3>Identificação</h3><div class="form-grid"><label class="field full">ISBN (opcional)<input placeholder="Digite o ISBN"></label><div class="full button-row"><button class="secondary" type="button">Ler com câmera</button><button class="secondary" type="button">Consultar ISBN</button></div><p class="muted full">Ao digitar um ISBN válido, a consulta também começa automaticamente.</p><label class="field full">Título *<input required></label><label class="field full">Autor *<input required></label></div></section><section><h3>Sobre a edição</h3><div class="form-grid"><label class="field">Editora<input></label><label class="field">Páginas<input type="number" min="1"></label><label class="field full">Gêneros (até 4)<input placeholder="Adicionar gênero"></label></div></section><section><h3>Organização</h3><div class="form-grid"><label class="field">Série<input></label><label class="field">Volume<input type="number" min="1"></label><label class="field">Quantidade<input type="number" value="1" min="1"></label><label class="field">Status<select><option>Não lido</option><option>Lendo</option><option>Concluído</option><option>Abandonado</option></select></label></div></section><section><h3>Sua leitura</h3><div class="form-grid"><label class="field full">Avaliação opcional<select><option>Sem avaliação</option><option>1 estrela</option><option>2 estrelas</option><option>3 estrelas</option><option>4 estrelas</option><option>5 estrelas</option></select></label><label class="field full">Comentário opcional<textarea rows="4" placeholder="Escreva sobre sua leitura"></textarea></label><p class="caption full">Editor ilustrativo · limite de 500 pontos de código; quebras de linha contam.</p></div></section><div class="form-actions"><button class="primary" type="submit">Salvar livro</button><button class="secondary" type="button" id="cancel">Cancelar</button></div></form></div>
-<div id="detail-view" class="hidden"><div class="detail-hero"><div class="cover">JARDIM<br>DE PAPEL</div><div><h3>Jardim de papel</h3><p class="muted">Autora Exemplo</p><span class="badge">Lendo</span></div></div><section><h3>Edição</h3><div class="details-list"><p><span>ISBN</span>Não informado</p><p><span>Editora</span>Editora Exemplo</p><p><span>Páginas</span>240</p></div></section><section><h3>Organização</h3><div class="details-list"><p><span>Gêneros</span>Fantasia</p><p><span>Série</span>Não informada</p><p><span>Quantidade</span>1 exemplar</p></div></section><section><h3>Sua leitura</h3><p>★★★★☆ · 4 de 5 estrelas</p><p class="muted">Um comentário pessoal aparece aqui.</p></section><div class="form-actions"><button class="primary" id="edit">Editar livro</button><button class="secondary" id="delete">Excluir livro</button></div></div>
-</aside></div>
-<dialog class="dialog" id="confirm"><h2>Descartar alterações?</h2><p>As informações preenchidas neste protótipo serão perdidas.</p><div class="form-actions"><button class="secondary" id="keep">Continuar editando</button><button class="primary" id="discard">Descartar</button></div></dialog>
-<script>
-  const $ = (s) => document.querySelector(s); const overlay=$('#overlay'), form=$('#form'), confirmDialog=$('#confirm'); let dirty=false, previous=null;
-  function openDrawer(detail=false){previous=document.activeElement;dirty=false;form.reset();$('#form-view').classList.toggle('hidden',detail);$('#detail-view').classList.toggle('hidden',!detail);$('#drawer-title').textContent=detail?'Detalhes do livro':'Adicionar livro';overlay.hidden=false;document.body.style.overflow='hidden';$('#close').focus()}
-  function closeDrawer(){overlay.hidden=true;document.body.style.overflow='';dirty=false;previous?.focus()}
-  function requestClose(){if(!$('#form-view').classList.contains('hidden')&&dirty)confirmDialog.showModal();else closeDrawer()}
-  $('#add').onclick=()=>openDrawer();document.querySelectorAll('.sample-book').forEach(b=>b.onclick=()=>openDrawer(true));$('#close').onclick=requestClose;$('#cancel').onclick=requestClose;overlay.onclick=e=>{if(e.target===overlay)requestClose()};document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!overlay.hidden&&!confirmDialog.open)requestClose()});form.addEventListener('input',()=>dirty=true);form.addEventListener('change',()=>dirty=true);form.onsubmit=e=>{e.preventDefault();alert('Protótipo: nenhuma informação foi salva.');closeDrawer()};$('#keep').onclick=()=>confirmDialog.close();$('#discard').onclick=()=>{confirmDialog.close();closeDrawer()};$('#edit').onclick=()=>{openDrawer();$('#drawer-title').textContent='Editar livro'};$('#delete').onclick=()=>alert('Protótipo: a exclusão real exige confirmação e não é executada aqui.');$('#logout').onclick=()=>alert('Protótipo: nenhuma sessão está conectada.');$('#theme').onclick=()=>{document.body.classList.toggle('light');$('#theme').setAttribute('aria-label',document.body.classList.contains('light')?'Ativar tema escuro':'Ativar tema claro')};$('#filter-toggle').onclick=()=>{const expanded=$('#filters').classList.toggle('expanded');$('#filter-toggle').setAttribute('aria-expanded',expanded);$('#filter-toggle').textContent=expanded?'Ocultar filtros ▴':'Mostrar filtros ▾'};$('#series-toggle').onclick=()=>{const expanded=$('#series-books').classList.toggle('hidden')===false;$('#series-toggle').setAttribute('aria-expanded',expanded);$('#series-toggle').textContent=expanded?'Fechar série ▴':'Abrir série ▾'};$('#clear').onclick=()=>{$('#search').value='';document.querySelectorAll('.filter-grid select').forEach(s=>s.selectedIndex=0)};
-</script>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Protótipo · Minha biblioteca</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      :root {
+        font-family: system-ui, sans-serif;
+        line-height: 1.5;
+        color-scheme: dark;
+        --bg: #100e24;
+        --surface: #1b1831;
+        --support: #211b35;
+        --text: #faf5f7;
+        --muted: #c7bdd0;
+        --accent: #dba3ed;
+        --on: #20102c;
+        --tag: #413050;
+        --border: #51405e;
+      }
+      body.light {
+        color-scheme: light;
+        --bg: #fff9ef;
+        --surface: #fff9ef;
+        --support: #eed9f2;
+        --text: #4f215e;
+        --muted: #754080;
+        --accent: #4f215e;
+        --on: #fff9ef;
+        --tag: #eed9f2;
+        --border: #9a6ca2;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+      }
+      button,
+      input,
+      select,
+      textarea {
+        font: inherit;
+      }
+      button {
+        cursor: pointer;
+      }
+      button:focus-visible,
+      input:focus-visible,
+      select:focus-visible,
+      textarea:focus-visible,
+      summary:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+      .notice {
+        padding: 8px 16px;
+        text-align: center;
+        background: var(--support);
+        color: var(--text);
+        font-size: 14px;
+      }
+      .wrap {
+        width: min(100% - 32px, 1200px);
+        margin: auto;
+        padding: 32px 0 48px;
+      }
+      header,
+      .brand,
+      .actions,
+      .tools,
+      .section-title,
+      .filter-head {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      header,
+      .section-title,
+      .filter-head {
+        justify-content: space-between;
+      }
+      header {
+        margin-bottom: 32px;
+      }
+      .brand-mark,
+      .icon-button {
+        display: grid;
+        place-items: center;
+        width: 44px;
+        height: 44px;
+        flex: none;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--surface);
+        color: var(--accent);
+      }
+      .brand h1 {
+        font:
+          600 32px/1.2 Georgia,
+          serif;
+        margin: 0;
+      }
+      .brand em {
+        color: var(--accent);
+        font-weight: 400;
+      }
+      .brand p,
+      .muted {
+        color: var(--muted);
+        margin: 4px 0 0;
+        font-size: 14px;
+      }
+      svg {
+        width: 22px;
+        height: 22px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.7;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+      }
+      .stat {
+        padding: 16px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+      }
+      .stat span {
+        display: block;
+        color: var(--muted);
+        font-size: 14px;
+      }
+      .stat strong {
+        display: block;
+        font:
+          600 28px/1.2 Georgia,
+          serif;
+        margin-top: 8px;
+      }
+      .caption {
+        font-size: 12px;
+        color: var(--muted);
+        margin: 8px 0 0;
+      }
+      .tools {
+        margin: 32px 0 16px;
+      }
+      .search {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--surface);
+        padding: 0 12px;
+        color: var(--muted);
+      }
+      .search input {
+        width: 100%;
+        height: 48px;
+        border: 0;
+        outline: 0;
+        background: transparent;
+        color: var(--text);
+      }
+      .primary,
+      .secondary {
+        min-height: 48px;
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-weight: 700;
+      }
+      .primary {
+        border: 1px solid var(--accent);
+        background: var(--accent);
+        color: var(--on);
+      }
+      .secondary {
+        border: 1px solid var(--border);
+        background: var(--surface);
+        color: var(--text);
+      }
+      .filters {
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--surface);
+        padding: 16px;
+      }
+      .filter-head {
+        display: none;
+      }
+      .filter-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+      }
+      .field {
+        display: grid;
+        gap: 8px;
+        font-size: 14px;
+        font-weight: 600;
+      }
+      .field input,
+      .field select,
+      .field textarea {
+        width: 100%;
+        min-height: 44px;
+        padding: 8px 12px;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        background: var(--bg);
+        color: var(--text);
+        font-weight: 400;
+      }
+      .result-line {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        align-items: center;
+        color: var(--muted);
+        font-size: 14px;
+        margin: 16px 0;
+      }
+      .text-button {
+        border: 0;
+        padding: 4px;
+        background: none;
+        color: var(--accent);
+        text-decoration: underline;
+        text-underline-offset: 4px;
+      }
+      .section-title {
+        margin: 32px 0 16px;
+      }
+      .section-title h2 {
+        font:
+          600 26px Georgia,
+          serif;
+        margin: 0;
+      }
+      .section-title span {
+        font-size: 14px;
+        color: var(--muted);
+      }
+      .series-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+      }
+      .series {
+        padding: 16px;
+        text-align: left;
+        background: var(--surface);
+        color: var(--text);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+      }
+      .series-inner {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+      }
+      .mosaic {
+        width: 128px;
+        flex: none;
+        aspect-ratio: 1;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4px;
+      }
+      .mini,
+      .cover {
+        display: grid;
+        place-items: center;
+        text-align: center;
+        background: var(--tag);
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        color: var(--text);
+        font:
+          600 13px Georgia,
+          serif;
+        padding: 8px;
+      }
+      .mini:nth-child(2),
+      .cover.alt {
+        background: var(--support);
+      }
+      .series h3,
+      .book h3 {
+        margin: 0;
+        font:
+          600 19px Georgia,
+          serif;
+      }
+      .series p,
+      .book p {
+        margin: 4px 0;
+        color: var(--muted);
+        font-size: 14px;
+      }
+      .series .open {
+        display: block;
+        margin-top: 12px;
+        color: var(--accent);
+        font-size: 14px;
+      }
+      .books {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 16px;
+      }
+      .book {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        text-align: left;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        color: var(--text);
+      }
+      .cover {
+        aspect-ratio: 2/3;
+        margin-bottom: 12px;
+        font-size: 18px;
+        letter-spacing: 0.04em;
+      }
+      .badge {
+        display: inline-block;
+        margin-top: 8px;
+        padding: 4px 8px;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        background: var(--tag);
+        font-size: 12px;
+      }
+      .overlay {
+        position: fixed;
+        inset: 0;
+        background: rgb(16 14 36 / 70%);
+        display: flex;
+        justify-content: flex-end;
+        z-index: 5;
+      }
+      .overlay[hidden] {
+        display: none;
+      }
+      .drawer {
+        width: min(100%, 680px);
+        height: 100%;
+        overflow: auto;
+        background: var(--surface);
+        border-left: 1px solid var(--border);
+        padding: 24px;
+      }
+      .drawer-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        position: sticky;
+        top: -24px;
+        background: var(--surface);
+        padding: 0 0 16px;
+        z-index: 1;
+      }
+      .drawer-head h2 {
+        font:
+          600 28px Georgia,
+          serif;
+        margin: 0;
+      }
+      .drawer section {
+        padding: 24px 0;
+        border-top: 1px solid var(--border);
+      }
+      .drawer section h3 {
+        font:
+          600 20px Georgia,
+          serif;
+        margin: 0 0 16px;
+      }
+      .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      .full {
+        grid-column: 1/-1;
+      }
+      .form-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 24px;
+      }
+      .detail-hero {
+        display: flex;
+        gap: 24px;
+        align-items: start;
+      }
+      .detail-hero .cover {
+        width: 128px;
+        flex: none;
+      }
+      .detail-hero h3 {
+        font:
+          600 26px Georgia,
+          serif;
+        margin: 0;
+      }
+      .details-list {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      .details-list p {
+        margin: 0;
+      }
+      .details-list span {
+        display: block;
+        color: var(--muted);
+        font-size: 14px;
+      }
+      .placeholder {
+        padding: 16px;
+        background: var(--support);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+      }
+      .hidden {
+        display: none !important;
+      }
+      .series-books {
+        margin-top: 16px;
+        border-top: 1px solid var(--border);
+        padding-top: 16px;
+      }
+      .series-books button {
+        width: 100%;
+        text-align: left;
+        margin: 4px 0;
+      }
+      .warning {
+        color: var(--muted);
+        font-size: 14px;
+      }
+      .button-row {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .button-row button {
+        flex: 1;
+      }
+      .dialog {
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--surface);
+        color: var(--text);
+        padding: 24px;
+        max-width: 420px;
+      }
+      .dialog::backdrop {
+        background: rgb(16 14 36 / 70%);
+      }
+      @media (max-width: 700px) {
+        .wrap {
+          padding-top: 16px;
+        }
+        .brand h1 {
+          font-size: 24px;
+        }
+        .brand p {
+          font-size: 12px;
+        }
+        .stats {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 8px;
+        }
+        .stat {
+          padding: 12px;
+        }
+        .stat strong {
+          font-size: 24px;
+        }
+        .tools {
+          flex-direction: column;
+          align-items: stretch;
+          margin-top: 24px;
+        }
+        .filter-head {
+          display: flex;
+        }
+        .filter-grid {
+          grid-template-columns: repeat(2, 1fr);
+          margin-top: 16px;
+        }
+        .filters:not(.expanded) .filter-grid {
+          display: none;
+        }
+        .series-grid {
+          grid-template-columns: 1fr;
+        }
+        .books {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .drawer {
+          padding: 16px;
+        }
+        .drawer-head {
+          top: -16px;
+        }
+        .form-grid {
+          grid-template-columns: 1fr;
+        }
+        .full {
+          grid-column: auto;
+        }
+        .detail-hero {
+          gap: 16px;
+        }
+        .detail-hero .cover {
+          width: 104px;
+        }
+        .details-list {
+          grid-template-columns: 1fr 1fr;
+        }
+        .section-title h2 {
+          font-size: 22px;
+        }
+      }
+      @media (max-width: 360px) {
+        .brand-mark {
+          display: none;
+        }
+        .brand h1 {
+          font-size: 20px;
+        }
+        .detail-hero {
+          display: block;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="notice">Protótipo para validação · Dados fictícios · Nenhuma alteração é salva</div>
+    <main class="wrap">
+      <header>
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true"
+            ><svg viewBox="0 0 24 24">
+              <path
+                d="M12 6c-3-2-6-2-9-1v13c3-1 6-1 9 1m0-13c3-2 6-2 9-1v13c-3-1-6-1-9 1m0-13v13"
+              /></svg
+          ></span>
+          <div>
+            <h1>Minha <em>biblioteca</em></h1>
+            <p>Seu cantinho para organizar suas leituras</p>
+          </div>
+        </div>
+        <div class="actions">
+          <button
+            class="icon-button"
+            id="theme"
+            aria-label="Ativar tema claro"
+            title="Alternar tema"
+          >
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="4" />
+              <path
+                d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M19 5l-1.5 1.5m-11 11L5 19"
+              />
+            </svg></button
+          ><button class="icon-button" id="logout" aria-label="Sair da biblioteca" title="Sair">
+            <svg viewBox="0 0 24 24"><path d="M10 4H5v16h5m5-12 4 4-4 4m4-4H9" /></svg>
+          </button>
+        </div>
+      </header>
+      <section aria-label="Resumo da biblioteca">
+        <div class="stats">
+          <div class="stat"><span>Exemplares</span><strong>12</strong></div>
+          <div class="stat"><span>Lidos</span><strong>4</strong></div>
+          <div class="stat"><span>Lendo</span><strong>2</strong></div>
+          <div class="stat"><span>Abandonados</span><strong>1</strong></div>
+        </div>
+        <p class="caption">Exemplares somam quantidades; os status contam edições.</p>
+      </section>
+      <div class="tools">
+        <label class="search"
+          ><span aria-hidden="true">⌕</span
+          ><input
+            id="search"
+            type="search"
+            aria-label="Buscar na biblioteca"
+            placeholder="Buscar título, autor, gênero ou série..." /></label
+        ><button class="primary" id="add">＋ Adicionar livro</button>
+      </div>
+      <section class="filters" id="filters" aria-label="Filtros da estante">
+        <div class="filter-head">
+          <strong>Filtros</strong
+          ><button class="secondary" id="filter-toggle" aria-expanded="false">
+            Mostrar filtros ▾
+          </button>
+        </div>
+        <div class="filter-grid">
+          <label class="field"
+            >Gênero<select>
+              <option>Todos os gêneros</option>
+              <option>Fantasia</option>
+            </select></label
+          ><label class="field"
+            >Status<select>
+              <option>Todos os status</option>
+              <option>Lendo</option>
+              <option>Não lido</option>
+              <option>Concluído</option>
+              <option>Abandonado</option>
+            </select></label
+          ><label class="field"
+            >Série<select>
+              <option>Todas as séries</option>
+              <option>Série Aurora</option>
+              <option>Sem série</option>
+            </select></label
+          ><label class="field"
+            >Ordenar por título<select>
+              <option>A–Z</option>
+              <option>Z–A</option>
+            </select></label
+          >
+        </div>
+      </section>
+      <div class="result-line">
+        <span>Exemplo de estante</span
+        ><button class="text-button" id="clear">Limpar busca e filtros</button>
+      </div>
+      <div class="section-title">
+        <h2>Minhas séries</h2>
+        <span>1 série</span>
+      </div>
+      <div class="series-grid">
+        <div class="series">
+          <div class="series-inner">
+            <div class="mosaic" aria-hidden="true">
+              <div class="mini">AURORA<br />I</div>
+              <div class="mini">AURORA<br />II</div>
+              <div class="mini">✦</div>
+              <div class="mini">✦</div>
+            </div>
+            <div>
+              <h3>Série Aurora</h3>
+              <p>2 edições</p>
+              <button class="text-button open" id="series-toggle" aria-expanded="false">
+                Abrir série ▾
+              </button>
+            </div>
+          </div>
+          <div class="series-books hidden" id="series-books">
+            <button class="secondary sample-book">Volume 1 · O primeiro amanhecer</button
+            ><button class="secondary sample-book">Volume 2 · Além do horizonte</button>
+          </div>
+        </div>
+      </div>
+      <div class="section-title">
+        <h2>Livros sem série</h2>
+        <span>3 edições</span>
+      </div>
+      <div class="books">
+        <button class="book sample-book">
+          <span class="cover">JARDIM<br />DE PAPEL</span>
+          <h3>Jardim de papel</h3>
+          <p>Autora Exemplo</p>
+          <span class="badge">Lendo</span></button
+        ><button class="book sample-book">
+          <span class="cover alt">ENTRE<br />ESTRELAS</span>
+          <h3>Entre estrelas</h3>
+          <p>Autor Exemplo</p>
+          <span class="badge">Não lido</span></button
+        ><button class="book sample-book">
+          <span class="cover">UM LUGAR<br />CALMO</span>
+          <h3>Um lugar calmo</h3>
+          <p>Autora Exemplo</p>
+          <span class="badge">Concluído</span>
+        </button>
+      </div>
+    </main>
+    <div class="overlay" id="overlay" hidden>
+      <aside class="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title">
+        <div class="drawer-head">
+          <h2 id="drawer-title">Adicionar livro</h2>
+          <button class="icon-button" id="close" aria-label="Fechar painel" title="Fechar">
+            <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" /></svg>
+          </button>
+        </div>
+        <div id="form-view">
+          <p class="muted">Confira os dados antes de salvar. * Campos obrigatórios.</p>
+          <form id="form">
+            <section>
+              <h3>Identificação</h3>
+              <div class="form-grid">
+                <label class="field full"
+                  >ISBN (opcional)<input placeholder="Digite o ISBN"
+                /></label>
+                <div class="full button-row">
+                  <button class="secondary" type="button">Ler com câmera</button
+                  ><button class="secondary" type="button">Consultar ISBN</button>
+                </div>
+                <p class="muted full">
+                  Ao digitar um ISBN válido, a consulta também começa automaticamente.
+                </p>
+                <label class="field full">Título *<input required /></label
+                ><label class="field full">Autor *<input required /></label>
+              </div>
+            </section>
+            <section>
+              <h3>Sobre a edição</h3>
+              <div class="form-grid">
+                <label class="field">Editora<input /></label
+                ><label class="field">Páginas<input type="number" min="1" /></label
+                ><label class="field full"
+                  >Gêneros (até 4)<input placeholder="Adicionar gênero"
+                /></label>
+              </div>
+            </section>
+            <section>
+              <h3>Organização</h3>
+              <div class="form-grid">
+                <label class="field">Série<input /></label
+                ><label class="field">Volume<input type="number" min="1" /></label
+                ><label class="field">Quantidade<input type="number" value="1" min="1" /></label
+                ><label class="field"
+                  >Status<select>
+                    <option>Não lido</option>
+                    <option>Lendo</option>
+                    <option>Concluído</option>
+                    <option>Abandonado</option>
+                  </select></label
+                >
+              </div>
+            </section>
+            <section>
+              <h3>Sua leitura</h3>
+              <div class="form-grid">
+                <label class="field full"
+                  >Avaliação opcional<select>
+                    <option>Sem avaliação</option>
+                    <option>1 estrela</option>
+                    <option>2 estrelas</option>
+                    <option>3 estrelas</option>
+                    <option>4 estrelas</option>
+                    <option>5 estrelas</option>
+                  </select></label
+                ><label class="field full"
+                  >Comentário opcional<textarea
+                    rows="4"
+                    placeholder="Escreva sobre sua leitura"
+                  ></textarea>
+                </label>
+                <p class="caption full">
+                  Editor ilustrativo · limite de 500 pontos de código; quebras de linha contam.
+                </p>
+              </div>
+            </section>
+            <div class="form-actions">
+              <button class="primary" type="submit">Salvar livro</button
+              ><button class="secondary" type="button" id="cancel">Cancelar</button>
+            </div>
+          </form>
+        </div>
+        <div id="detail-view" class="hidden">
+          <div class="detail-hero">
+            <div class="cover">JARDIM<br />DE PAPEL</div>
+            <div>
+              <h3>Jardim de papel</h3>
+              <p class="muted">Autora Exemplo</p>
+              <span class="badge">Lendo</span>
+            </div>
+          </div>
+          <section>
+            <h3>Edição</h3>
+            <div class="details-list">
+              <p><span>ISBN</span>Não informado</p>
+              <p><span>Editora</span>Editora Exemplo</p>
+              <p><span>Páginas</span>240</p>
+            </div>
+          </section>
+          <section>
+            <h3>Organização</h3>
+            <div class="details-list">
+              <p><span>Gêneros</span>Fantasia</p>
+              <p><span>Série</span>Não informada</p>
+              <p><span>Quantidade</span>1 exemplar</p>
+            </div>
+          </section>
+          <section>
+            <h3>Sua leitura</h3>
+            <p>★★★★☆ · 4 de 5 estrelas</p>
+            <p class="muted">Um comentário pessoal aparece aqui.</p>
+          </section>
+          <div class="form-actions">
+            <button class="primary" id="edit">Editar livro</button
+            ><button class="secondary" id="delete">Excluir livro</button>
+          </div>
+        </div>
+      </aside>
+    </div>
+    <dialog class="dialog" id="confirm">
+      <h2>Descartar alterações?</h2>
+      <p>As informações preenchidas neste protótipo serão perdidas.</p>
+      <div class="form-actions">
+        <button class="secondary" id="keep">Continuar editando</button
+        ><button class="primary" id="discard">Descartar</button>
+      </div>
+    </dialog>
+    <script>
+      const $ = (s) => document.querySelector(s)
+      const overlay = $('#overlay'),
+        form = $('#form'),
+        confirmDialog = $('#confirm')
+      let dirty = false,
+        previous = null
+      function openDrawer(detail = false) {
+        previous = document.activeElement
+        dirty = false
+        form.reset()
+        $('#form-view').classList.toggle('hidden', detail)
+        $('#detail-view').classList.toggle('hidden', !detail)
+        $('#drawer-title').textContent = detail ? 'Detalhes do livro' : 'Adicionar livro'
+        overlay.hidden = false
+        document.body.style.overflow = 'hidden'
+        $('#close').focus()
+      }
+      function closeDrawer() {
+        overlay.hidden = true
+        document.body.style.overflow = ''
+        dirty = false
+        previous?.focus()
+      }
+      function requestClose() {
+        if (!$('#form-view').classList.contains('hidden') && dirty) confirmDialog.showModal()
+        else closeDrawer()
+      }
+      $('#add').onclick = () => openDrawer()
+      document.querySelectorAll('.sample-book').forEach((b) => (b.onclick = () => openDrawer(true)))
+      $('#close').onclick = requestClose
+      $('#cancel').onclick = requestClose
+      overlay.onclick = (e) => {
+        if (e.target === overlay) requestClose()
+      }
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !overlay.hidden && !confirmDialog.open) requestClose()
+      })
+      form.addEventListener('input', () => (dirty = true))
+      form.addEventListener('change', () => (dirty = true))
+      form.onsubmit = (e) => {
+        e.preventDefault()
+        alert('Protótipo: nenhuma informação foi salva.')
+        closeDrawer()
+      }
+      $('#keep').onclick = () => confirmDialog.close()
+      $('#discard').onclick = () => {
+        confirmDialog.close()
+        closeDrawer()
+      }
+      $('#edit').onclick = () => {
+        openDrawer()
+        $('#drawer-title').textContent = 'Editar livro'
+      }
+      $('#delete').onclick = () =>
+        alert('Protótipo: a exclusão real exige confirmação e não é executada aqui.')
+      $('#logout').onclick = () => alert('Protótipo: nenhuma sessão está conectada.')
+      $('#theme').onclick = () => {
+        document.body.classList.toggle('light')
+        $('#theme').setAttribute(
+          'aria-label',
+          document.body.classList.contains('light') ? 'Ativar tema escuro' : 'Ativar tema claro',
+        )
+      }
+      $('#filter-toggle').onclick = () => {
+        const expanded = $('#filters').classList.toggle('expanded')
+        $('#filter-toggle').setAttribute('aria-expanded', expanded)
+        $('#filter-toggle').textContent = expanded ? 'Ocultar filtros ▴' : 'Mostrar filtros ▾'
+      }
+      $('#series-toggle').onclick = () => {
+        const expanded = $('#series-books').classList.toggle('hidden') === false
+        $('#series-toggle').setAttribute('aria-expanded', expanded)
+        $('#series-toggle').textContent = expanded ? 'Fechar série ▴' : 'Abrir série ▾'
+      }
+      $('#clear').onclick = () => {
+        $('#search').value = ''
+        document.querySelectorAll('.filter-grid select').forEach((s) => (s.selectedIndex = 0))
+      }
+    </script>
+  </body>
 </html>

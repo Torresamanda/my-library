@@ -35,6 +35,14 @@ const error = ref('')
 const saving = ref(false)
 const rating = ref<number | null>(props.book?.rating ?? null)
 const review = ref<Review | null>(props.book?.review ?? null)
+const initialValues = JSON.stringify({ form, rating: rating.value, review: review.value })
+
+function requestCancel() {
+  if (saving.value) return
+  const changed =
+    JSON.stringify({ form, rating: rating.value, review: review.value }) !== initialValues
+  if (!changed || window.confirm('Descartar as alterações feitas neste livro?')) emit('cancel')
+}
 const reviewInvalid = ref(false)
 const lookingUp = ref(false)
 const lookupMessage = ref('')
@@ -234,20 +242,13 @@ async function submit() {
   <BaseDrawer
     :title="book ? 'Editar livro' : 'Adicionar livro'"
     :close-disabled="saving"
-    @close="emit('cancel')"
+    @close="requestCancel"
   >
     <div class="book-form">
       <p>Preencha os dados desta edição. Campos com * são obrigatórios.</p>
       <form @submit.prevent="submit">
         <div class="form-grid">
-          <label class="full"
-            ><span>Título <span aria-hidden="true">*</span></span
-            ><input v-model="form.title" required maxlength="250" autocomplete="off"
-          /></label>
-          <label class="full"
-            ><span>Autor <span aria-hidden="true">*</span></span
-            ><input v-model="form.author" required maxlength="250" autocomplete="off"
-          /></label>
+          <h3 class="form-section-title full">Identificação</h3>
           <div class="isbn-lookup full">
             <label
               >ISBN (opcional)<input
@@ -269,6 +270,26 @@ async function submit() {
               <BarcodeScanner @scanned="scanned" />
             </div>
           </div>
+          <label class="full"
+            ><span>Título <span aria-hidden="true">*</span></span
+            ><input v-model="form.title" required maxlength="250" autocomplete="off"
+          /></label>
+          <label class="full"
+            ><span>Autor <span aria-hidden="true">*</span></span
+            ><input v-model="form.author" required maxlength="250" autocomplete="off"
+          /></label>
+          <div class="full">
+            <p v-if="lookupMessage" role="status">{{ lookupMessage }}</p>
+            <img
+              v-if="coverUrl && !coverFailed"
+              :src="coverUrl"
+              alt="Capa encontrada na Open Library"
+              class="lookup-cover"
+              referrerpolicy="no-referrer"
+              @error="coverFailed = true"
+            />
+          </div>
+          <h3 class="form-section-title full">Sobre a edição</h3>
           <label
             >Gêneros (até 4, separados por vírgula)<input
               v-model="form.genres"
@@ -283,6 +304,7 @@ async function submit() {
               max="1000000"
               step="1"
           /></label>
+          <h3 class="form-section-title full">Organização</h3>
           <label>Série (opcional)<input v-model="form.seriesName" maxlength="200" /></label>
           <label
             >Volume (opcional)<input
@@ -311,31 +333,18 @@ async function submit() {
             </select></label
           >
         </div>
+        <h3 class="form-section-title">Sua leitura</h3>
         <ReviewEditor
           v-model:rating="rating"
           v-model:review="review"
           @invalid="reviewInvalid = $event"
-        />
-        <p v-if="lookupMessage" role="status">{{ lookupMessage }}</p>
-        <img
-          v-if="coverUrl && !coverFailed"
-          :src="coverUrl"
-          alt="Capa encontrada na Open Library"
-          class="lookup-cover"
-          referrerpolicy="no-referrer"
-          @error="coverFailed = true"
         />
         <p v-if="error" role="alert" class="form-error">{{ error }}</p>
         <div class="form-actions">
           <button type="submit" :disabled="saving || lookingUp">
             <LoadingIndicator v-if="saving" compact text="Salvando..." />
             <template v-else>Salvar livro</template></button
-          ><button
-            type="button"
-            class="secondary-button"
-            :disabled="saving"
-            @click="emit('cancel')"
-          >
+          ><button type="button" class="secondary-button" :disabled="saving" @click="requestCancel">
             Cancelar
           </button>
         </div>

@@ -15,7 +15,7 @@ import { isLibraryPath } from './features/navigation/path'
 import BookForm from './features/books/components/BookForm.vue'
 import BookDetails from './features/books/components/BookDetails.vue'
 import LibraryFilters from './features/library/components/LibraryFilters.vue'
-import { defaultFilters } from './features/library/domain/groupBooks'
+import { defaultFilters, groupBooks } from './features/library/domain/groupBooks'
 import LibraryStats from './features/library/components/LibraryStats.vue'
 import LibraryShelf from './features/library/components/LibraryShelf.vue'
 import LoadingIndicator from './ui/LoadingIndicator.vue'
@@ -25,7 +25,16 @@ import {
   LibraryRequestError,
   type LibraryBook,
 } from './features/library/services/books'
-import { PhBookOpen, PhLockKey, PhMagnifyingGlass, PhMoon, PhSun, PhWarningCircle } from './icons'
+import {
+  PhBookOpen,
+  PhLockKey,
+  PhMagnifyingGlass,
+  PhMoon,
+  PhSun,
+  PhWarningCircle,
+  PhSignOut,
+  PhPlus,
+} from './icons'
 
 type View = 'checking' | 'signed-out' | 'loading' | 'ready' | 'denied' | 'error' | 'unconfigured'
 const view = ref<View>(firebaseConfigured ? 'checking' : 'unconfigured')
@@ -46,6 +55,18 @@ const dark = ref(
 const message = ref('')
 const loadError = ref('Confira sua conexão e tente novamente.')
 const stats = computed(() => libraryStats(books.value))
+const matchingCount = computed(() => {
+  const groups = groupBooks(books.value, search.value, filters.value)
+  return (
+    groups.standalone.length +
+    groups.series.reduce((total, series) => total + series.books.length, 0)
+  )
+})
+const hasFilters = computed(() =>
+  Boolean(
+    search.value.trim() || filters.value.genre || filters.value.status || filters.value.series,
+  ),
+)
 let unsubscribe = () => {}
 let requestVersion = 0
 
@@ -182,7 +203,16 @@ onBeforeUnmount(() => {
             @click="toggleTheme"
           >
             <PhSun v-if="dark" :size="22" /><PhMoon v-else :size="22" /></button
-          ><button v-if="user" class="filter" type="button" @click="leave">Sair</button>
+          ><button
+            v-if="user"
+            class="theme"
+            type="button"
+            aria-label="Sair da biblioteca"
+            title="Sair"
+            @click="leave"
+          >
+            <PhSignOut :size="22" aria-hidden="true" />
+          </button>
         </div>
       </header>
       <p v-if="message" role="alert" class="notice">{{ message }}</p>
@@ -227,6 +257,7 @@ onBeforeUnmount(() => {
       <template v-else
         ><p v-if="success" role="status">{{ success }}</p>
         <LibraryStats :stats="stats" />
+        <p class="stats-caption">Exemplares somam quantidades; os status contam edições.</p>
         <div class="tools">
           <label class="search"
             ><PhMagnifyingGlass :size="22" aria-hidden="true" /><span class="sr-only"
@@ -236,15 +267,27 @@ onBeforeUnmount(() => {
               type="search"
               placeholder="Buscar título, autor, gênero ou série..."
           /></label>
-          <button class="add-book" type="button" @click="startAdding">Adicionar livro</button>
+          <button class="add-book" type="button" @click="startAdding">
+            <PhPlus :size="20" aria-hidden="true" /> Adicionar livro
+          </button>
         </div>
         <LibraryFilters :books="books" :filters="filters" @change="filters = $event" />
+        <div v-if="hasFilters" class="results-summary" role="status">
+          <span
+            >{{ matchingCount }}
+            {{ matchingCount === 1 ? 'edição encontrada' : 'edições encontradas' }}</span
+          >
+          <button type="button" class="clear-filters" @click="clearFilters">
+            Limpar busca e filtros
+          </button>
+        </div>
         <LibraryShelf
           :books="books"
           :search="search"
           :filters="filters"
           @select="selectBook"
           @clear="clearFilters"
+          @add="startAdding"
         />
       </template>
       <BookDetails
