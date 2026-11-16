@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onBeforeUnmount, reactive, ref } from 'vue'
+import { toast } from 'vue-sonner'
 import { normalizeIsbn } from '../domain/isbn'
 import BarcodeScanner from './BarcodeScanner.vue'
 import ReviewEditor from './ReviewEditor.vue'
@@ -222,6 +223,7 @@ async function submit() {
         : cause instanceof LibraryRequestError && cause.status === 401
           ? 'Sua sessão expirou ou o acesso foi negado. Entre novamente.'
           : 'Não foi possível salvar. Confira os dados e tente novamente.'
+    toast.error(error.value, { toasterId: 'drawer' })
   } finally {
     saving.value = false
   }

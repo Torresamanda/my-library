@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { nextTick, ref } from 'vue'
+import { toast } from 'vue-sonner'
 import BookCover from './BookCover.vue'
 import ReviewContent from './ReviewContent.vue'
 import BaseDrawer from '../../../ui/BaseDrawer.vue'
@@ -44,6 +45,7 @@ async function remove() {
         : cause instanceof LibraryRequestError && cause.status === 404
           ? 'Este livro não foi encontrado. Feche os detalhes e atualize a estante.'
           : 'Não foi possível excluir. Confira sua conexão e tente novamente.'
+    toast.error(error.value, { toasterId: 'drawer' })
   } finally {
     deleting.value = false
   }

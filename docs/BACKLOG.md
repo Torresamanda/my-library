@@ -357,3 +357,12 @@ Estas decisões substituem dúvidas e propostas anteriores conflitantes neste ar
 - [x] Contar pontos de código Unicode (emojis compostos podem contar mais de um), quebras de linha e separações entre blocos como um cada; o limite é 500. Marcação não conta.
 - [x] Validar estrutura e limite no servidor, armazenar somente blocos e marcas permitidos e renderizar como texto seguro; testar entradas maliciosas e persistência.
 - [ ] Validar edição por toque e teclado, acessibilidade e temas em dispositivos reais; a publicação depende da migração de metadados pendente no D1 remoto.
+
+### Acabamento da estante
+
+- [x] Aplicar filtros combinados de gênero, status e série e ordenação por título, mantendo volumes ordenados; permitir limpar busca e filtros sem resultados.
+- [x] Acrescentar notificações de sucesso e de falha no salvamento/exclusão, incluindo ISBN duplicado, além das mensagens persistentes; manter a página 404 e estados de carregamento e erro.
+- [x] Respeitar a preferência de tema do dispositivo na primeira visita e permitir troca manual.
+- [ ] Validar contraste, foco, notificações, temas e leiautes em celular e computador com navegadores reais; concluir também o envio manual de capas ainda pendente.
+
+As combinações principais de texto, texto secundário e botões dos temas claro e escuro foram verificadas por cálculo de contraste e atingem pelo menos 4,5:1. Isso não substitui a inspeção dos componentes, foco, imagens e estados em telas reais.

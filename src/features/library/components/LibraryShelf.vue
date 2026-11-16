@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import BookCover from '../../books/components/BookCover.vue'
-import { groupBooks } from '../domain/groupBooks'
+import { groupBooks, type LibraryFilters } from '../domain/groupBooks'
 import type { LibraryBook } from '../services/books'
-const props = defineProps<{ books: LibraryBook[]; search: string }>()
-const emit = defineEmits<{ select: [book: LibraryBook] }>()
-const groups = computed(() => groupBooks(props.books, props.search))
+const props = defineProps<{ books: LibraryBook[]; search: string; filters: LibraryFilters }>()
+const emit = defineEmits<{ select: [book: LibraryBook]; clear: [] }>()
+const groups = computed(() => groupBooks(props.books, props.search, props.filters))
 const labels = {
   nao_lido: 'Não lido',
   lendo: 'Lendo',
@@ -89,13 +89,26 @@ const labels = {
     </section>
   </div>
   <section v-else class="empty">
-    <h2>{{ search.trim() ? 'Nenhum livro encontrado' : 'Sua estante ainda está vazia' }}</h2>
+    <h2>
+      {{
+        search.trim() || filters.genre || filters.status || filters.series
+          ? 'Nenhum livro encontrado'
+          : 'Sua estante ainda está vazia'
+      }}
+    </h2>
     <p>
       {{
-        search.trim()
+        search.trim() || filters.genre || filters.status || filters.series
           ? 'Tente buscar por outro título, autor, gênero ou série.'
           : 'Os livros cadastrados aparecerão aqui.'
       }}
     </p>
+    <button
+      v-if="search.trim() || filters.genre || filters.status || filters.series"
+      type="button"
+      @click="emit('clear')"
+    >
+      Limpar busca e filtros
+    </button>
   </section>
 </template>

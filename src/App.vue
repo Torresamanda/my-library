@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import type { User } from '@firebase/auth'
+import { Toaster, toast } from 'vue-sonner'
+import 'vue-sonner/style.css'
 import {
   completeRedirect,
   firebaseConfigured,
@@ -12,6 +14,8 @@ import { loginErrorMessage } from './features/auth/loginError'
 import { isLibraryPath } from './features/navigation/path'
 import BookForm from './features/books/components/BookForm.vue'
 import BookDetails from './features/books/components/BookDetails.vue'
+import LibraryFilters from './features/library/components/LibraryFilters.vue'
+import { defaultFilters } from './features/library/domain/groupBooks'
 import LibraryStats from './features/library/components/LibraryStats.vue'
 import LibraryShelf from './features/library/components/LibraryShelf.vue'
 import LoadingIndicator from './ui/LoadingIndicator.vue'
@@ -28,14 +32,19 @@ const view = ref<View>(firebaseConfigured ? 'checking' : 'unconfigured')
 const user = ref<User | null>(null)
 const books = ref<LibraryBook[]>([])
 const search = ref('')
+const filters = ref(defaultFilters())
 const adding = ref(false)
 const selectedBook = ref<LibraryBook | null>(null)
 const editingBook = ref<LibraryBook | null>(null)
 const loggingIn = ref(false)
 const isNotFound = !isLibraryPath(window.location.pathname)
 const success = ref('')
-const dark = ref(localStorage.getItem('biblioteca-theme') !== 'light')
+const savedTheme = localStorage.getItem('biblioteca-theme')
+const dark = ref(
+  savedTheme ? savedTheme !== 'light' : window.matchMedia('(prefers-color-scheme: dark)').matches,
+)
 const message = ref('')
+const loadError = ref('Confira sua conexão e tente novamente.')
 const stats = computed(() => libraryStats(books.value))
 let unsubscribe = () => {}
 let requestVersion = 0
@@ -52,6 +61,10 @@ async function loadBooks(current: User) {
     view.value = 'ready'
   } catch (error) {
     if (version !== requestVersion) return
+    loadError.value =
+      error instanceof LibraryRequestError
+        ? 'O serviço da biblioteca está temporariamente indisponível. Tente novamente.'
+        : 'Confira sua conexão e tente novamente.'
     view.value = error instanceof LibraryRequestError && error.status === 401 ? 'denied' : 'error'
   }
 }
@@ -84,12 +97,14 @@ async function bookSaved() {
   adding.value = false
   editingBook.value = null
   selectedBook.value = null
+  toast.success(success.value)
   if (user.value) await loadBooks(user.value)
 }
 
 async function bookDeleted() {
   selectedBook.value = null
   success.value = 'Livro excluído da biblioteca.'
+  toast.success(success.value)
   if (user.value) await loadBooks(user.value)
 }
 
@@ -101,6 +116,11 @@ function editBook() {
 function cancelEdit() {
   selectedBook.value = editingBook.value
   editingBook.value = null
+}
+
+function clearFilters() {
+  search.value = ''
+  filters.value = defaultFilters()
 }
 
 function selectBook(book: LibraryBook) {
@@ -144,6 +164,7 @@ onBeforeUnmount(() => {
 </script>
 <template>
   <div :class="['app', { light: !dark }]">
+    <Toaster :theme="dark ? 'dark' : 'light'" position="top-center" />
     <main class="layout">
       <header class="header">
         <div class="brand">
@@ -200,7 +221,7 @@ onBeforeUnmount(() => {
         <span class="state-icon"><PhWarningCircle :size="40" aria-hidden="true" /></span>
         <p class="state-kicker">Algo não saiu como esperado</p>
         <h2>Não foi possível carregar</h2>
-        <p>Confira sua conexão e tente novamente.</p>
+        <p>{{ loadError }}</p>
         <button type="button" @click="user && loadBooks(user)">Tentar novamente</button>
       </section>
       <template v-else
@@ -217,7 +238,14 @@ onBeforeUnmount(() => {
           /></label>
           <button class="add-book" type="button" @click="startAdding">Adicionar livro</button>
         </div>
-        <LibraryShelf :books="books" :search="search" @select="selectBook" />
+        <LibraryFilters :books="books" :filters="filters" @change="filters = $event" />
+        <LibraryShelf
+          :books="books"
+          :search="search"
+          :filters="filters"
+          @select="selectBook"
+          @clear="clearFilters"
+        />
       </template>
       <BookDetails
         v-if="selectedBook && user && view === 'ready'"

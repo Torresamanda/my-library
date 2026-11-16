@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { Toaster } from 'vue-sonner'
 
 const props = defineProps<{ title: string; closeDisabled?: boolean }>()
 const emit = defineEmits<{ close: [] }>()
 const dialog = ref<HTMLDialogElement | null>(null)
+const toastTheme = document.querySelector('.app.light') ? 'light' : 'dark'
 
 function cancel(event: Event) {
   event.preventDefault()
@@ -29,5 +31,6 @@ onBeforeUnmount(() => dialog.value?.close())
       </button>
     </div>
     <slot />
+    <Toaster id="drawer" :theme="toastTheme" position="top-center" />
   </dialog>
 </template>
