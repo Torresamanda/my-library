@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { reviewSchema, type Review } from '../../books/domain/review'
 
 const bookSchema = z.object({
   id: z.string(),
@@ -13,6 +14,8 @@ const bookSchema = z.object({
   coverUrl: z.string().nullable().optional(),
   publisher: z.string().nullable().optional(),
   pageCount: z.number().int().positive().nullable().optional(),
+  rating: z.number().int().min(1).max(5).nullable().optional(),
+  review: reviewSchema.nullable().optional(),
 })
 export type LibraryBook = z.infer<typeof bookSchema>
 
@@ -39,6 +42,8 @@ export type BookDraft = {
   coverUrl?: string | null
   publisher?: string | null
   pageCount?: number | null
+  rating?: number | null
+  review?: Review | null
   quantity: number
   status: LibraryBook['status']
   seriesName: string | null

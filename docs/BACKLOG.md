@@ -350,3 +350,10 @@ Estas decisões substituem dúvidas e propostas anteriores conflitantes neste ar
 - [x] Escolher o Cloudflare R2 como armazenamento privado, sem ativar recursos pagos ou presumir uso ilimitado; sua ativação e configuração devem ser tratadas antes da publicação.
 - [x] Exibir capas automáticas na estante e nos detalhes, com imagem padrão quando estiverem ausentes ou indisponíveis.
 - [ ] Implementar e testar envio privado com validação de conteúdo e tamanho no servidor; associar ao livro sem ISBN e tratar exclusão e falhas.
+
+### Avaliação e comentário — implementação
+
+- [x] Permitir avaliação opcional de 1 a 5 estrelas inteiras e comentário pessoal editável em parágrafos, negrito e títulos de níveis 1 a 3.
+- [x] Contar pontos de código Unicode (emojis compostos podem contar mais de um), quebras de linha e separações entre blocos como um cada; o limite é 500. Marcação não conta.
+- [x] Validar estrutura e limite no servidor, armazenar somente blocos e marcas permitidos e renderizar como texto seguro; testar entradas maliciosas e persistência.
+- [ ] Validar edição por toque e teclado, acessibilidade e temas em dispositivos reais; a publicação depende da migração de metadados pendente no D1 remoto.

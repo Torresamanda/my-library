@@ -2,6 +2,8 @@
 import { onBeforeUnmount, reactive, ref } from 'vue'
 import { normalizeIsbn } from '../domain/isbn'
 import BarcodeScanner from './BarcodeScanner.vue'
+import ReviewEditor from './ReviewEditor.vue'
+import { reviewLength, type Review } from '../domain/review'
 import BaseDrawer from '../../../ui/BaseDrawer.vue'
 import LoadingIndicator from '../../../ui/LoadingIndicator.vue'
 import { lookupIsbn } from '../services/lookup'
@@ -30,6 +32,9 @@ const form = reactive({
 })
 const error = ref('')
 const saving = ref(false)
+const rating = ref<number | null>(props.book?.rating ?? null)
+const review = ref<Review | null>(props.book?.review ?? null)
+const reviewInvalid = ref(false)
 const lookingUp = ref(false)
 const lookupMessage = ref('')
 const coverUrl = ref<string | null>(props.book?.coverUrl ?? null)
@@ -146,6 +151,11 @@ async function submit() {
     .split(',')
     .map((genre) => genre.trim())
     .filter(Boolean)
+  if (reviewInvalid.value || (review.value && reviewLength(review.value) > 500)) {
+    error.value =
+      'O comentário deve ter no máximo 500 caracteres e usar apenas as formatações permitidas.'
+    return
+  }
   if (!form.title.trim() || !form.author.trim()) {
     error.value = 'Informe o título e o autor.'
     return
@@ -193,6 +203,8 @@ async function submit() {
       coverUrl: coverUrl.value,
       publisher: form.publisher.trim() || null,
       pageCount,
+      rating: rating.value,
+      review: review.value,
       genres,
       seriesName: form.seriesName.trim() || null,
       seriesVolume: volume,
@@ -297,6 +309,11 @@ async function submit() {
             </select></label
           >
         </div>
+        <ReviewEditor
+          v-model:rating="rating"
+          v-model:review="review"
+          @invalid="reviewInvalid = $event"
+        />
         <p v-if="lookupMessage" role="status">{{ lookupMessage }}</p>
         <img
           v-if="coverUrl && !coverFailed"

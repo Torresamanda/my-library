@@ -170,6 +170,63 @@ describe('books API', () => {
         (await send(env, 'POST', '/api/books', { ...example, isbn: null, pageCount })).status,
       ).toBe(400)
   })
+  it('validates and preserves ratings and structured comments', async () => {
+    const review = {
+      type: 'doc',
+      content: [
+        {
+          type: 'heading',
+          attrs: { level: 2 },
+          content: [{ type: 'text', text: 'Ótimo 😀', marks: [{ type: 'bold' }] }],
+        },
+      ],
+    }
+    const response = await send(env, 'POST', '/api/books', { ...example, rating: 5, review })
+    expect(response.status).toBe(201)
+    const { book } = (await response.json()) as { book: { id: string } }
+    expect(await (await send(env, 'GET', `/api/books/${book.id}`)).json()).toMatchObject({
+      book: { rating: 5, review },
+    })
+    expect(
+      await (await send(env, 'PUT', `/api/books/${book.id}`, { ...example, quantity: 3 })).json(),
+    ).toMatchObject({ book: { rating: 5, review } })
+    expect(
+      (await send(env, 'PUT', `/api/books/${book.id}`, { ...example, rating: null, review: null }))
+        .status,
+    ).toBe(200)
+    expect(await (await send(env, 'GET', `/api/books/${book.id}`)).json()).toMatchObject({
+      book: { rating: null, review: null },
+    })
+    for (const rating of [0, 6, 2.5])
+      expect(
+        (await send(env, 'POST', '/api/books', { ...example, isbn: null, rating })).status,
+      ).toBe(400)
+    const tooLong = {
+      type: 'doc',
+      content: [{ type: 'paragraph', content: [{ type: 'text', text: 'a'.repeat(501) }] }],
+    }
+    expect(
+      (await send(env, 'POST', '/api/books', { ...example, isbn: null, review: tooLong })).status,
+    ).toBe(400)
+    const malicious = {
+      type: 'doc',
+      content: [
+        {
+          type: 'paragraph',
+          content: [
+            {
+              type: 'text',
+              text: 'x',
+              marks: [{ type: 'link', attrs: { href: 'javascript:alert(1)' } }],
+            },
+          ],
+        },
+      ],
+    }
+    expect(
+      (await send(env, 'POST', '/api/books', { ...example, isbn: null, review: malicious })).status,
+    ).toBe(400)
+  })
   it('does not permit unauthorized collection access', async () => {
     vi.mocked(authenticate).mockResolvedValue(false)
     expect((await send(env, 'GET', '/api/books')).status).toBe(401)

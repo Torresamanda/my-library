@@ -132,3 +132,7 @@ O banco D1 `biblioteca-virtual` foi criado na conta Cloudflare e recebeu a migra
 O Worker foi publicado com os segredos da API e o D1 remoto. O site e o endpoint de saúde foram verificados, assim como o bloqueio de acesso anônimo à coleção. O domínio precisa ser autorizado no Firebase antes do teste completo do login. A implantação atual foi feita a partir de uma compilação local, sem integração automática do GitHub.
 
 O funcionamento do login no celular em produção foi confirmado pela proprietária após ajustar o endereço de retorno no cliente OAuth. A correção publicada ainda precisa ser registrada em commit quando solicitado.
+
+### Contagem do comentário pessoal
+
+O limite de 500 usa pontos de código Unicode: um emoji simples conta como um, mas emojis compostos podem contar mais de um. Cada quebra de linha e cada separação entre blocos contam como um; a marcação não é contada. São aceitos parágrafos, quebras de linha, negrito e títulos de níveis 1 a 3. A mesma regra é aplicada no navegador e no servidor.

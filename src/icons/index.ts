@@ -8,6 +8,7 @@ export {
   PhPlus,
   PhSlidersHorizontal,
   PhSun,
+  PhStar,
   PhWarningCircle,
   PhXCircle,
 } from '@phosphor-icons/vue'

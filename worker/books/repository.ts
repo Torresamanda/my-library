@@ -1,4 +1,5 @@
 import type { Database, Statement } from '../database'
+import { parseStoredReview } from '../../src/features/books/domain/review'
 import type { BookInput } from './validation'
 
 type Input = BookInput & { isbn: string | null }
@@ -16,12 +17,18 @@ export interface BookRow {
   seriesName: string | null
   seriesVolume: number | null
   rating: number | null
+  reviewJson: string | null
   createdAt: string
   updatedAt: string
 }
 
 const selectBook = `SELECT id, title, author, isbn, quantity, status, series_name AS seriesName,
-  series_volume AS seriesVolume, cover_url AS coverUrl, publisher, page_count AS pageCount, rating, created_at AS createdAt, updated_at AS updatedAt FROM books`
+  series_volume AS seriesVolume, cover_url AS coverUrl, publisher, page_count AS pageCount, rating, review_json AS reviewJson, created_at AS createdAt, updated_at AS updatedAt FROM books`
+
+function publicBook(book: BookRow) {
+  const { reviewJson, ...fields } = book
+  return { ...fields, review: parseStoredReview(reviewJson) }
+}
 
 async function genresFor(db: Database, id: string): Promise<string[]> {
   const result = await db
@@ -36,7 +43,7 @@ async function genresFor(db: Database, id: string): Promise<string[]> {
 
 export async function getBook(db: Database, id: string) {
   const book = await db.prepare(`${selectBook} WHERE id = ?`).bind(id).first<BookRow>()
-  return book ? { ...book, genres: await genresFor(db, id) } : null
+  return book ? { ...publicBook(book), genres: await genresFor(db, id) } : null
 }
 
 export async function listBooks(db: Database) {
@@ -53,7 +60,7 @@ export async function listBooks(db: Database) {
     names.push(genre.name)
     grouped.set(genre.bookId, names)
   }
-  return result.results.map((book) => ({ ...book, genres: grouped.get(book.id) ?? [] }))
+  return result.results.map((book) => ({ ...publicBook(book), genres: grouped.get(book.id) ?? [] }))
 }
 
 export async function isbnExists(db: Database, isbn: string, id: string): Promise<boolean> {
@@ -99,16 +106,18 @@ export async function saveBook(
     book.coverUrl,
     book.publisher,
     book.pageCount,
+    book.rating,
+    book.review ? JSON.stringify(book.review) : null,
   ]
   const statement = existing
     ? db
         .prepare(
-          `UPDATE books SET title = ?, author = ?, isbn = ?, quantity = ?, status = ?, series_name = ?, series_volume = ?, cover_url = ?, publisher = ?, page_count = ?, updated_at = datetime('now') WHERE id = ?`,
+          `UPDATE books SET title = ?, author = ?, isbn = ?, quantity = ?, status = ?, series_name = ?, series_volume = ?, cover_url = ?, publisher = ?, page_count = ?, rating = ?, review_json = ?, updated_at = datetime('now') WHERE id = ?`,
         )
         .bind(...values, id)
     : db
         .prepare(
-          `INSERT INTO books (title, author, isbn, quantity, status, series_name, series_volume, cover_url, publisher, page_count, id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+          `INSERT INTO books (title, author, isbn, quantity, status, series_name, series_volume, cover_url, publisher, page_count, rating, review_json, id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         )
         .bind(...values, id)
   await db.batch([statement, ...genreStatements(db, id, book.genres)])

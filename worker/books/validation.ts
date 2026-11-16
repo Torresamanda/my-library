@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { reviewSchema } from '../../src/features/books/domain/review'
 import { normalizeIsbn } from '../../src/features/books/domain/isbn'
 
 const optionalText = (max: number) =>
@@ -27,6 +28,18 @@ const bookSchema = z
       .int()
       .min(1)
       .max(1000000)
+      .nullable()
+      .optional()
+      .transform((v) => v ?? null),
+    rating: z
+      .number()
+      .int()
+      .min(1)
+      .max(5)
+      .nullable()
+      .optional()
+      .transform((v) => v ?? null),
+    review: reviewSchema
       .nullable()
       .optional()
       .transform((v) => v ?? null),

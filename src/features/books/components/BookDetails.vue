@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { nextTick, ref } from 'vue'
 import BookCover from './BookCover.vue'
+import ReviewContent from './ReviewContent.vue'
 import BaseDrawer from '../../../ui/BaseDrawer.vue'
 import LoadingIndicator from '../../../ui/LoadingIndicator.vue'
 import { deleteBook, LibraryRequestError, type LibraryBook } from '../../library/services/books'
@@ -90,6 +91,12 @@ async function remove() {
           <dd>{{ labels[book.status] }}</dd>
         </div>
       </dl>
+      <section class="personal-review" aria-labelledby="personal-review-title">
+        <h4 id="personal-review-title">Avaliação e comentário</h4>
+        <p>{{ book.rating ? `Avaliação: ${book.rating} de 5 estrelas` : 'Sem avaliação' }}</p>
+        <ReviewContent v-if="book.review" :review="book.review" />
+        <p v-else>Sem comentário.</p>
+      </section>
       <p v-if="error" class="form-error" role="alert">{{ error }}</p>
       <div v-if="!confirming" class="form-actions">
         <button type="button" @click="emit('edit')">Editar livro</button>
