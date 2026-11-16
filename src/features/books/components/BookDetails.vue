@@ -6,6 +6,7 @@ import { hasOwned, hasUnowned, ownershipDescription } from '../domain/collection
 import ReviewContent from './ReviewContent.vue'
 import BaseDrawer from '../../../ui/BaseDrawer.vue'
 import LoadingIndicator from '../../../ui/LoadingIndicator.vue'
+import { PhHeart, PhStar } from '../../../icons'
 import { deleteBook, LibraryRequestError, type LibraryBook } from '../../library/services/books'
 const props = defineProps<{ book: LibraryBook; token: () => Promise<string> }>()
 const emit = defineEmits<{ close: []; edit: []; deleted: [] }>()
@@ -62,7 +63,9 @@ async function remove() {
           <h3>{{ book.title }}</h3>
           <p>{{ book.author }}</p>
           <span class="badge">{{ labels[book.status] }}</span>
-          <span v-if="book.favorite" class="badge">Favorito</span>
+          <span v-if="book.favorite" class="badge favorite-badge"
+            ><PhHeart :size="18" weight="fill" aria-hidden="true" /> Favorito</span
+          >
         </div>
       </div>
       <h4 class="form-section-title">Sobre esta edição</h4>
@@ -124,7 +127,20 @@ async function remove() {
       </dl>
       <section class="personal-review" aria-labelledby="personal-review-title">
         <h4 id="personal-review-title">Avaliação e comentário</h4>
-        <p>{{ book.rating ? `Avaliação: ${book.rating} de 5 estrelas` : 'Sem avaliação' }}</p>
+        <div
+          class="detail-rating"
+          :aria-label="book.rating ? `Avaliação: ${book.rating} de 5 estrelas` : 'Sem avaliação'"
+          role="img"
+        >
+          <span class="detail-stars" aria-hidden="true"
+            ><PhStar
+              v-for="star in 5"
+              :key="star"
+              :size="24"
+              :weight="book.rating && star <= book.rating ? 'fill' : 'regular'"
+          /></span>
+          <span>{{ book.rating ? `${book.rating} de 5` : 'Sem avaliação' }}</span>
+        </div>
         <ReviewContent v-if="book.review" :review="book.review" />
         <p v-else>Sem comentário.</p>
       </section>
