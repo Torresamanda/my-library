@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { onBeforeUnmount, reactive, ref } from 'vue'
 import { normalizeIsbn } from '../domain/isbn'
 import BarcodeScanner from './BarcodeScanner.vue'
 import { lookupIsbn } from '../services/lookup'
+import { autofillField, createLookupScheduler } from '../services/automaticLookup'
 import { createBook, LibraryRequestError, type BookDraft } from '../../library/services/books'
 
 const props = defineProps<{ token: () => Promise<string> }>()
@@ -23,27 +24,46 @@ const lookingUp = ref(false)
 const lookupMessage = ref('')
 const coverUrl = ref<string | null>(null)
 let lookupVersion = 0
+let automaticTitle = ''
+let automaticAuthor = ''
+let automaticIsbn: string | null = null
+const scheduler = createLookupScheduler(() => void lookup())
+onBeforeUnmount(() => {
+  scheduler.cancel()
+  lookupVersion++
+})
 
 function isbnChanged() {
+  if (automaticIsbn && normalizeIsbn(form.isbn) !== automaticIsbn) {
+    if (automaticTitle && form.title === automaticTitle) form.title = ''
+    if (automaticAuthor && form.author === automaticAuthor) form.author = ''
+    automaticTitle = ''
+    automaticAuthor = ''
+    automaticIsbn = null
+  }
   lookupVersion++
   coverUrl.value = null
   lookupMessage.value = ''
   lookingUp.value = false
+  scheduler.schedule(form.isbn)
 }
 
 function scanned(isbn: string) {
-  isbnChanged()
   form.isbn = isbn
+  isbnChanged()
   void lookup()
 }
 
 async function lookup() {
+  scheduler.cancel()
   const isbn = normalizeIsbn(form.isbn)
   if (!isbn) {
     lookupMessage.value = 'Informe um ISBN válido para consultar.'
     return
   }
   const version = ++lookupVersion
+  const initialTitle = form.title
+  const initialAuthor = form.author
   lookingUp.value = true
   lookupMessage.value = ''
   coverUrl.value = null
@@ -54,8 +74,13 @@ async function lookup() {
       lookupMessage.value = 'Livro não encontrado. Preencha os dados manualmente.'
       return
     }
-    form.title = result.title || form.title
-    form.author = result.author || form.author
+    const title = autofillField(form.title, initialTitle, automaticTitle, result.title)
+    const author = autofillField(form.author, initialAuthor, automaticAuthor, result.author)
+    automaticTitle = title === result.title ? title : ''
+    automaticAuthor = author === result.author ? author : ''
+    automaticIsbn = isbn
+    form.title = title
+    form.author = author
     coverUrl.value = result.coverUrl
     lookupMessage.value = 'Confira e complete os dados encontrados antes de salvar.'
   } catch {
@@ -68,6 +93,7 @@ async function lookup() {
 }
 
 async function submit() {
+  scheduler.cancel()
   error.value = ''
   const genres = form.genres
     .split(',')

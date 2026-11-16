@@ -311,3 +311,8 @@ Estas decisões substituem dúvidas e propostas anteriores conflitantes neste ar
 
 - [x] Identificar por versão semântica o cadastro manual, a consulta por ISBN e a leitura pela câmera.
 - [ ] Validar os fluxos publicados em dispositivos reais. A integração Git ainda não foi confirmada: a consulta à configuração de builds retornou acesso negado; não enviar alterações ao repositório remoto até verificá-la.
+
+### Preenchimento automático por ISBN
+
+- [x] Ao digitar um ISBN válido, iniciar a consulta automaticamente após uma breve pausa; a leitura pela câmera continua iniciando a consulta imediatamente.
+- [x] Preencher título e autores disponíveis, preservando alterações manuais e ignorando respostas de consultas antigas. A consulta pode ser repetida pelo botão e o preenchimento manual permanece disponível.

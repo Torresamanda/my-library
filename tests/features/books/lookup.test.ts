@@ -11,7 +11,12 @@ describe('ISBN lookup', () => {
           JSON.stringify({
             docs: [
               { title: 'Outro', isbn: ['9780140328721'], cover_i: 1 },
-              { title: ' Livro ', author_name: ['Autora'], isbn: ['0306406152'], cover_i: 123 },
+              {
+                title: ' Livro ',
+                author_name: ['Autora', 'Outro autor'],
+                isbn: ['0306406152'],
+                cover_i: 123,
+              },
             ],
           }),
           { status: 200 },
@@ -20,7 +25,7 @@ describe('ISBN lookup', () => {
     )
     expect(await lookupIsbn('9780306406157')).toEqual({
       title: 'Livro',
-      author: 'Autora',
+      author: 'Autora, Outro autor',
       coverUrl: 'https://covers.openlibrary.org/b/id/123-M.jpg',
     })
   })
