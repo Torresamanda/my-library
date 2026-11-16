@@ -3,6 +3,7 @@ import { onBeforeUnmount, reactive, ref } from 'vue'
 import { toast } from 'vue-sonner'
 import { normalizeIsbn } from '../domain/isbn'
 import BarcodeScanner from './BarcodeScanner.vue'
+import BookCover from './BookCover.vue'
 import ReviewEditor from './ReviewEditor.vue'
 import { reviewLength, type Review } from '../domain/review'
 import BaseDrawer from '../../../ui/BaseDrawer.vue'
@@ -63,7 +64,6 @@ const reviewInvalid = ref(false)
 const lookingUp = ref(false)
 const lookupMessage = ref('')
 const coverUrl = ref<string | null>(props.book?.coverUrl ?? null)
-const coverFailed = ref(false)
 const originalIsbn = props.book?.isbn ? normalizeIsbn(props.book.isbn) : null
 let lookupVersion = 0
 let automaticTitle = ''
@@ -98,7 +98,6 @@ function isbnChanged() {
     originalIsbn && normalizeIsbn(form.isbn) === originalIsbn
       ? (props.book?.coverUrl ?? null)
       : null
-  coverFailed.value = false
   lookupMessage.value = ''
   lookingUp.value = false
   scheduler.schedule(form.isbn)
@@ -157,7 +156,6 @@ async function lookup() {
     form.author = author
     coverUrl.value =
       result.coverUrl ?? (originalIsbn === isbn ? (props.book?.coverUrl ?? null) : null)
-    coverFailed.value = false
     lookupMessage.value = result.author
       ? 'Confira e complete os dados encontrados antes de salvar.'
       : 'A fonte não informou a autoria. Preencha o autor ou os autores antes de salvar.'
@@ -287,24 +285,25 @@ async function submit() {
               <BarcodeScanner @scanned="scanned" />
             </div>
           </div>
-          <label class="full"
-            ><span>Título <span aria-hidden="true">*</span></span
-            ><input v-model="form.title" required maxlength="250" autocomplete="off"
-          /></label>
-          <label class="full"
-            ><span>Autor <span aria-hidden="true">*</span></span
-            ><input v-model="form.author" required maxlength="250" autocomplete="off"
-          /></label>
+          <div class="form-book-preview full">
+            <div class="form-cover">
+              <BookCover :url="coverUrl" :title="form.title || 'livro'" /><span
+                >Prévia da capa</span
+              >
+            </div>
+            <div class="form-book-fields">
+              <label
+                ><span>Título <span aria-hidden="true">*</span></span
+                ><input v-model="form.title" required maxlength="250" autocomplete="off"
+              /></label>
+              <label
+                ><span>Autor <span aria-hidden="true">*</span></span
+                ><input v-model="form.author" required maxlength="250" autocomplete="off"
+              /></label>
+            </div>
+          </div>
           <div class="full">
             <p v-if="lookupMessage" role="status">{{ lookupMessage }}</p>
-            <img
-              v-if="coverUrl && !coverFailed"
-              :src="coverUrl"
-              alt="Capa encontrada na Open Library"
-              class="lookup-cover"
-              referrerpolicy="no-referrer"
-              @error="coverFailed = true"
-            />
           </div>
           <h3 class="form-section-title full">Sobre a edição</h3>
           <label

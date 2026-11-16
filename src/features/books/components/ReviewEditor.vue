@@ -50,26 +50,29 @@ const editor = useEditor({
 <template>
   <fieldset class="rating-field">
     <legend>Avaliação (opcional)</legend>
-    <label
-      ><input
-        type="radio"
-        name="rating"
-        :checked="rating === null"
-        @change="emit('update:rating', null)"
-      />
-      Sem avaliação</label
+    <div class="rating-stars">
+      <label v-for="n in 5" :key="n" class="rating-star"
+        ><input
+          type="radio"
+          name="rating"
+          :value="n"
+          :checked="rating === n"
+          @change="emit('update:rating', n)"
+        />
+        <span aria-hidden="true"
+          ><PhStar :size="28" :weight="rating && n <= rating ? 'fill' : 'regular'" /></span
+        ><span class="sr-only">{{ n }} {{ n === 1 ? 'estrela' : 'estrelas' }}</span></label
+      >
+    </div>
+    <button
+      v-if="rating !== null"
+      type="button"
+      class="rating-clear"
+      @click="emit('update:rating', null)"
     >
-    <label v-for="n in 5" :key="n"
-      ><input
-        type="radio"
-        name="rating"
-        :checked="rating === n"
-        @change="emit('update:rating', n)"
-      />
-      <span aria-hidden="true"
-        ><PhStar v-for="star in n" :key="star" :size="16" weight="fill" /></span
-      ><span class="sr-only">{{ n }} {{ n === 1 ? 'estrela' : 'estrelas' }}</span></label
-    >
+      Limpar avaliação
+    </button>
+    <span v-else class="rating-hint">Sem avaliação</span>
   </fieldset>
   <div class="review-field">
     <p id="review-label">Comentário pessoal (opcional)</p>

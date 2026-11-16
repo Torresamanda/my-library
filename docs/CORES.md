@@ -20,6 +20,8 @@ O [manual visual em HTML](MANUAL-VISUAL.html) apresenta exemplos de aplicação 
 
 ## Paleta clara e elementos decorativos
 
+A avaliação usa dourado para as estrelas: `#E8BB55` no tema escuro e `#805600` no tema claro. O contorno e o preenchimento distinguem estrelas não selecionadas e selecionadas.
+
 | Uso                                 | Cor                  |
 | ----------------------------------- | -------------------- |
 | Papel claro da moldura              | `#FFF9EF`            |

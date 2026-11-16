@@ -929,6 +929,70 @@ select:focus-visible {
 .form-grid > .form-section-title:first-child {
   margin-top: 0;
 }
+.form-book-preview {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+.form-cover {
+  flex: none;
+  width: 112px;
+  color: var(--secondary);
+  font-size: 12px;
+}
+.form-cover .book-cover {
+  width: 100%;
+  margin-bottom: 8px;
+}
+.form-book-fields {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+  gap: 16px;
+}
+.rating-field {
+  align-items: center;
+}
+.rating-stars {
+  display: flex;
+  flex-wrap: nowrap;
+}
+.rating-field .rating-star {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  cursor: pointer;
+  color: #e8bb55;
+}
+.light .rating-field .rating-star {
+  color: #805600;
+}
+.rating-star input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+.rating-star:focus-within {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-small);
+}
+.rating-clear {
+  min-height: 44px;
+  border: 0;
+  padding: 8px;
+  color: var(--accent);
+  background: transparent;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.rating-hint {
+  color: var(--secondary);
+  font-size: 14px;
+}
 @media (max-width: 900px) {
   .series-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -956,6 +1020,9 @@ select:focus-visible {
   }
 }
 @media (max-width: 360px) {
+  .form-cover {
+    width: 80px;
+  }
   .detail-hero .book-cover {
     width: 96px;
     min-width: 96px;
