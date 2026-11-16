@@ -485,3 +485,8 @@ As combinações principais de texto, texto secundário e botões dos temas clar
 - [x] Validar o esquema com a proprietária e preparar o [protótipo visual da câmera](PROTOTIPO-CAMERA.html).
 - [x] Validar o protótipo visual com a proprietária e implementar a linha central e a prévia ampliada no leitor.
 - [ ] Testar leitura, cancelamento, permissões e apresentação em celular e computador após a implementação.
+
+### Preparação da versão 1.5.0
+
+- [x] Identificar por versão semântica os campos da coleção, a reorganização do cadastro e as melhorias de interface.
+- [ ] Aplicar a migração `0003_collection_fields.sql` ao D1 remoto e verificar a publicação e os fluxos autenticados em dispositivos reais.
