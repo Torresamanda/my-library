@@ -993,6 +993,48 @@ select:focus-visible {
   color: var(--secondary);
   font-size: 14px;
 }
+.genre-field {
+  display: grid;
+  gap: 8px;
+}
+.genre-field > label {
+  font-weight: 600;
+}
+.genre-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.genre-tags li {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 44px;
+  padding: 4px 12px;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-medium);
+  background: var(--tag);
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.genre-tags li:has(button) {
+  padding-right: 4px;
+}
+.genre-tags button {
+  flex: none;
+  min-width: 44px;
+  min-height: 44px;
+  border: 0;
+  border-radius: var(--radius-small);
+  background: transparent;
+  color: var(--text);
+  font-size: 20px;
+}
 @media (max-width: 900px) {
   .series-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));

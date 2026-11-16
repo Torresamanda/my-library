@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeUnmount, reactive, ref } from 'vue'
+import { computed, onBeforeUnmount, reactive, ref } from 'vue'
 import { toast } from 'vue-sonner'
 import { normalizeIsbn } from '../domain/isbn'
 import BarcodeScanner from './BarcodeScanner.vue'
@@ -32,6 +32,16 @@ const form = reactive({
   quantity: props.book?.quantity ?? 1,
   status: (props.book?.status ?? 'nao_lido') as BookDraft['status'],
 })
+const genreTags = computed(() =>
+  form.genres
+    .split(',')
+    .map((genre) => genre.trim())
+    .filter(Boolean),
+)
+
+function removeGenre(index: number) {
+  form.genres = genreTags.value.filter((_, current) => current !== index).join(', ')
+}
 const error = ref('')
 const saving = ref(false)
 const rating = ref<number | null>(props.book?.rating ?? null)
@@ -306,11 +316,22 @@ async function submit() {
             <p v-if="lookupMessage" role="status">{{ lookupMessage }}</p>
           </div>
           <h3 class="form-section-title full">Sobre a edição</h3>
-          <label
-            >Gêneros (até 4, separados por vírgula)<input
-              v-model="form.genres"
-              placeholder="Ex.: Fantasia, Romance"
-          /></label>
+          <div class="genre-field full">
+            <label for="book-genres">Gêneros (até 4, separados por vírgula)</label>
+            <input id="book-genres" v-model="form.genres" placeholder="Ex.: Fantasia, Romance" />
+            <ul v-if="genreTags.length" class="genre-tags" aria-label="Gêneros informados">
+              <li v-for="(genre, index) in genreTags" :key="`${index}-${genre}`">
+                <span>{{ genre }}</span>
+                <button
+                  type="button"
+                  :aria-label="`Remover gênero ${genre}`"
+                  @click="removeGenre(index)"
+                >
+                  ×
+                </button>
+              </li>
+            </ul>
+          </div>
           <label>Editora (opcional)<input v-model="form.publisher" maxlength="250" /></label>
           <label
             >Número de páginas (opcional)<input

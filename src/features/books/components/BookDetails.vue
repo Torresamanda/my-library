@@ -70,7 +70,12 @@ async function remove() {
         </div>
         <div>
           <dt>Gêneros</dt>
-          <dd>{{ book.genres.length ? book.genres.join(', ') : 'Não informados' }}</dd>
+          <dd>
+            <ul v-if="book.genres.length" class="genre-tags" aria-label="Gêneros">
+              <li v-for="genre in book.genres" :key="genre">{{ genre }}</li>
+            </ul>
+            <template v-else>Não informados</template>
+          </dd>
         </div>
         <div>
           <dt>Série</dt>
