@@ -428,6 +428,7 @@ As combinações principais de texto, texto secundário e botões dos temas clar
 
 - [x] Identificar por versão semântica as melhorias da estante, do cadastro e das interações.
 - [ ] Confirmar publicação, acesso e fluxos autenticados em dispositivos reais; verificar a configuração de compilações da integração Git com a Cloudflare.
+- [x] Adicionar favicon com o símbolo da biblioteca e as cores da identidade visual.
 
 ### Publicação da versão 1.3.0
 
