@@ -909,6 +909,10 @@ select:focus-visible {
 .filters-panel .library-filters {
   margin: 0;
 }
+.filters-panel + .empty,
+.results-summary + .empty {
+  margin-top: 24px;
+}
 .filter-toggle {
   display: none;
 }
