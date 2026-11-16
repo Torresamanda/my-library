@@ -1,6 +1,31 @@
 # Backlog — biblioteca virtual
 
-Status inicial: planejamento. Itens são propostas, não funcionalidades já implementadas. Ajustar prioridade e escopo após as respostas e validações.
+## Situação atual
+
+A versão publicada é a 1.2.0. As funcionalidades posteriores descritas abaixo estão implementadas no repositório, mas ainda não foram publicadas nem validadas em dispositivos reais. A tarefa de capas continua parcialmente concluída: falta implementar o envio manual.
+
+### Concluído no repositório
+
+- [x] Cadastro manual com ISBN opcional, consulta e leitura pela câmera, preenchimento dos dados disponíveis e detecção de ISBN duplicado.
+- [x] Até quatro gêneros, editora e páginas por edição; detalhes, edição e exclusão com confirmação.
+- [x] Capas automáticas e imagem padrão; avaliação opcional e comentário com formatação permitida e limite validado no servidor.
+- [x] Busca, filtros, ordenação, agrupamento de séries, notificações, página 404 e estados de carregamento e erro.
+- [x] Testes automatizados de regras e API, ESLint, verificação de tipos e compilação; 53 testes passaram na última execução.
+
+### Próximos passos
+
+- [ ] Implementar envio privado de capa JPG, JPEG ou PNG de até 2 MB para livros sem ISBN; validar conteúdo e tamanho no servidor, tratar falhas e exclusão e preparar a configuração do R2 sem ativar serviços pagos.
+- [ ] Validar, em celular e computador, os fluxos implementados, leitura pela câmera, editor de comentário, foco, notificações e temas claro e escuro, com autorização para o acesso necessário.
+- [ ] Investigar e reduzir o tamanho do arquivo principal gerado na compilação, que excede o limite de aviso da ferramenta.
+- [ ] Conferir a configuração efetiva da integração Git com a Cloudflare; a consulta anterior foi negada por falta de permissão. Não presumir que um envio ao Git não publique automaticamente.
+- [ ] Antes de publicar, aplicar a migração '0002_book_metadata.sql' ao D1 remoto com autorização; atualizar a versão semântica, registrar commit e tag e publicar somente código versionado.
+- [ ] Definir e documentar backup e recuperação da coleção e os limites dos serviços.
+
+O banco local já recebeu a migração 0002 e a proprietária confirmou que a estante local voltou a abrir. O D1 remoto é independente e ainda não recebeu essa migração.
+
+## Histórico de planejamento
+
+As seções históricas abaixo preservam propostas e decisões anteriores; consulte a situação atual e os registros de progresso ao final quando houver divergência.
 
 ## Manual visual
 
@@ -121,7 +146,7 @@ Os itens gerais acima sobre esses temas devem ser lidos à luz dessas decisões;
 - [ ] Verificar apresentação em telas pequenas e consistência dos totais com a regra aprovada.
 
 - [x] Definir status único por livro cadastrado, mesmo com múltiplos exemplares. Indicadores por status contam cadastros, não exemplares.
-- [ ] Definir separadamente se o total geral do dashboard soma exemplares ou conta livros cadastrados.
+- [x] Definir que o total geral soma exemplares; indicadores por status contam cada cadastro uma vez.
 
 ### Segurança e testes
 
@@ -137,20 +162,23 @@ Os itens gerais acima sobre esses temas devem ser lidos à luz dessas decisões;
 - [x] Estante abre com séries agrupadas em cartões quadrados com até quatro miniaturas e nome da série; abrir os volumes em ordem. Livros sem série aparecem individualmente.
 - [x] Status: não lido, concluído, lendo e abandonado.
 - [x] Sem resultado por ISBN, permitir preencher dados manualmente e usar capa padrão; envio de capa manual permanece restrito a livros sem ISBN.
-- [ ] Definir detalhes da seleção, armazenamento gratuito e limites das capas manuais para livros sem ISBN.
+- [x] Definir seleção de JPG, JPEG ou PNG, limite de 2 MB e uso previsto do R2 para livros sem ISBN.
+- [ ] Implementar armazenamento, seleção, validação e tratamento de falhas para capas manuais.
 
 Estas decisões substituem dúvidas e propostas anteriores conflitantes neste arquivo.
 
 ### Regras para imagem de capa
 
 - [x] Seleção pela galeria ou arquivos do dispositivo para livros sem ISBN; formatos permitidos: JPG, JPEG e PNG.
-- [ ] Validar proposta de limite de 5 MB por imagem; exibir erro compreensível para arquivo inválido ou acima do limite.
-- [ ] Escolher armazenamento gratuito compatível com o volume de imagens e documentar cotas e recuperação.
+- [x] Definir limite de 2 MB por imagem, substituindo a proposta anterior de 5 MB.
+- [ ] Exibir erro compreensível para arquivo inválido ou acima do limite de 2 MB.
+- [x] Escolher R2 como opção de armazenamento privado.
+- [ ] Preparar e configurar o R2, documentar cotas, custos ao exceder a franquia e recuperação, sem ativar serviços pagos.
 - [ ] Validar tamanho e conteúdo da imagem no servidor, além de restringir a seleção no navegador; proteger gravação por autorização.
 
 ### Tratamento de erros e notificações
 
-- [ ] Escolher biblioteca de toast compatível com Vue, mantida e com versão verificada quanto a vulnerabilidades conhecidas.
+- [x] Usar vue-sonner para notificações, com auditoria de dependências de produção sem vulnerabilidades conhecidas na verificação realizada.
 - [ ] Exibir notificações acessíveis de carregamento, sucesso na criação, edição e exclusão e falhas, inclusive ISBN duplicado.
 - [ ] Criar página 404 com opção de voltar à estante e tratar erros de rede, sessão, câmera, busca, imagem e gravação.
 - [ ] Exibir orientações persistentes junto a campos ou áreas quando necessário, permitir nova tentativa e preservar dados preenchidos quando possível.
@@ -158,8 +186,8 @@ Estas decisões substituem dúvidas e propostas anteriores conflitantes neste ar
 
 ### Ícones
 
-- [ ] Instalar a integração Phosphor Icons para Vue em versão adequada e verificada.
-- [ ] Criar pasta dedicada a ícones e importar individualmente somente os ícones necessários.
+- [x] Instalar a integração Phosphor Icons para Vue.
+- [x] Centralizar os ícones utilizados em src/icons.
 - [ ] Garantir nomes acessíveis em ações e ocultar ícones decorativos dos leitores de tela.
 
 - [x] Escolher direção visual: versão 3, “Lilás contemporâneo”.
@@ -176,17 +204,17 @@ Estas decisões substituem dúvidas e propostas anteriores conflitantes neste ar
 ### Avaliação e comentário pessoal
 
 - [x] Incluir avaliação de até cinco estrelas e breve comentário pessoal opcional por livro.
-- [ ] Definir obrigatoriedade da avaliação, se aceita frações e o limite do comentário.
+- [x] Definir avaliação opcional com estrelas inteiras de 1 a 5 e comentário opcional de até 500 caracteres.
 - [ ] Desenhar avaliação e comentário na tela de detalhes e edição, com acesso por toque, mouse e teclado.
-- [ ] Persistir e proteger os dados por livro; validar entradas e tratar falhas ao salvar.
-- [ ] Testar salvamento, edição, ausência de comentário e regras de validação aprovadas.
+- [x] Persistir e proteger avaliação e comentário por livro; validar entradas e tratar falhas ao salvar.
+- [x] Testar salvamento, edição, ausência de comentário e regras de validação aprovadas.
 
 ### Avaliação e texto rico — decisões confirmadas
 
 - [x] Avaliação opcional com estrelas inteiras de 1 a 5; comentário opcional de até 500 caracteres de texto visível.
 - [ ] Projetar editor acessível e responsivo com negrito, emojis e diferentes níveis de título, com contador e indicação clara do limite.
 - [ ] Escolher editor Vue mantido e verificar vulnerabilidades; definir e documentar contagem consistente de emojis e quebras de linha, sem contar marcação de formatação.
-- [ ] Validar limite e formato no cliente e no servidor; permitir somente formatações aprovadas e sanitizar armazenamento/renderização contra conteúdo malicioso.
+- [x] Validar limite e formato no cliente e no servidor; aceitar somente formatações aprovadas e renderizar com segurança.
 - [ ] Testar limite, emojis, formatação permitida, remoção de conteúdo perigoso, salvamento e edição.
 
 ### Progresso da base de dados e segurança
@@ -247,7 +275,7 @@ Estas decisões substituem dúvidas e propostas anteriores conflitantes neste ar
 - [x] Validar dados básicos, quantidade, status, nome e volume da série, gêneros e ISBN; normalizar ISBN e rejeitar duplicatas com resposta 409.
 - [x] Salvar a edição e seus gêneros em lote transacional e testar os fluxos com SQLite isolado e autorização simulada.
 - [ ] Implementar e testar capas, avaliação e comentário rico com validação e sanitização; integrar busca externa, câmera e interface.
-- [ ] Validar a API completa com autenticação Google e D1 reais após configuração das contas, antes de implantação.
+- [ ] Validar os fluxos novos da API com autenticação Google e D1 reais antes de sua próxima publicação.
 
 ### Estante e sessão
 
@@ -255,7 +283,8 @@ Estas decisões substituem dúvidas e propostas anteriores conflitantes neste ar
 - [x] Conectar dashboard e estante aos livros retornados pela API, agrupar séries, ordenar volumes e pesquisar.
 - [x] Documentar variáveis públicas do Firebase Web e variáveis privadas da API, com exemplos vazios.
 - [ ] Validar o login com uma conta real e os fluxos no celular após configurar Firebase e domínio autorizado.
-- [ ] Conectar cadastro, detalhes, filtros adicionais e capas à interface; implementar notificações dos fluxos de escrita.
+- [x] Conectar cadastro, detalhes, filtros, capas automáticas e notificações dos fluxos de escrita no código local.
+- [ ] Publicar e validar essas alterações; o envio manual de capas ainda não foi implementado.
 
 - [x] Validar acesso local com conta Google real, UID autorizado e API local, conforme confirmação da proprietária.
 - [ ] Validar separadamente o acesso após o deploy e em celular; o teste local não comprova o ambiente de produção.
@@ -297,12 +326,12 @@ Estas decisões substituem dúvidas e propostas anteriores conflitantes neste ar
 
 - [x] Formulário responsivo para título, autor, ISBN opcional, gêneros, série, volume, quantidade e status, com validação e salvamento na API protegida.
 - [x] Informar ISBN duplicado e preservar os dados em caso de falha; atualizar estante e indicadores após salvar.
-- [ ] Validar visualmente o cadastro em dispositivos e temas; consulta externa, câmera e capas continuam pendentes.
+- [ ] Validar visualmente o cadastro, a consulta, a câmera e as capas em dispositivos e temas reais; envio manual de capas continua pendente.
 
 ### Consulta por ISBN
 
 - [x] Consultar a Open Library pelo ISBN validado, permitir revisão e preenchimento manual e preservar a capa automática encontrada para livros com ISBN.
-- [ ] Verificar visualmente e com serviços reais em celular e computador; a exibição de capas na estante, imagem padrão e envio manual continuam na tarefa de capas.
+- [ ] Verificar visualmente e com serviços reais em celular e computador; a exibição de capas automáticas e a imagem padrão estão implementadas, mas o envio manual continua pendente.
 - [ ] Avaliar integração adicional ao Google Books: sua documentação exige identificação para consultas públicas. A Open Library pode não encontrar todas as edições ou capas e está sujeita a disponibilidade e limites do serviço.
 
 ### Leitura pela câmera
