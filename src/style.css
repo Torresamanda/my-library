@@ -1012,7 +1012,7 @@ select:focus-visible {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  min-height: 44px;
+  min-height: 32px;
   padding: 4px 12px;
   border: 1px solid var(--accent);
   border-radius: var(--radius-medium);
@@ -1023,6 +1023,8 @@ select:focus-visible {
   overflow-wrap: anywhere;
 }
 .genre-tags li:has(button) {
+  min-height: 44px;
+  padding-block: 0;
   padding-right: 4px;
 }
 .genre-tags button {
@@ -1034,6 +1036,7 @@ select:focus-visible {
   background: transparent;
   color: var(--text);
   font-size: 20px;
+  line-height: 1;
 }
 @media (max-width: 900px) {
   .series-grid {
