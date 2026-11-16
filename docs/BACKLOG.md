@@ -495,5 +495,6 @@ As combinações principais de texto, texto secundário e botões dos temas clar
 
 - [x] Definir busca inicial por título e autor editáveis e permitir escolher capa de outra edição quando identificada, sem alterar o cadastro da edição.
 - [x] Preparar [esquema de pesquisa e escolha de capa](WIREFRAME-PESQUISA-CAPAS.md), mantendo envio de arquivo para livros sem ISBN como alternativa.
-- [ ] Validar o fluxo e o protótipo visual; implementar pesquisa e seleção, atribuição e links exigidos pelo Google Books, configuração segura e testes.
+- [x] Validar o fluxo e preparar o [protótipo visual da pesquisa](PROTOTIPO-PESQUISA-CAPAS.html).
+- [ ] Validar o protótipo visual; implementar pesquisa e seleção, atribuição e links exigidos pelo Google Books, configuração segura e testes.
 - [ ] Implementar envio privado ao R2 para livros sem ISBN, com limite de 2 MB e validação de tipo e conteúdo no servidor; não ativar serviços pagos.

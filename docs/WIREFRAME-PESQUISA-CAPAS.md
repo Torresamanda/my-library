@@ -41,4 +41,4 @@ A atribuição e os links seguirão as [diretrizes do Google Books](https://deve
 
 ## Validação pendente
 
-A proprietária aprovou pesquisar usando título e autor editáveis e poder escolher uma capa de outra edição identificada. O esquema de interação e sua aparência ainda devem ser validados antes do protótipo e da implementação, conforme o processo do projeto.
+A proprietária aprovou pesquisar usando título e autor editáveis e poder escolher uma capa de outra edição identificada. O fluxo foi aprovado pela proprietária. O [protótipo visual](PROTOTIPO-PESQUISA-CAPAS.html) aguarda validação antes da implementação.

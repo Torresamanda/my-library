@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark light" />
+    <title>Protótipo · Escolher capa</title>
+    <style>
+      :root {
+        font-family: system-ui, sans-serif;
+        color-scheme: dark;
+        --bg: #100e24;
+        --surface: #1b1831;
+        --support: #211b35;
+        --text: #faf5f7;
+        --muted: #c7bdd0;
+        --accent: #dba3ed;
+        --button: #20102c;
+        --tag: #413050;
+        --border: #51405e;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.5;
+      }
+      body.light {
+        color-scheme: light;
+        --bg: #fff9ef;
+        --surface: #fff9ef;
+        --support: #eed9f2;
+        --text: #4f215e;
+        --muted: #754080;
+        --accent: #4f215e;
+        --button: #fff9ef;
+        --tag: #eed9f2;
+        --border: #9a6ca2;
+      }
+      button,
+      input {
+        font: inherit;
+      }
+      button {
+        cursor: pointer;
+      }
+      button:focus-visible,
+      input:focus-visible,
+      a:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+      .page {
+        width: min(100% - 32px, 760px);
+        margin: auto;
+        padding: 32px 0 48px;
+      }
+      .header {
+        display: flex;
+        align-items: start;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+        margin-bottom: 24px;
+      }
+      h1 {
+        margin: 0 0 8px;
+        font:
+          600 28px Georgia,
+          serif;
+      }
+      .intro {
+        color: var(--muted);
+        margin: 0;
+        max-width: 560px;
+      }
+      .mock {
+        padding: 24px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--surface);
+      }
+      .mock-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        align-items: start;
+      }
+      h2 {
+        margin: 0 0 8px;
+        font:
+          600 24px Georgia,
+          serif;
+      }
+      h3 {
+        margin: 0 0 4px;
+        font-size: 16px;
+      }
+      p {
+        margin: 0;
+      }
+      .muted {
+        color: var(--muted);
+      }
+      .fields {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+        margin: 24px 0 16px;
+      }
+      .fields label {
+        display: grid;
+        gap: 8px;
+        font-weight: 600;
+      }
+      input[type='text'] {
+        width: 100%;
+        min-width: 0;
+        min-height: 44px;
+        padding: 8px 12px;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        background: var(--surface);
+        color: var(--text);
+      }
+      button {
+        min-height: 44px;
+        padding: 8px 16px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--surface);
+        color: var(--text);
+      }
+      .primary {
+        border-color: var(--accent);
+        background: var(--accent);
+        color: var(--button);
+        font-weight: 700;
+      }
+      .results-head {
+        margin: 24px 0 12px;
+      }
+      .source-note {
+        padding: 8px 12px;
+        border: 1px dashed var(--border);
+        border-radius: 4px;
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .results {
+        display: grid;
+        gap: 12px;
+        margin-top: 16px;
+      }
+      .result {
+        display: grid;
+        grid-template-columns: 80px minmax(0, 1fr) auto;
+        align-items: start;
+        gap: 16px;
+        padding: 16px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--surface);
+      }
+      .cover {
+        display: grid;
+        place-items: center;
+        width: 80px;
+        aspect-ratio: 2/3;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        background: var(--tag);
+        color: var(--muted);
+        text-align: center;
+        font:
+          14px Georgia,
+          serif;
+      }
+      .result p {
+        margin: 4px 0;
+      }
+      .badge {
+        display: inline-block;
+        padding: 4px 8px;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        background: var(--tag);
+        font-size: 12px;
+      }
+      .choose {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 44px;
+        padding: 8px;
+        cursor: pointer;
+      }
+      .choose input {
+        width: 20px;
+        height: 20px;
+        accent-color: var(--accent);
+      }
+      .actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 24px;
+      }
+      .warning {
+        margin-top: 16px;
+        padding: 12px;
+        border-left: 4px solid var(--accent);
+        background: var(--support);
+      }
+      .notice {
+        margin-top: 16px;
+        color: var(--muted);
+        font-size: 14px;
+      }
+      .mock a {
+        color: var(--text);
+        text-underline-offset: 4px;
+      }
+      @media (max-width: 520px) {
+        .page {
+          padding-top: 24px;
+        }
+        .mock {
+          padding: 16px;
+        }
+        .fields {
+          grid-template-columns: 1fr;
+        }
+        .result {
+          grid-template-columns: 64px minmax(0, 1fr);
+          gap: 12px;
+          padding: 12px;
+        }
+        .cover {
+          width: 64px;
+        }
+        .choose {
+          grid-column: 2;
+          justify-self: start;
+        }
+        .actions button {
+          flex: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <header class="header">
+        <div>
+          <h1>Prévia: escolher uma capa</h1>
+          <p class="intro">
+            Exemplo visual com dados fictícios. Esta página não pesquisa no Google nem salva
+            alterações.
+          </p>
+        </div>
+        <button id="theme" type="button" aria-pressed="false">Ver tema claro</button>
+      </header>
+      <section class="mock" aria-labelledby="title">
+        <div class="mock-head">
+          <div>
+            <h2 id="title">Escolher capa</h2>
+            <p class="muted">Pesquise pelo título e autor e confira a edição antes de escolher.</p>
+          </div>
+        </div>
+        <div class="fields">
+          <label>Título<input type="text" value="Título de exemplo" /></label
+          ><label>Autor<input type="text" value="Autora de exemplo" /></label>
+        </div>
+        <button type="button" class="primary" disabled>Pesquisar</button>
+        <div class="results-head">
+          <h3>Resultados da pesquisa</h3>
+          <p class="muted">Confira se a capa corresponde à edição que deseja.</p>
+        </div>
+        <p class="source-note">
+          Área reservada para a atribuição oficial do Google Books e links à fonte na implementação.
+        </p>
+        <div class="results" role="radiogroup" aria-label="Escolha uma capa">
+          <article class="result">
+            <div class="cover" aria-hidden="true">Capa<br />ilustrativa</div>
+            <div>
+              <h3>Uma edição de exemplo</h3>
+              <p class="muted">Autora de exemplo · Editora</p>
+              <p><span class="badge">Mesmo ISBN</span></p>
+              <a href="https://books.google.com/" target="_blank" rel="noopener noreferrer"
+                >Ver fonte de exemplo</a
+              >
+            </div>
+            <label class="choose"><input type="radio" name="cover" value="same" /> Escolher</label>
+          </article>
+          <article class="result">
+            <div class="cover" aria-hidden="true">Outra capa<br />ilustrativa</div>
+            <div>
+              <h3>Outra edição de exemplo</h3>
+              <p class="muted">Autora de exemplo · Outra editora</p>
+              <p><span class="badge">ISBN diferente</span></p>
+              <a href="https://books.google.com/" target="_blank" rel="noopener noreferrer"
+                >Ver fonte de exemplo</a
+              >
+            </div>
+            <label class="choose"
+              ><input type="radio" name="cover" value="different" /> Escolher</label
+            >
+          </article>
+        </div>
+        <p id="message" class="warning" role="status">
+          Selecione uma capa para conferir a escolha.
+        </p>
+        <div class="actions">
+          <button type="button" class="primary" disabled>Usar esta capa</button
+          ><button type="button" disabled>Cancelar</button>
+        </div>
+        <p class="notice">
+          Ao confirmar no aplicativo, a capa aparecerá no formulário. O livro só será alterado
+          quando for salvo.
+        </p>
+      </section>
+    </main>
+    <script>
+      const theme = document.getElementById('theme')
+      theme.addEventListener('click', () => {
+        const light = document.body.classList.toggle('light')
+        theme.setAttribute('aria-pressed', String(light))
+        theme.textContent = light ? 'Ver tema escuro' : 'Ver tema claro'
+      })
+      const message = document.getElementById('message')
+      document.querySelectorAll('input[name="cover"]').forEach((input) =>
+        input.addEventListener('change', () => {
+          message.textContent =
+            input.value === 'different'
+              ? 'Esta capa é de outra edição. O ISBN e os demais dados do seu cadastro não serão alterados.'
+              : 'A capa selecionada corresponde ao ISBN desta edição.'
+        }),
+      )
+    </script>
+  </body>
+</html>
