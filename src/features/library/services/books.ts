@@ -27,3 +27,23 @@ export async function fetchBooks(token: string): Promise<LibraryBook[]> {
   const data: unknown = await response.json()
   return z.object({ books: z.array(bookSchema) }).parse(data).books
 }
+
+export type BookDraft = {
+  title: string
+  author: string
+  isbn: string | null
+  quantity: number
+  status: LibraryBook['status']
+  seriesName: string | null
+  seriesVolume: number | null
+  genres: string[]
+}
+
+export async function createBook(token: string, book: BookDraft): Promise<void> {
+  const response = await fetch('/api/books', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify(book),
+  })
+  if (!response.ok) throw new LibraryRequestError(response.status)
+}

@@ -281,3 +281,9 @@ Estas decisões substituem dúvidas e propostas anteriores conflitantes neste ar
 - [ ] Confirmar a primeira compilação da integração e registrar como promover uma versão identificada à produção.
 
 - [x] Registrar que todas as modificações devem ter commits rastreáveis e que versões de publicação recebem tags semânticas.
+
+### Cadastro manual — implementação
+
+- [x] Formulário responsivo para título, autor, ISBN opcional, gêneros, série, volume, quantidade e status, com validação e salvamento na API protegida.
+- [x] Informar ISBN duplicado e preservar os dados em caso de falha; atualizar estante e indicadores após salvar.
+- [ ] Validar visualmente o cadastro em dispositivos e temas; consulta externa, câmera e capas continuam pendentes.

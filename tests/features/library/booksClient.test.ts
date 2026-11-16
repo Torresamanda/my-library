@@ -24,3 +24,25 @@ describe('library API client', () => {
     await expect(fetchBooks('test-token')).rejects.toThrow()
   })
 })
+
+it('sends a new book with authorization and reports duplicate ISBNs', async () => {
+  const { createBook } = await import('../../../src/features/library/services/books')
+  const book = {
+    title: 'Livro',
+    author: 'Autora',
+    isbn: '9780306406157',
+    quantity: 2,
+    status: 'lendo' as const,
+    seriesName: null,
+    seriesVolume: null,
+    genres: ['Fantasia'],
+  }
+  const fetchMock = vi.fn().mockResolvedValue(new Response(null, { status: 409 }))
+  vi.stubGlobal('fetch', fetchMock)
+  await expect(createBook('test-token', book)).rejects.toMatchObject({ status: 409 })
+  expect(fetchMock).toHaveBeenCalledWith('/api/books', {
+    method: 'POST',
+    headers: { Authorization: 'Bearer test-token', 'Content-Type': 'application/json' },
+    body: JSON.stringify(book),
+  })
+})

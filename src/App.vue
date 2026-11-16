@@ -9,6 +9,7 @@ import {
   observeUser,
 } from './features/auth/firebase'
 import { loginErrorMessage } from './features/auth/loginError'
+import BookForm from './features/books/components/BookForm.vue'
 import LibraryStats from './features/library/components/LibraryStats.vue'
 import LibraryShelf from './features/library/components/LibraryShelf.vue'
 import { libraryStats } from './features/library/domain/libraryStats'
@@ -24,6 +25,8 @@ const view = ref<View>(firebaseConfigured ? 'checking' : 'unconfigured')
 const user = ref<User | null>(null)
 const books = ref<LibraryBook[]>([])
 const search = ref('')
+const adding = ref(false)
+const success = ref('')
 const dark = ref(localStorage.getItem('biblioteca-theme') !== 'light')
 const message = ref('')
 const stats = computed(() => libraryStats(books.value))
@@ -64,6 +67,17 @@ async function leave() {
   }
 }
 
+async function bookSaved() {
+  adding.value = false
+  success.value = 'Livro adicionado à biblioteca.'
+  if (user.value) await loadBooks(user.value)
+}
+
+function startAdding() {
+  adding.value = true
+  success.value = ''
+}
+
 function toggleTheme() {
   dark.value = !dark.value
   localStorage.setItem('biblioteca-theme', dark.value ? 'dark' : 'light')
@@ -81,6 +95,8 @@ onMounted(() => {
     }
     requestVersion++
     books.value = []
+    adding.value = false
+    success.value = ''
     if (firebaseConfigured) view.value = 'signed-out'
   })
 })
@@ -135,8 +151,15 @@ onBeforeUnmount(() => {
         <p>Confira sua conexão e tente novamente.</p>
         <button type="button" @click="user && loadBooks(user)">Tentar novamente</button>
       </section>
+      <BookForm
+        v-else-if="adding && user"
+        :token="() => user!.getIdToken()"
+        @cancel="adding = false"
+        @saved="bookSaved"
+      />
       <template v-else
-        ><LibraryStats :stats="stats" />
+        ><p v-if="success" role="status">{{ success }}</p>
+        <LibraryStats :stats="stats" />
         <div class="tools">
           <label class="search"
             ><PhMagnifyingGlass :size="22" aria-hidden="true" /><span class="sr-only"
@@ -147,8 +170,9 @@ onBeforeUnmount(() => {
               placeholder="Buscar título, autor, gênero ou série..."
           /></label>
         </div>
+        <button class="add-book" type="button" @click="startAdding">Adicionar livro</button>
         <LibraryShelf :books="books" :search="search" />
-        <p class="notice">Cadastro e capas estão em preparação.</p></template
+        <p class="notice">Consulta por ISBN, câmera e capas estão em preparação.</p></template
       >
     </main>
   </div>
