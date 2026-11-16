@@ -424,6 +424,11 @@ As combinações principais de texto, texto secundário e botões dos temas clar
 - [x] Evitar corte dos rótulos caso uma versão anterior do editor apareça durante a atualização da interface.
 - [x] Manter a confirmação de descarte visível na parte inferior da tela ao percorrer o formulário, inclusive após a animação do painel.
 
+### Preparação da versão 1.4.0
+
+- [x] Identificar por versão semântica as melhorias da estante, do cadastro e das interações.
+- [ ] Confirmar publicação, acesso e fluxos autenticados em dispositivos reais; verificar a configuração de compilações da integração Git com a Cloudflare.
+
 ### Publicação da versão 1.3.0
 
 - [x] Executar lint, verificação de tipos, 53 testes e compilação; criar commit e tag, aplicar a migração remota e publicar a versão identificada.
