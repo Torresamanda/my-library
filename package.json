@@ -19,6 +19,8 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
+    "@firebase/app": "^0.16.6",
+    "@firebase/auth": "^1.13.10",
     "@phosphor-icons/vue": "^2.2.1",
     "@tiptap/starter-kit": "^3.34.0",
     "@tiptap/vue-3": "^3.34.0",

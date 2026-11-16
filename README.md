@@ -42,3 +42,9 @@ Para desenvolvimento, copie `.dev.vars.example` para `.dev.vars` e preencha `FIR
 Após autenticação, a API oferece `GET /api/books`, `GET /api/books/:id`, `POST /api/books`, `PUT /api/books/:id` e `DELETE /api/books/:id`. IDs são UUIDs. O corpo de criação ou substituição é JSON e contém `title`, `author`, `isbn` (opcional), `quantity`, `status` (`nao_lido`, `lendo`, `concluido` ou `abandonado`), `seriesName` e `seriesVolume` (opcionais) e `genres` (lista opcional de nomes). Título e autor são obrigatórios; o ISBN é validado, convertido para ISBN-13 e duplicatas retornam 409. Todas as rotas da coleção exigem um token válido da conta autorizada.
 
 Esta etapa cobre dados básicos, séries e gêneros. Capas, upload, busca externa, avaliação, comentário formatado e a ligação com a interface ainda serão implementados; os campos existentes de avaliação e comentário não são alterados por essa API. Não use a prévia como coleção pessoal até a implementação e validação dos fluxos restantes.
+
+## Login e estante
+
+O login Google e a consulta da estante dependem de um projeto Firebase configurado, com o provedor Google habilitado e o domínio de acesso autorizado. Copie `.env.example` para `.env` para a configuração **pública** do aplicativo Web e `.dev.vars.example` para `.dev.vars` para a configuração da API. Os dois identificadores de projeto devem apontar para o mesmo projeto, e o UID permitido deve ser o da conta autorizada. Consulte [as variáveis](docs/VARIAVEIS.md) antes de preencher os arquivos.
+
+Após entrar, a estante busca os livros da API, mostra o dashboard e permite pesquisar e abrir as séries em ordem de volume. A interface de cadastro e as capas ainda estão em desenvolvimento. A integração com uma conta Google real e a experiência em dispositivos reais ainda precisam de validação após a configuração das contas.

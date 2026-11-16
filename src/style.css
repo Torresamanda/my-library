@@ -207,3 +207,126 @@ button:disabled {
     padding: 48px 18px;
   }
 }
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+button {
+  cursor: pointer;
+}
+.shelf section {
+  margin-top: 28px;
+}
+.shelf h2 {
+  margin-bottom: 16px;
+}
+.series-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.series-card,
+.book-list li {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+}
+.series-card summary {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 18px;
+  cursor: pointer;
+  list-style: none;
+}
+.series-card summary::-webkit-details-marker {
+  display: none;
+}
+.series-card h3 {
+  font:
+    600 1.4rem Georgia,
+    serif;
+  margin: 7px 0;
+}
+.series-card small,
+.series-card summary span {
+  color: var(--accent);
+}
+.series-card p,
+.book-list p {
+  color: var(--secondary);
+  margin: 6px 0;
+  font-size: 0.85rem;
+}
+.cover-grid {
+  width: 130px;
+  min-width: 130px;
+  aspect-ratio: 1;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 4px;
+}
+.cover-grid span {
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: #413050;
+  color: #faf5f7;
+  font:
+    1.3rem Georgia,
+    serif;
+}
+.book-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.series-card .book-list {
+  padding: 0 18px 18px;
+}
+.book-list li {
+  padding: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+.badge {
+  background: #413050;
+  color: #faf5f7;
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+.standalone {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.standalone li {
+  margin: 0;
+}
+.search:focus-within {
+  outline: 2px solid var(--accent);
+}
+button:focus-visible,
+summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+@media (max-width: 700px) {
+  .series-grid,
+  .standalone {
+    grid-template-columns: 1fr;
+  }
+  .cover-grid {
+    width: 110px;
+    min-width: 110px;
+  }
+  .header-actions {
+    gap: 6px;
+  }
+}

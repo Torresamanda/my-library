@@ -116,3 +116,9 @@ As rotas privadas da API verificam o token Firebase e restringem o acesso à ide
 ## Progresso da API de livros
 
 A API privada agora oferece operações de livros com nome, autor, ISBN, quantidade, status, série e gêneros. A interface continua em prévia; capas, avaliação, comentário rico e integração com serviços externos permanecem pendentes. Os testes de operações usam SQLite isolado e autenticação simulada; a integração com conta Firebase e D1 remoto precisa ser validada posteriormente.
+
+## Progresso da estante
+
+A interface integra autenticação Firebase Google e consulta os livros autorizados para compor o dashboard e a estante agrupada. A configuração do projeto Firebase e a validação com uma conta real ainda são necessárias. Capas e interface de cadastro permanecem pendentes.
+
+O primeiro acesso local com a conta Google autorizada foi confirmado pela proprietária. A implantação e a validação em produção e no celular continuam pendentes.

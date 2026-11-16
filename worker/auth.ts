@@ -18,9 +18,12 @@ export async function authenticate(
   keySet: CryptoKey | JWTVerifyGetKey = googleKeys,
 ): Promise<boolean> {
   if (!env.FIREBASE_PROJECT_ID || !env.ALLOWED_FIREBASE_UID) return false
+
   const header = request.headers.get('Authorization') || ''
   const match = /^Bearer ([^\s]+)$/.exec(header)
+
   if (!match?.[1]) return false
+
   try {
     const { payload } = await jwtVerify(match[1], keySet, {
       algorithms: ['RS256'],
@@ -28,7 +31,9 @@ export async function authenticate(
       audience: env.FIREBASE_PROJECT_ID,
       requiredClaims: ['sub', 'iat', 'exp', 'auth_time'],
     })
+
     const now = Math.floor(Date.now() / 1000)
+
     return (
       payload.sub === env.ALLOWED_FIREBASE_UID &&
       typeof payload.auth_time === 'number' &&

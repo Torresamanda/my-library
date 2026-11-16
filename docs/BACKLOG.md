@@ -237,3 +237,14 @@ Estas decisões substituem dúvidas e propostas anteriores conflitantes neste ar
 - [x] Salvar a edição e seus gêneros em lote transacional e testar os fluxos com SQLite isolado e autorização simulada.
 - [ ] Implementar e testar capas, avaliação e comentário rico com validação e sanitização; integrar busca externa, câmera e interface.
 - [ ] Validar a API completa com autenticação Google e D1 reais após configuração das contas, antes de implantação.
+
+### Estante e sessão
+
+- [x] Integrar login Google, saída, estados de acesso e token Firebase para chamadas à API.
+- [x] Conectar dashboard e estante aos livros retornados pela API, agrupar séries, ordenar volumes e pesquisar.
+- [x] Documentar variáveis públicas do Firebase Web e variáveis privadas da API, com exemplos vazios.
+- [ ] Validar o login com uma conta real e os fluxos no celular após configurar Firebase e domínio autorizado.
+- [ ] Conectar cadastro, detalhes, filtros adicionais e capas à interface; implementar notificações dos fluxos de escrita.
+
+- [x] Validar acesso local com conta Google real, UID autorizado e API local, conforme confirmação da proprietária.
+- [ ] Validar separadamente o acesso após o deploy e em celular; o teste local não comprova o ambiente de produção.
