@@ -35,4 +35,4 @@ No computador, a área de câmera permanece proporcional e limitada ao espaço d
 
 ## Validação pendente
 
-O esquema é uma proposta e não confirma que o leitor do Skoob tenha a mesma aparência. A proprietária deve validar a organização antes do protótipo visual e da implementação. Testar no celular, com câmera permitida, negada e indisponível, dependerá de autorização para acesso ao dispositivo ou de teste pela proprietária.
+O esquema é uma proposta e não confirma que o leitor do Skoob tenha a mesma aparência. A proprietária aprovou a organização. O [protótipo visual](PROTOTIPO-CAMERA.html) aguarda validação antes da implementação. Testar no celular, com câmera permitida, negada e indisponível, dependerá de autorização para acesso ao dispositivo ou de teste pela proprietária.

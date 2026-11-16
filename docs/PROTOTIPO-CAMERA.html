@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Prévia do leitor de ISBN · Minha biblioteca</title>
+    <style>
+      :root {
+        font-family: system-ui, sans-serif;
+        color-scheme: dark;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #100e24;
+        color: #faf5f7;
+      }
+      .page {
+        max-width: 680px;
+        margin: auto;
+        padding: 32px 16px 48px;
+      }
+      h1 {
+        font:
+          600 28px Georgia,
+          serif;
+        margin: 0 0 8px;
+      }
+      .intro {
+        color: #c7bdd0;
+        margin: 0 0 24px;
+        line-height: 1.5;
+      }
+      .mock {
+        --surface: #1b1831;
+        --text: #faf5f7;
+        --secondary: #c7bdd0;
+        --accent: #dba3ed;
+        --border: #51405e;
+        max-width: 480px;
+        margin: auto;
+        padding: 24px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--surface);
+        color: var(--text);
+      }
+      .mock h2 {
+        font:
+          600 22px Georgia,
+          serif;
+        margin: 0 0 8px;
+      }
+      .mock p {
+        line-height: 1.5;
+        color: var(--secondary);
+        margin: 0 0 16px;
+      }
+      .camera {
+        position: relative;
+        display: grid;
+        place-items: center;
+        width: 100%;
+        min-height: 240px;
+        aspect-ratio: 4 / 3;
+        overflow: hidden;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: #211b35;
+      }
+      .camera::before {
+        content: '';
+        position: absolute;
+        inset: 24% 10%;
+        border: 2px solid #faf5f7;
+        border-radius: 4px;
+        opacity: 0.85;
+      }
+      .barcode {
+        width: 48%;
+        height: 24%;
+        background: repeating-linear-gradient(
+          90deg,
+          #faf5f7 0 3px,
+          #211b35 3px 5px,
+          #faf5f7 5px 6px,
+          #211b35 6px 10px
+        );
+        opacity: 0.45;
+      }
+      .line {
+        position: absolute;
+        left: 12%;
+        right: 12%;
+        top: 50%;
+        height: 2px;
+        background: var(--accent);
+      }
+      .mock .help {
+        margin: 16px 0;
+      }
+      .mock button {
+        min-height: 44px;
+        padding: 8px 16px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--surface);
+        color: var(--text);
+        font:
+          600 16px system-ui,
+          sans-serif;
+      }
+      .mock .manual {
+        margin: 16px 0 0;
+        font-size: 14px;
+      }
+      .mock .caption {
+        margin: 16px 0 0;
+        font-size: 12px;
+      }
+      @media (max-width: 520px) {
+        .page {
+          padding-top: 24px;
+        }
+        .mock {
+          padding: 16px;
+        }
+        .camera {
+          min-height: 200px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <h1>Prévia do leitor de ISBN</h1>
+      <p class="intro">
+        Esta é uma ilustração para avaliar a organização e as cores. A câmera não está ativa.
+      </p>
+      <section class="mock" aria-labelledby="reader-title">
+        <h2 id="reader-title">Ler código pela câmera</h2>
+        <p>Aponte para o código de barras na contracapa do livro.</p>
+        <div
+          class="camera"
+          role="img"
+          aria-label="Ilustração da prévia da câmera com uma linha central"
+        >
+          <span class="barcode" aria-hidden="true"></span
+          ><span class="line" aria-hidden="true"></span>
+        </div>
+        <p class="help">Alinhe o código com a linha e mantenha o celular firme.</p>
+        <button type="button" disabled>Parar câmera</button>
+        <p class="manual">Se preferir, pare a câmera e digite o ISBN no formulário.</p>
+        <p class="caption">
+          A ilustração representa uma prévia: nenhum código ou imagem é lido aqui.
+        </p>
+      </section>
+    </main>
+  </body>
+</html>
