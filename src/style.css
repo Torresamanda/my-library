@@ -1337,8 +1337,40 @@ select:focus-visible {
 
 /* Movimento discreto, desativado quando o dispositivo solicita menos animação. */
 @media (prefers-reduced-motion: no-preference) {
+  .app,
+  .app
+    :where(
+      .brand-mark,
+      .stat,
+      .search,
+      .filters-panel,
+      .library-filters select,
+      .series-card,
+      .series-toggle,
+      .book-list li,
+      .standalone-button,
+      .book-cover,
+      .cover-placeholder,
+      .badge,
+      .empty,
+      .drawer,
+      .form-choice,
+      .edition-details,
+      input,
+      select,
+      textarea,
+      button
+    ) {
+    transition:
+      background-color 280ms ease,
+      color 280ms ease,
+      border-color 280ms ease;
+  }
   .drawer[open] {
-    animation: drawer-enter 220ms ease-out both;
+    animation: drawer-enter 320ms ease-out both;
+  }
+  .drawer[open]::backdrop {
+    animation: drawer-backdrop-enter 320ms ease-out both;
   }
   .library-filters.expanded {
     animation: content-enter 180ms ease-out both;
@@ -1375,11 +1407,19 @@ select:focus-visible {
   @keyframes drawer-enter {
     from {
       opacity: 0;
-      transform: translateX(16px);
+      transform: translateX(24px);
     }
     to {
       opacity: 1;
       transform: none;
+    }
+  }
+  @keyframes drawer-backdrop-enter {
+    from {
+      background-color: rgb(16 14 36 / 0%);
+    }
+    to {
+      background-color: rgb(16 14 36 / 70%);
     }
   }
   @keyframes content-enter {
