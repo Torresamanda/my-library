@@ -416,6 +416,7 @@ As combinações principais de texto, texto secundário e botões dos temas clar
 - [x] Fechar painéis pelo fundo e confirmar descarte de alterações no formulário; manter bloqueio durante operações em andamento.
 - [ ] Validar temas, foco, toque, fechamento e fluxos autenticados em navegadores e dispositivos reais antes de publicar.
 - [x] Acrescentar movimento discreto aos painéis, à expansão de conteúdo e à interação com cartões e botões, respeitando a preferência por movimento reduzido.
+- [x] Substituir a confirmação do navegador ao descartar edição por uma notificação persistente com opções de continuar editando ou descartar.
 
 ### Publicação da versão 1.3.0
 

@@ -36,12 +36,28 @@ const saving = ref(false)
 const rating = ref<number | null>(props.book?.rating ?? null)
 const review = ref<Review | null>(props.book?.review ?? null)
 const initialValues = JSON.stringify({ form, rating: rating.value, review: review.value })
+const discardToastId = 'discard-book-changes'
 
 function requestCancel() {
   if (saving.value) return
   const changed =
     JSON.stringify({ form, rating: rating.value, review: review.value }) !== initialValues
-  if (!changed || window.confirm('Descartar as alterações feitas neste livro?')) emit('cancel')
+  if (!changed) {
+    emit('cancel')
+    return
+  }
+  toast('Descartar as alterações feitas neste livro?', {
+    id: discardToastId,
+    toasterId: 'drawer',
+    duration: Infinity,
+    cancel: { label: 'Continuar editando', onClick: () => {} },
+    action: {
+      label: 'Descartar',
+      onClick: () => {
+        if (!saving.value) emit('cancel')
+      },
+    },
+  })
 }
 const reviewInvalid = ref(false)
 const lookingUp = ref(false)
@@ -58,6 +74,7 @@ let automaticGenres = ''
 let automaticIsbn: string | null = null
 const scheduler = createLookupScheduler(() => void lookup())
 onBeforeUnmount(() => {
+  toast.dismiss(discardToastId)
   scheduler.cancel()
   lookupVersion++
 })
