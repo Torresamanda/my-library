@@ -4,7 +4,7 @@
 
 - Seguir a ordem: fluxo e wireframes, validação, protótipo, validação e código.
 - Não criar commits antes de a proprietária validar explicitamente o fluxo.
-- Usar Conventional Commits depois da autorização: `feat:`, `fix:`, `docs:`, `refactor:`, `test:`, `chore:` e afins. O uso de commits não autoriza publicação.
+- Ao concluir cada tarefa, registrar suas alterações em commit com Conventional Commits em inglês: `feat:`, `fix:`, `docs:`, `refactor:`, `test:`, `chore:` e afins. O uso de commits não autoriza publicação.
 - Dividir mudanças em unidades compreensíveis; documentar decisões, pré-requisitos e configuração sem expor segredos.
 
 ## Implementação
@@ -72,3 +72,5 @@
 - Usar versionamento semântico (`MAJOR.MINOR.PATCH`) e atualizar `package.json` e `package-lock.json` na mesma alteração. Identificar cada versão com uma tag Git `vMAJOR.MINOR.PATCH` no commit correspondente.
 - Toda nova publicação deve partir de código verificado, registrado em commit e identificado por uma versão. Não publicar alterações não versionadas. A versão do código publicado deve ser rastreável ao commit e à tag correspondentes.
 - A integração Git da Cloudflare deve criar versões sem promovê-las automaticamente à produção; a publicação de cada versão segue a autorização aplicável. Manter variáveis públicas disponíveis na compilação e segredos apenas no Worker.
+
+- Todas as modificações devem ser registradas em commits rastreáveis, sem incluir segredos ou alterações alheias. Cada versão destinada à publicação deve ter uma tag semântica correspondente; não é necessária uma tag para cada commit.

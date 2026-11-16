@@ -7,7 +7,7 @@ Leia [docs/README.md](docs/README.md), [docs/PLANEJAMENTO.md](docs/PLANEJAMENTO.
 ## Processo
 
 - Respeite a sequência fluxo → wireframes → protótipo → código e as validações da proprietária. O fluxo e a direção visual “Lilás contemporâneo” foram revisados e a implementação inicial foi autorizada; valide mudanças relevantes de fluxo ou aparência antes de presumir aprovação.
-- Não faça commits antes de validação do fluxo. O fluxo foi validado para o trabalho inicial; a existência dessa validação não é, por si só, um pedido para criar commits. Use Conventional Commits quando criar commits autorizados.
+- O fluxo inicial foi validado. Ao concluir cada tarefa, registre as alterações pertinentes em commit, sem incluir segredos nem trabalho alheio, seguindo Conventional Commits em inglês. Mudanças relevantes de fluxo ou aparência exigem validação antes de avançar.
 - Não publique nem ative serviços pagos sem autorização. Mantenha os serviços dentro dos planos gratuitos e documente limitações e configurações necessárias.
 - A tela atual é uma prévia em desenvolvimento; não apresente dados simulados ou funcionalidades incompletas como reais. Não há página de perfil: o acesso é exclusivo da proprietária por Google.
 
@@ -39,3 +39,5 @@ Leia [docs/README.md](docs/README.md), [docs/PLANEJAMENTO.md](docs/PLANEJAMENTO.
 - Documente toda variável de ambiente em `docs/VARIAVEIS.md`, incluindo finalidade, obrigatoriedade e local de configuração local e de produção. Atualize exemplos sem valores reais sempre que houver mudanças.
 
 - Antes de publicar uma nova versão, atualize a versão semântica no projeto, registre as alterações em commit e identifique o commit com a tag correspondente. A publicação deve ser rastreável à versão; não publique código não versionado. A integração com a Cloudflare deve criar versões sem promover automaticamente cada alteração à produção.
+
+- Versione todas as modificações do projeto em commits rastreáveis ao concluir cada tarefa. Use tags semânticas para versões de publicação; commit e tag não autorizam publicar automaticamente.

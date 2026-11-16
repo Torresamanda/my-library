@@ -62,3 +62,5 @@ Para o login por redirecionamento no domínio publicado, o cliente OAuth Web do 
 ## Versionamento
 
 O projeto usa versões semânticas em `package.json` e tags Git no formato `vMAJOR.MINOR.PATCH`. Antes de publicar, registre as alterações, atualize a versão e crie a tag correspondente. A versão `v1.0.1` identifica a correção de login confirmada no celular. A integração com o GitHub deve gerar versões na Cloudflare sem promovê-las automaticamente; a promoção é uma etapa separada.
+
+Todas as alterações concluídas devem ser registradas em commits rastreáveis. Cada versão destinada à publicação recebe uma tag semântica; um commit ou uma tag não publica o site por si só. A conexão do repositório com a Cloudflare foi concluída pela proprietária; a configuração efetiva de compilação automática ainda precisa ser verificada.

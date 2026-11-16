@@ -275,6 +275,9 @@ Estas decisões substituem dúvidas e propostas anteriores conflitantes neste ar
 ### Versionamento e integração Cloudflare
 
 - [x] Adotar versionamento semântico e exigir commit e tag da versão antes de novas publicações.
-- [ ] Conectar o repositório ao Worker existente, com compilação que crie versões sem publicar automaticamente.
+- [x] Conectar o repositório ao Worker existente, conforme confirmação da proprietária.
+- [ ] Verificar no painel a configuração efetiva das compilações e garantir que versões não sejam publicadas automaticamente.
 - [ ] Configurar as variáveis públicas `VITE_FIREBASE_*` para a compilação, sem expor segredos ou substituir os segredos existentes do Worker.
 - [ ] Confirmar a primeira compilação da integração e registrar como promover uma versão identificada à produção.
+
+- [x] Registrar que todas as modificações devem ter commits rastreáveis e que versões de publicação recebem tags semânticas.
