@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import BookCover from '../../books/components/BookCover.vue'
+import { PhHeart } from '../../../icons'
 import { groupBooks, type LibraryFilters } from '../domain/groupBooks'
 import type { LibraryBook } from '../services/books'
 const props = defineProps<{ books: LibraryBook[]; search: string; filters: LibraryFilters }>()
@@ -61,30 +62,40 @@ const labels = {
           >
             <div class="series-panel-inner">
               <ul class="book-list">
-                <li v-for="book in series.books" :key="book.id">
+                <li v-for="book in series.books" :key="book.id" class="series-book">
                   <BookCover :url="book.coverUrl" :title="book.title" />
-                  <div>
+                  <div class="series-book-content">
+                    <span v-if="book.seriesVolume" class="series-volume"
+                      >Volume {{ book.seriesVolume }}</span
+                    >
                     <button class="book-link" type="button" @click="emit('select', book)">
                       {{ book.title }}
                     </button>
-                    <p>
-                      {{ book.author
-                      }}<template v-if="book.seriesVolume">
-                        · Volume {{ book.seriesVolume }}</template
-                      >
-                    </p>
-                    <p v-if="book.publisher || book.pageCount">
+                    <p class="series-book-author">{{ book.author }}</p>
+                    <p
+                      v-if="book.publisher || book.pageCount || book.mediaType"
+                      class="series-book-meta"
+                    >
                       {{
-                        [book.publisher, book.pageCount ? `${book.pageCount} páginas` : null]
+                        [
+                          book.publisher,
+                          book.pageCount ? `${book.pageCount} páginas` : null,
+                          book.mediaType ? mediaLabels[book.mediaType] : null,
+                        ]
                           .filter(Boolean)
                           .join(' · ')
                       }}
                     </p>
-                    <p v-if="book.mediaType">{{ mediaLabels[book.mediaType] }}</p>
-                    <p v-if="book.genres.length">{{ book.genres.join(' · ') }}</p>
-                    <span v-if="book.favorite" class="badge">Favorito</span>
+                    <p v-if="book.genres.length" class="series-book-meta">
+                      {{ book.genres.join(' · ') }}
+                    </p>
+                    <div class="series-book-badges">
+                      <span class="badge">{{ labels[book.status] }}</span
+                      ><span v-if="book.favorite" class="badge favorite-badge"
+                        ><PhHeart :size="16" weight="fill" aria-hidden="true" /> Favorito</span
+                      >
+                    </div>
                   </div>
-                  <span class="badge">{{ labels[book.status] }}</span>
                 </li>
               </ul>
             </div>
