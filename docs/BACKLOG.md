@@ -466,3 +466,8 @@ As combinações principais de texto, texto secundário e botões dos temas clar
 
 - [x] Somar no indicador de exemplares apenas as quantidades de edições marcadas como físicas ou e-books que a proprietária possui; preservar indicadores de leitura e páginas lidas para empréstimos.
 - [ ] Revisar a posse dos livros já cadastrados: registros sem essa informação ficam fora do total de exemplares até serem classificados.
+
+### Contagem por edição possuída
+
+- [x] Contar cada edição possuída uma vez, inclusive quando há físico e e-book ou mais de um exemplar físico; manter quantidade cadastrada para consulta.
+- [ ] Revisar a posse dos cadastros existentes: sem essa informação, a edição não entra no indicador “Livros que tenho”.

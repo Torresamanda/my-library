@@ -398,7 +398,7 @@ async function submit() {
               step="1"
           /></label>
           <label v-if="ownsCopies"
-            ><span>Quantidade de exemplares que tenho <span aria-hidden="true">*</span></span
+            ><span>Quantidade de exemplares registrados <span aria-hidden="true">*</span></span
             ><input
               v-model.number="form.quantity"
               type="number"
@@ -408,7 +408,8 @@ async function submit() {
               step="1"
           /></label>
           <p v-if="ownsCopies" class="full">
-            Informe o total que você possui, somando físico e e-book.
+            Cada edição que você tem conta uma vez no painel, independentemente da quantidade ou do
+            formato.
           </p>
           <p v-else class="full">
             Para contabilizar exemplares, marque “Tenho físico” ou “Tenho e-book”.

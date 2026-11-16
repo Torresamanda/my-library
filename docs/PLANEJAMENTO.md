@@ -147,3 +147,7 @@ O limite de 500 usa pontos de código Unicode: um emoji simples conta como um, m
 ### Contagem de exemplares próprios
 
 O total de exemplares do dashboard considera apenas edições marcadas como “Tenho físico” ou “Tenho e-book”, somando a quantidade informada para os exemplares que a proprietária possui. Leituras sem posse e cadastros sem informação de posse não entram nesse total. Os indicadores de leitura e o paginômetro continuam considerando as edições independentemente da posse. Essa decisão substitui regras anteriores sobre a contagem geral.
+
+### Contagem de livros que possuo
+
+Cada edição cadastrada que a proprietária possui conta uma única vez no indicador “Livros que tenho”, mesmo que esteja nos formatos físico e e-book ou tenha mais de um exemplar físico. A quantidade registrada continua disponível para consulta, mas não multiplica o indicador. Obras sem posse e sem informação de posse não são contadas; os indicadores de leitura e o paginômetro permanecem independentes da posse. Esta decisão substitui as regras anteriores para o total.

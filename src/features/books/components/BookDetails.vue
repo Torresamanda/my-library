@@ -106,7 +106,7 @@ async function remove() {
           <dd>{{ book.pageCount ?? 'Não informado' }}</dd>
         </div>
         <div>
-          <dt>Exemplares que tenho</dt>
+          <dt>Exemplares registrados</dt>
           <dd>
             {{
               hasOwned(book.ownership)
