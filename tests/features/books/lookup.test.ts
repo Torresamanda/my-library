@@ -88,3 +88,68 @@ it('keeps the title if the edition author lookup fails', async () => {
   )
   expect(await lookupIsbn('9780306406157')).toEqual({ title: 'Livro', author: '', coverUrl: null })
 })
+
+it('prefers the title and cover for the ISBN edition and requests Portuguese results', async () => {
+  const fetchMock = vi
+    .fn()
+    .mockResolvedValueOnce(
+      new Response(
+        JSON.stringify({
+          docs: [
+            {
+              title: 'Original title',
+              author_name: ['Autora'],
+              isbn: ['9780306406157'],
+              cover_i: 11,
+            },
+          ],
+        }),
+        { status: 200 },
+      ),
+    )
+    .mockResolvedValueOnce(
+      new Response(JSON.stringify({ title: 'Título da edição brasileira', covers: [22] }), {
+        status: 200,
+      }),
+    )
+  vi.stubGlobal('fetch', fetchMock)
+  expect(await lookupIsbn('9780306406157')).toEqual({
+    title: 'Título da edição brasileira',
+    author: 'Autora',
+    coverUrl: 'https://covers.openlibrary.org/b/id/22-M.jpg',
+  })
+  const requested = fetchMock.mock.calls[0]?.[0] as URL
+  expect(requested.searchParams.get('lang')).toBe('pt')
+  expect(fetchMock.mock.calls[1]?.[0]).toBe('https://openlibrary.org/isbn/9780306406157.json')
+})
+
+it('falls back to work data when the edition has no usable title or cover', async () => {
+  vi.stubGlobal(
+    'fetch',
+    vi
+      .fn()
+      .mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({
+            docs: [
+              {
+                title: 'Título disponível',
+                author_name: ['Autora'],
+                isbn: ['9780306406157'],
+                cover_i: 11,
+              },
+            ],
+          }),
+          { status: 200 },
+        ),
+      )
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ title: ' ', covers: [-1, 'invalid'] }), { status: 200 }),
+      ),
+  )
+  expect(await lookupIsbn('9780306406157')).toEqual({
+    title: 'Título disponível',
+    author: 'Autora',
+    coverUrl: 'https://covers.openlibrary.org/b/id/11-M.jpg',
+  })
+})

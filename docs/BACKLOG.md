@@ -326,3 +326,8 @@ Estas decisões substituem dúvidas e propostas anteriores conflitantes neste ar
 
 - [x] Consultar os autores vinculados à edição quando a busca inicial não trouxer nomes; informar quando a fonte não disponibilizar autoria e manter o preenchimento manual.
 - [ ] Validar com o ISBN específico que apresentou ausência de autor e em dispositivo real.
+
+### Preferência por dados em português
+
+- [x] Priorizar o título e a capa da edição correspondente ao ISBN e solicitar resultados em português à Open Library; usar os dados disponíveis quando a edição não trouxer esses campos.
+- [ ] Validar com ISBNs brasileiros reais. A fonte não distingue necessariamente português do Brasil de outras variantes e pode não ter os dados da edição.
