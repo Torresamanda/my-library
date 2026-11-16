@@ -268,18 +268,20 @@ select:focus-visible {
   border: 1px solid var(--border);
   border-radius: var(--radius-medium);
 }
-.series-card summary {
+.series-card .series-toggle {
   display: flex;
   align-items: center;
   gap: 16px;
+  width: 100%;
   padding: 16px;
+  border: 0;
+  border-radius: var(--radius-medium);
+  background: transparent;
+  color: var(--text);
   cursor: pointer;
-  list-style: none;
+  text-align: left;
 }
-.series-card summary::-webkit-details-marker {
-  display: none;
-}
-.series-card summary > div:last-child {
+.series-card .series-toggle > div:last-child {
   min-width: 0;
   overflow-wrap: anywhere;
 }
@@ -290,7 +292,7 @@ select:focus-visible {
     serif;
 }
 .series-card small,
-.series-card summary span {
+.series-card .series-toggle span {
   color: var(--accent);
 }
 .series-card p,
@@ -891,15 +893,20 @@ select:focus-visible {
 }
 .series-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start;
 }
-.series-close {
-  display: none;
+.series-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
 }
-.series-card[open] .series-open {
-  display: none;
+.series-panel.is-open {
+  grid-template-rows: 1fr;
+  opacity: 1;
 }
-.series-card[open] .series-close {
-  display: inline;
+.series-panel-inner {
+  min-height: 0;
+  overflow: hidden;
 }
 .standalone {
   grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -1285,9 +1292,13 @@ select:focus-visible {
   .drawer[open] {
     animation: drawer-enter 220ms ease-out both;
   }
-  .series-card[open] .book-list,
   .library-filters.expanded {
     animation: content-enter 180ms ease-out both;
+  }
+  .series-panel {
+    transition:
+      grid-template-rows 260ms ease,
+      opacity 200ms ease;
   }
   .standalone-card,
   .series-card,

@@ -1,11 +1,19 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import BookCover from '../../books/components/BookCover.vue'
 import { groupBooks, type LibraryFilters } from '../domain/groupBooks'
 import type { LibraryBook } from '../services/books'
 const props = defineProps<{ books: LibraryBook[]; search: string; filters: LibraryFilters }>()
 const emit = defineEmits<{ select: [book: LibraryBook]; clear: []; add: [] }>()
 const groups = computed(() => groupBooks(props.books, props.search, props.filters))
+const openSeries = ref(new Set<string>())
+
+function toggleSeries(name: string) {
+  const next = new Set(openSeries.value)
+  if (next.has(name)) next.delete(name)
+  else next.add(name)
+  openSeries.value = next
+}
 const mediaLabels = { livro: 'Livro', quadrinho: 'Quadrinho', manga: 'Mangá', outro: 'Outro' }
 const labels = {
   nao_lido: 'Não lido',
@@ -19,8 +27,14 @@ const labels = {
     <section v-if="groups.series.length">
       <h2>Minhas séries</h2>
       <div class="series-grid">
-        <details v-for="series in groups.series" :key="series.name" class="series-card">
-          <summary>
+        <div v-for="(series, index) in groups.series" :key="series.name" class="series-card">
+          <button
+            type="button"
+            class="series-toggle"
+            :aria-expanded="openSeries.has(series.name)"
+            :aria-controls="`series-panel-${index}`"
+            @click="toggleSeries(series.name)"
+          >
             <div class="cover-grid" aria-hidden="true">
               <template v-for="n in 4" :key="n"
                 ><BookCover
@@ -36,36 +50,46 @@ const labels = {
               <p>
                 {{ series.books.length }} {{ series.books.length === 1 ? 'edição' : 'edições' }}
               </p>
-              <span class="series-open">Abrir série ▾</span
-              ><span class="series-close">Fechar série ▴</span>
+              <span>{{ openSeries.has(series.name) ? 'Fechar série ▴' : 'Abrir série ▾' }}</span>
             </div>
-          </summary>
-          <ul class="book-list">
-            <li v-for="book in series.books" :key="book.id">
-              <BookCover :url="book.coverUrl" :title="book.title" />
-              <div>
-                <button class="book-link" type="button" @click="emit('select', book)">
-                  {{ book.title }}
-                </button>
-                <p>
-                  {{ book.author
-                  }}<template v-if="book.seriesVolume"> · Volume {{ book.seriesVolume }}</template>
-                </p>
-                <p v-if="book.publisher || book.pageCount">
-                  {{
-                    [book.publisher, book.pageCount ? `${book.pageCount} páginas` : null]
-                      .filter(Boolean)
-                      .join(' · ')
-                  }}
-                </p>
-                <p v-if="book.mediaType">{{ mediaLabels[book.mediaType] }}</p>
-                <p v-if="book.genres.length">{{ book.genres.join(' · ') }}</p>
-                <span v-if="book.favorite" class="badge">Favorito</span>
-              </div>
-              <span class="badge">{{ labels[book.status] }}</span>
-            </li>
-          </ul>
-        </details>
+          </button>
+          <div
+            :id="`series-panel-${index}`"
+            :class="['series-panel', { 'is-open': openSeries.has(series.name) }]"
+            :inert="!openSeries.has(series.name)"
+            :aria-hidden="!openSeries.has(series.name)"
+          >
+            <div class="series-panel-inner">
+              <ul class="book-list">
+                <li v-for="book in series.books" :key="book.id">
+                  <BookCover :url="book.coverUrl" :title="book.title" />
+                  <div>
+                    <button class="book-link" type="button" @click="emit('select', book)">
+                      {{ book.title }}
+                    </button>
+                    <p>
+                      {{ book.author
+                      }}<template v-if="book.seriesVolume">
+                        · Volume {{ book.seriesVolume }}</template
+                      >
+                    </p>
+                    <p v-if="book.publisher || book.pageCount">
+                      {{
+                        [book.publisher, book.pageCount ? `${book.pageCount} páginas` : null]
+                          .filter(Boolean)
+                          .join(' · ')
+                      }}
+                    </p>
+                    <p v-if="book.mediaType">{{ mediaLabels[book.mediaType] }}</p>
+                    <p v-if="book.genres.length">{{ book.genres.join(' · ') }}</p>
+                    <span v-if="book.favorite" class="badge">Favorito</span>
+                  </div>
+                  <span class="badge">{{ labels[book.status] }}</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
     <section v-if="groups.standalone.length">

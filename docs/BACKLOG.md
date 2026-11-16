@@ -464,6 +464,7 @@ As combinações principais de texto, texto secundário e botões dos temas clar
 - [x] Receber aprovação do protótipo e implementar a organização do cadastro com opções visíveis e seção expansível para dados da edição.
 - [x] Exibir coração vazio ou preenchido para indicar e alterar o estado de favorito no cadastro.
 - [x] Exibir coração para favoritos e estrelas para a avaliação na visualização de detalhes do livro.
+- [x] Suavizar abertura e fechamento das séries, respeitando a preferência por movimento reduzido e preservando a navegação por teclado.
 - [ ] Validar visualmente e por teclado os fluxos de cadastro e edição em ambos os temas, no celular e no computador, inclusive consulta e câmera reais.
 
 ### Contagem de exemplares próprios
