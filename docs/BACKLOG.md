@@ -450,3 +450,9 @@ As combinações principais de texto, texto secundário e botões dos temas clar
 - [x] Distinguir livro, quadrinho, mangá e outro; manter tipo opcional para edições já existentes.
 - [x] Somar páginas informadas de edições concluídas uma vez por cadastro no paginômetro, sem multiplicar por exemplares.
 - [ ] Validar os novos controles e o dashboard em dispositivos e temas reais. Antes de publicar, aplicar a migração `0003_collection_fields.sql` ao D1 remoto e identificar a versão.
+
+### Opção única de leitura sem posse
+
+- [x] Substituir as opções visíveis de empréstimo por “Não tenho”, preservando os registros anteriores até que a opção seja alterada.
+- [x] Melhorar os estados selecionado e de foco dos controles de posse, favorito e avaliação.
+- [ ] Validar visualmente os controles em dispositivos reais.

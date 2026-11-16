@@ -1177,3 +1177,42 @@ select:focus-visible {
   width: auto;
   min-height: auto;
 }
+
+.form-grid .ownership-field label,
+.favorite-field {
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-medium);
+  background: var(--surface);
+  cursor: pointer;
+}
+.form-grid .ownership-field label.choice-selected,
+.favorite-field:has(input:checked) {
+  background: var(--tag);
+  border-color: var(--accent);
+}
+.form-grid .ownership-field input,
+.favorite-field input {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  accent-color: var(--accent);
+}
+.form-grid .ownership-field label:focus-within,
+.favorite-field:focus-within {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.rating-field .rating-star {
+  border-radius: var(--radius-small);
+}
+.rating-field .rating-star:has(input:checked) {
+  background: var(--tag);
+}
+@media (hover: hover) {
+  .rating-field .rating-star:hover {
+    background: var(--support);
+  }
+}

@@ -279,6 +279,25 @@ describe('books API', () => {
         .status,
     ).toBe(400)
   })
+  it('supports the single unowned option and retains legacy values on edit', async () => {
+    const created = await send(env, 'POST', '/api/books', {
+      ...example,
+      ownership: ['emprestado_pessoa', 'emprestado_assinatura'],
+    })
+    const { book } = (await created.json()) as { book: { id: string } }
+    const unchanged = await send(env, 'PUT', `/api/books/${book.id}`, {
+      ...example,
+      ownership: ['emprestado_pessoa', 'emprestado_assinatura'],
+    })
+    expect(await unchanged.json()).toMatchObject({
+      book: { ownership: ['emprestado_pessoa', 'emprestado_assinatura'] },
+    })
+    const updated = await send(env, 'PUT', `/api/books/${book.id}`, {
+      ...example,
+      ownership: ['nao_tenho'],
+    })
+    expect(await updated.json()).toMatchObject({ book: { ownership: ['nao_tenho'] } })
+  })
   it('does not permit unauthorized collection access', async () => {
     vi.mocked(authenticate).mockResolvedValue(false)
     expect((await send(env, 'GET', '/api/books')).status).toBe(401)

@@ -140,6 +140,6 @@ O limite de 500 usa pontos de código Unicode: um emoji simples conta como um, m
 ### Favoritos, posse, tipo e paginômetro
 
 - O favorito é opcional e pode ser marcado ou removido no cadastro e na edição.
-- É possível combinar posse física, e-book e empréstimos de pessoa ou assinatura; não selecionar opções indica que a informação não foi registrada.
+- É possível combinar posse física, e-book e a opção única “Não tenho” (por exemplo, leitura por empréstimo ou assinatura); não selecionar opções indica que a informação não foi registrada. Registros anteriores de empréstimo preservam seus dados e aparecem sob essa opção.
 - Tipos disponíveis: livro, quadrinho, mangá e outro; cadastros anteriores não recebem tipo presumido.
 - O paginômetro soma o número de páginas das edições concluídas, uma vez por cadastro, independentemente da quantidade. Edições sem número de páginas não contribuem para o total.

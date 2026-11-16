@@ -2,6 +2,7 @@
 import { nextTick, ref } from 'vue'
 import { toast } from 'vue-sonner'
 import BookCover from './BookCover.vue'
+import { ownershipDescription } from '../domain/collection'
 import ReviewContent from './ReviewContent.vue'
 import BaseDrawer from '../../../ui/BaseDrawer.vue'
 import LoadingIndicator from '../../../ui/LoadingIndicator.vue'
@@ -14,12 +15,6 @@ const deleteButton = ref<HTMLButtonElement | null>(null)
 const deleting = ref(false)
 const error = ref('')
 const mediaLabels = { livro: 'Livro', quadrinho: 'Quadrinho', manga: 'Mangá', outro: 'Outro' }
-const ownershipLabels = {
-  fisico: 'Tenho físico',
-  ebook: 'Tenho e-book',
-  emprestado_pessoa: 'Emprestado de alguém',
-  emprestado_assinatura: 'Emprestado por assinatura',
-}
 const labels = {
   nao_lido: 'Não lido',
   lendo: 'Lendo',
@@ -79,11 +74,7 @@ async function remove() {
         <div>
           <dt>Formato ou origem</dt>
           <dd>
-            {{
-              book.ownership?.length
-                ? book.ownership.map((value) => ownershipLabels[value]).join(', ')
-                : 'Não informado'
-            }}
+            {{ book.ownership?.length ? ownershipDescription(book.ownership) : 'Não informado' }}
           </dd>
         </div>
         <div>

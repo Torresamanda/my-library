@@ -5,7 +5,7 @@ import { normalizeIsbn } from '../domain/isbn'
 import BarcodeScanner from './BarcodeScanner.vue'
 import BookCover from './BookCover.vue'
 import ReviewEditor from './ReviewEditor.vue'
-import { type MediaType, type Ownership } from '../domain/collection'
+import { hasUnowned, setUnowned, type MediaType, type Ownership } from '../domain/collection'
 import { reviewLength, type Review } from '../domain/review'
 import BaseDrawer from '../../../ui/BaseDrawer.vue'
 import LoadingIndicator from '../../../ui/LoadingIndicator.vue'
@@ -35,6 +35,12 @@ const form = reactive({
   seriesVolume: props.book?.seriesVolume?.toString() ?? '',
   quantity: props.book?.quantity ?? 1,
   status: (props.book?.status ?? 'nao_lido') as BookDraft['status'],
+})
+const unowned = computed({
+  get: () => hasUnowned(form.ownership),
+  set: (checked: boolean) => {
+    form.ownership = setUnowned(form.ownership, checked)
+  },
 })
 const genreTags = computed(() =>
   form.genres
@@ -364,16 +370,15 @@ async function submit() {
           >
           <fieldset class="ownership-field full">
             <legend>Formato ou origem (opcional)</legend>
-            <label
+            <label :class="{ 'choice-selected': form.ownership.includes('fisico') }"
               ><input v-model="form.ownership" type="checkbox" value="fisico" /> Tenho físico</label
-            ><label
+            >
+            <label :class="{ 'choice-selected': form.ownership.includes('ebook') }"
               ><input v-model="form.ownership" type="checkbox" value="ebook" /> Tenho e-book</label
-            ><label
-              ><input v-model="form.ownership" type="checkbox" value="emprestado_pessoa" />
-              Emprestado de alguém</label
-            ><label
-              ><input v-model="form.ownership" type="checkbox" value="emprestado_assinatura" />
-              Emprestado por assinatura (ex.: Kindle+)</label
+            >
+            <label :class="{ 'choice-selected': unowned }"
+              ><input v-model="unowned" type="checkbox" /> Não tenho (ex.: empréstimo ou
+              assinatura)</label
             >
           </fieldset>
           <label>Série (opcional)<input v-model="form.seriesName" maxlength="200" /></label>
