@@ -1366,6 +1366,17 @@ select:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
+.favorite-field {
+  position: relative;
+}
+.favorite-field input {
+  position: absolute;
+  opacity: 0;
+}
+.favorite-field svg {
+  flex: none;
+  color: var(--accent);
+}
 .rating-field .rating-star {
   border-radius: var(--radius-small);
 }

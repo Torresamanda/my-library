@@ -2,6 +2,7 @@ export {
   PhBookOpen,
   PhBooks,
   PhCheckCircle,
+  PhHeart,
   PhMagnifyingGlass,
   PhLockKey,
   PhSignOut,

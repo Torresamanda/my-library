@@ -462,6 +462,7 @@ As combinações principais de texto, texto secundário e botões dos temas clar
 - [x] Preparar [wireframe de reorganização do cadastro](WIREFRAME-CADASTRO.md), incluindo os campos e comportamentos existentes.
 - [x] Validar sequência, escolhas visíveis e seção de dados adicionais com a proprietária e preparar [protótipo visual](PROTOTIPO-CADASTRO.html).
 - [x] Receber aprovação do protótipo e implementar a organização do cadastro com opções visíveis e seção expansível para dados da edição.
+- [x] Exibir coração vazio ou preenchido para indicar e alterar o estado de favorito no cadastro.
 - [ ] Validar visualmente e por teclado os fluxos de cadastro e edição em ambos os temas, no celular e no computador, inclusive consulta e câmera reais.
 
 ### Contagem de exemplares próprios

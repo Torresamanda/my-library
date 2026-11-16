@@ -15,6 +15,7 @@ import {
 import { reviewLength, type Review } from '../domain/review'
 import BaseDrawer from '../../../ui/BaseDrawer.vue'
 import LoadingIndicator from '../../../ui/LoadingIndicator.vue'
+import { PhHeart } from '../../../icons'
 import { lookupIsbn } from '../services/lookup'
 import { autofillField, createLookupScheduler } from '../services/automaticLookup'
 import {
@@ -399,8 +400,7 @@ async function submit() {
             ><input id="book-genres" v-model="form.genres" placeholder="Ex.: Fantasia, Romance" />
             <ul v-if="genreTags.length" class="genre-tags" aria-label="Gêneros informados">
               <li v-for="(genre, index) in genreTags" :key="`${index}-${genre}`">
-                <span>{{ genre }}</span
-                ><button
+                <span>{{ genre }}</span><button
                   type="button"
                   :aria-label="`Remover gênero ${genre}`"
                   @click="removeGenre(index)"
@@ -519,9 +519,11 @@ async function submit() {
               >
             </div>
           </fieldset>
-          <label class="favorite-field field-block"
-            ><input v-model="form.favorite" type="checkbox" /> Marcar como favorito</label
-          >
+          <label class="favorite-field field-block">
+            <input v-model="form.favorite" type="checkbox" />
+            <PhHeart :size="24" :weight="form.favorite ? 'fill' : 'regular'" aria-hidden="true" />
+            <span>Marcar como favorito</span>
+          </label>
           <ReviewEditor
             v-model:rating="rating"
             v-model:review="review"
