@@ -2,7 +2,7 @@
 
 ## Situação atual
 
-A versão publicada é a 1.2.0. As funcionalidades posteriores descritas abaixo estão implementadas no repositório, mas ainda não foram publicadas nem validadas em dispositivos reais. A tarefa de capas continua parcialmente concluída: falta implementar o envio manual.
+A versão 1.3.0 foi publicada a partir do commit `0276253` e da tag `v1.3.0`. As funcionalidades abaixo estão disponíveis em produção, mas ainda precisam de validação em dispositivos reais. A tarefa de capas continua parcialmente concluída: falta implementar o envio manual.
 
 ### Concluído no repositório
 
@@ -18,10 +18,11 @@ A versão publicada é a 1.2.0. As funcionalidades posteriores descritas abaixo 
 - [ ] Validar, em celular e computador, os fluxos implementados, leitura pela câmera, editor de comentário, foco, notificações e temas claro e escuro, com autorização para o acesso necessário.
 - [ ] Investigar e reduzir o tamanho do arquivo principal gerado na compilação, que excede o limite de aviso da ferramenta.
 - [ ] Conferir a configuração efetiva da integração Git com a Cloudflare; a consulta anterior foi negada por falta de permissão. Não presumir que um envio ao Git não publique automaticamente.
-- [ ] Antes de publicar, aplicar a migração '0002_book_metadata.sql' ao D1 remoto com autorização; atualizar a versão semântica, registrar commit e tag e publicar somente código versionado.
+- [x] Aplicar a migração `0002_book_metadata.sql` ao D1 remoto, registrar e identificar a versão 1.3.0 e publicá-la a partir do código versionado.
+- [ ] Antes das próximas publicações, manter a mesma sequência de verificações, versão, commit e tag.
 - [ ] Definir e documentar backup e recuperação da coleção e os limites dos serviços.
 
-O banco local já recebeu a migração 0002 e a proprietária confirmou que a estante local voltou a abrir. O D1 remoto é independente e ainda não recebeu essa migração.
+Os bancos local e remoto receberam a migração 0002. Após a migração local, a proprietária confirmou que a estante local voltou a abrir; os dois bancos permanecem independentes.
 
 ## Histórico de planejamento
 
@@ -365,13 +366,14 @@ Estas decisões substituem dúvidas e propostas anteriores conflitantes neste ar
 
 - [x] Limitar novos salvamentos a quatro gêneros e sugerir até quatro assuntos retornados pela edição, sempre editáveis; fontes externas podem fornecer assuntos em outros idiomas ou pouco precisos.
 - [x] Permitir consultar e salvar editora e número de páginas opcionais, com preenchimento automático quando disponíveis; preservar alterações manuais e registros existentes.
-- [ ] Antes de publicar, aplicar a migração `0002_book_metadata.sql` ao D1 remoto com autorização e conferir a versão; validar o cadastro em dispositivos reais. Livros existentes com mais de quatro gêneros são preservados, mas precisam ser ajustados a quatro para um novo salvamento.
+- [x] Aplicar a migração `0002_book_metadata.sql` ao D1 remoto.
+- [ ] Validar o cadastro em dispositivos reais. Livros existentes com mais de quatro gêneros são preservados, mas precisam ser ajustados a quatro para um novo salvamento.
 
 ### Detalhes, edição e exclusão
 
 - [x] Abrir detalhes da edição a partir da estante, consultar os dados, editar pelo formulário e confirmar a exclusão antes de chamar a API protegida.
 - [x] Preservar dados de edição em erros de salvamento, tratar conflito de ISBN e falhas de exclusão e atualizar os indicadores após alterações.
-- [ ] Validar interações, foco, temas e responsividade em navegadores e dispositivos reais. A publicação depende também da migração de metadados já pendente no D1 remoto.
+- [ ] Validar interações, foco, temas e responsividade em navegadores e dispositivos reais.
 
 ### Capas — decisões e progresso
 
@@ -385,7 +387,7 @@ Estas decisões substituem dúvidas e propostas anteriores conflitantes neste ar
 - [x] Permitir avaliação opcional de 1 a 5 estrelas inteiras e comentário pessoal editável em parágrafos, negrito e títulos de níveis 1 a 3.
 - [x] Contar pontos de código Unicode (emojis compostos podem contar mais de um), quebras de linha e separações entre blocos como um cada; o limite é 500. Marcação não conta.
 - [x] Validar estrutura e limite no servidor, armazenar somente blocos e marcas permitidos e renderizar como texto seguro; testar entradas maliciosas e persistência.
-- [ ] Validar edição por toque e teclado, acessibilidade e temas em dispositivos reais; a publicação depende da migração de metadados pendente no D1 remoto.
+- [ ] Validar edição por toque e teclado, acessibilidade e temas em dispositivos reais.
 
 ### Acabamento da estante
 
@@ -395,3 +397,9 @@ Estas decisões substituem dúvidas e propostas anteriores conflitantes neste ar
 - [ ] Validar contraste, foco, notificações, temas e leiautes em celular e computador com navegadores reais; concluir também o envio manual de capas ainda pendente.
 
 As combinações principais de texto, texto secundário e botões dos temas claro e escuro foram verificadas por cálculo de contraste e atingem pelo menos 4,5:1. Isso não substitui a inspeção dos componentes, foco, imagens e estados em telas reais.
+
+### Publicação da versão 1.3.0
+
+- [x] Executar lint, verificação de tipos, 53 testes e compilação; criar commit e tag, aplicar a migração remota e publicar a versão identificada.
+- [x] Verificar respostas do site e da saúde da API e confirmar bloqueio da coleção sem autenticação.
+- [ ] Validar os novos fluxos autenticados em produção, em celular e computador. A integração Git da Cloudflare permanece sem verificação; não foi enviado novo código ao GitHub nesta publicação.
