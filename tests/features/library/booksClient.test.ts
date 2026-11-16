@@ -46,3 +46,37 @@ it('sends a new book with authorization and reports duplicate ISBNs', async () =
     body: JSON.stringify(book),
   })
 })
+
+it('edits and deletes through authenticated requests and reports failures', async () => {
+  const { updateBook, deleteBook } = await import('../../../src/features/library/services/books')
+  const book = {
+    title: 'Livro',
+    author: 'Autora',
+    isbn: null,
+    quantity: 1,
+    status: 'lendo' as const,
+    seriesName: null,
+    seriesVolume: null,
+    genres: [],
+  }
+  const fetchMock = vi
+    .fn()
+    .mockResolvedValueOnce(new Response(null, { status: 200 }))
+    .mockResolvedValueOnce(new Response(null, { status: 409 }))
+    .mockResolvedValueOnce(new Response(null, { status: 204 }))
+    .mockResolvedValueOnce(new Response(null, { status: 401 }))
+  vi.stubGlobal('fetch', fetchMock)
+  await updateBook('token', 'book-id', book)
+  expect(fetchMock).toHaveBeenNthCalledWith(1, '/api/books/book-id', {
+    method: 'PUT',
+    headers: { Authorization: 'Bearer token', 'Content-Type': 'application/json' },
+    body: JSON.stringify(book),
+  })
+  await expect(updateBook('token', 'book-id', book)).rejects.toMatchObject({ status: 409 })
+  await deleteBook('token', 'book-id')
+  expect(fetchMock).toHaveBeenNthCalledWith(3, '/api/books/book-id', {
+    method: 'DELETE',
+    headers: { Authorization: 'Bearer token' },
+  })
+  await expect(deleteBook('token', 'book-id')).rejects.toMatchObject({ status: 401 })
+})

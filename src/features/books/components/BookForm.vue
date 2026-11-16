@@ -6,27 +6,35 @@ import BaseDrawer from '../../../ui/BaseDrawer.vue'
 import LoadingIndicator from '../../../ui/LoadingIndicator.vue'
 import { lookupIsbn } from '../services/lookup'
 import { autofillField, createLookupScheduler } from '../services/automaticLookup'
-import { createBook, LibraryRequestError, type BookDraft } from '../../library/services/books'
+import {
+  createBook,
+  updateBook,
+  LibraryRequestError,
+  type BookDraft,
+  type LibraryBook,
+} from '../../library/services/books'
 
-const props = defineProps<{ token: () => Promise<string> }>()
+const props = defineProps<{ token: () => Promise<string>; book?: LibraryBook }>()
 const emit = defineEmits<{ cancel: []; saved: [] }>()
 const form = reactive({
-  title: '',
-  author: '',
-  isbn: '',
-  genres: '',
-  publisher: '',
-  pageCount: '',
-  seriesName: '',
-  seriesVolume: '',
-  quantity: 1,
-  status: 'nao_lido' as BookDraft['status'],
+  title: props.book?.title ?? '',
+  author: props.book?.author ?? '',
+  isbn: props.book?.isbn ?? '',
+  genres: props.book?.genres.join(', ') ?? '',
+  publisher: props.book?.publisher ?? '',
+  pageCount: props.book?.pageCount?.toString() ?? '',
+  seriesName: props.book?.seriesName ?? '',
+  seriesVolume: props.book?.seriesVolume?.toString() ?? '',
+  quantity: props.book?.quantity ?? 1,
+  status: (props.book?.status ?? 'nao_lido') as BookDraft['status'],
 })
 const error = ref('')
 const saving = ref(false)
 const lookingUp = ref(false)
 const lookupMessage = ref('')
-const coverUrl = ref<string | null>(null)
+const coverUrl = ref<string | null>(props.book?.coverUrl ?? null)
+const coverFailed = ref(false)
+const originalIsbn = props.book?.isbn ? normalizeIsbn(props.book.isbn) : null
 let lookupVersion = 0
 let automaticTitle = ''
 let automaticAuthor = ''
@@ -55,7 +63,11 @@ function isbnChanged() {
     automaticIsbn = null
   }
   lookupVersion++
-  coverUrl.value = null
+  coverUrl.value =
+    originalIsbn && normalizeIsbn(form.isbn) === originalIsbn
+      ? (props.book?.coverUrl ?? null)
+      : null
+  coverFailed.value = false
   lookupMessage.value = ''
   lookingUp.value = false
   scheduler.schedule(form.isbn)
@@ -82,7 +94,6 @@ async function lookup() {
   const initialGenres = form.genres
   lookingUp.value = true
   lookupMessage.value = ''
-  coverUrl.value = null
   try {
     const result = await lookupIsbn(isbn, AbortSignal.timeout(10000))
     if (version !== lookupVersion) return
@@ -113,7 +124,9 @@ async function lookup() {
     automaticIsbn = isbn
     form.title = title
     form.author = author
-    coverUrl.value = result.coverUrl
+    coverUrl.value =
+      result.coverUrl ?? (originalIsbn === isbn ? (props.book?.coverUrl ?? null) : null)
+    coverFailed.value = false
     lookupMessage.value = result.author
       ? 'Confira e complete os dados encontrados antes de salvar.'
       : 'A fonte não informou a autoria. Preencha o autor ou os autores antes de salvar.'
@@ -173,7 +186,7 @@ async function submit() {
   }
   saving.value = true
   try {
-    await createBook(await props.token(), {
+    const draft: BookDraft = {
       title: form.title.trim(),
       author: form.author.trim(),
       isbn: form.isbn.trim() || null,
@@ -185,7 +198,10 @@ async function submit() {
       seriesVolume: volume,
       quantity: form.quantity,
       status: form.status,
-    })
+    }
+    const token = await props.token()
+    if (props.book) await updateBook(token, props.book.id, draft)
+    else await createBook(token, draft)
     emit('saved')
   } catch (cause) {
     error.value =
@@ -201,7 +217,11 @@ async function submit() {
 </script>
 
 <template>
-  <BaseDrawer title="Adicionar livro" :close-disabled="saving" @close="emit('cancel')">
+  <BaseDrawer
+    :title="book ? 'Editar livro' : 'Adicionar livro'"
+    :close-disabled="saving"
+    @close="emit('cancel')"
+  >
     <div class="book-form">
       <p>Preencha os dados desta edição. Campos com * são obrigatórios.</p>
       <form @submit.prevent="submit">
@@ -279,12 +299,12 @@ async function submit() {
         </div>
         <p v-if="lookupMessage" role="status">{{ lookupMessage }}</p>
         <img
-          v-if="coverUrl"
+          v-if="coverUrl && !coverFailed"
           :src="coverUrl"
           alt="Capa encontrada na Open Library"
           class="lookup-cover"
           referrerpolicy="no-referrer"
-          @error="coverUrl = null"
+          @error="coverFailed = true"
         />
         <p v-if="error" role="alert" class="form-error">{{ error }}</p>
         <div class="form-actions">

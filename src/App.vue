@@ -11,6 +11,7 @@ import {
 import { loginErrorMessage } from './features/auth/loginError'
 import { isLibraryPath } from './features/navigation/path'
 import BookForm from './features/books/components/BookForm.vue'
+import BookDetails from './features/books/components/BookDetails.vue'
 import LibraryStats from './features/library/components/LibraryStats.vue'
 import LibraryShelf from './features/library/components/LibraryShelf.vue'
 import LoadingIndicator from './ui/LoadingIndicator.vue'
@@ -28,6 +29,8 @@ const user = ref<User | null>(null)
 const books = ref<LibraryBook[]>([])
 const search = ref('')
 const adding = ref(false)
+const selectedBook = ref<LibraryBook | null>(null)
+const editingBook = ref<LibraryBook | null>(null)
 const loggingIn = ref(false)
 const isNotFound = !isLibraryPath(window.location.pathname)
 const success = ref('')
@@ -75,9 +78,34 @@ async function leave() {
 }
 
 async function bookSaved() {
+  success.value = editingBook.value
+    ? 'Livro atualizado na biblioteca.'
+    : 'Livro adicionado à biblioteca.'
   adding.value = false
-  success.value = 'Livro adicionado à biblioteca.'
+  editingBook.value = null
+  selectedBook.value = null
   if (user.value) await loadBooks(user.value)
+}
+
+async function bookDeleted() {
+  selectedBook.value = null
+  success.value = 'Livro excluído da biblioteca.'
+  if (user.value) await loadBooks(user.value)
+}
+
+function editBook() {
+  editingBook.value = selectedBook.value
+  selectedBook.value = null
+}
+
+function cancelEdit() {
+  selectedBook.value = editingBook.value
+  editingBook.value = null
+}
+
+function selectBook(book: LibraryBook) {
+  selectedBook.value = book
+  success.value = ''
 }
 
 function startAdding() {
@@ -103,6 +131,8 @@ onMounted(() => {
     requestVersion++
     books.value = []
     adding.value = false
+    selectedBook.value = null
+    editingBook.value = null
     success.value = ''
     if (firebaseConfigured) view.value = 'signed-out'
   })
@@ -187,9 +217,24 @@ onBeforeUnmount(() => {
           /></label>
           <button class="add-book" type="button" @click="startAdding">Adicionar livro</button>
         </div>
-        <LibraryShelf :books="books" :search="search" />
+        <LibraryShelf :books="books" :search="search" @select="selectBook" />
         <p class="notice">A exibição de capas na estante está em preparação.</p></template
       >
+      <BookDetails
+        v-if="selectedBook && user && view === 'ready'"
+        :book="selectedBook"
+        :token="() => user!.getIdToken()"
+        @close="selectedBook = null"
+        @edit="editBook"
+        @deleted="bookDeleted"
+      />
+      <BookForm
+        v-if="editingBook && user && view === 'ready'"
+        :book="editingBook"
+        :token="() => user!.getIdToken()"
+        @cancel="cancelEdit"
+        @saved="bookSaved"
+      />
       <BookForm
         v-if="adding && user && view === 'ready'"
         :token="() => user!.getIdToken()"

@@ -610,3 +610,46 @@ select:focus-visible {
 .isbn-actions .scanner button {
   width: 100%;
 }
+
+.book-link {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-weight: 700;
+  text-align: left;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.book-details {
+  padding: 24px;
+}
+.book-details h3 {
+  margin: 0 0 24px;
+  font-size: 20px;
+  overflow-wrap: anywhere;
+}
+.book-details dl {
+  display: grid;
+  gap: 16px;
+  margin: 0;
+}
+.book-details dt {
+  color: var(--secondary);
+  font-size: 14px;
+}
+.book-details dd {
+  margin: 4px 0 0;
+  overflow-wrap: anywhere;
+}
+.delete-confirmation {
+  margin-top: 24px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-medium);
+  background: var(--support);
+}
+.delete-confirmation p {
+  margin: 0 0 8px;
+}

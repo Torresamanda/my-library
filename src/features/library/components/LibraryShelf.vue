@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import { groupBooks } from '../domain/groupBooks'
 import type { LibraryBook } from '../services/books'
 const props = defineProps<{ books: LibraryBook[]; search: string }>()
+const emit = defineEmits<{ select: [book: LibraryBook] }>()
 const groups = computed(() => groupBooks(props.books, props.search))
 const labels = {
   nao_lido: 'Não lido',
@@ -35,7 +36,9 @@ const labels = {
           <ul class="book-list">
             <li v-for="book in series.books" :key="book.id">
               <div>
-                <strong>{{ book.title }}</strong>
+                <button class="book-link" type="button" @click="emit('select', book)">
+                  {{ book.title }}
+                </button>
                 <p>
                   {{ book.author
                   }}<template v-if="book.seriesVolume"> · Volume {{ book.seriesVolume }}</template>

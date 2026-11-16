@@ -4,6 +4,7 @@ const bookSchema = z.object({
   id: z.string(),
   title: z.string(),
   author: z.string(),
+  isbn: z.string().nullable().optional(),
   quantity: z.number().int().positive(),
   status: z.enum(['nao_lido', 'lendo', 'concluido', 'abandonado']),
   seriesName: z.string().nullable(),
@@ -50,6 +51,23 @@ export async function createBook(token: string, book: BookDraft): Promise<void> 
     method: 'POST',
     headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
     body: JSON.stringify(book),
+  })
+  if (!response.ok) throw new LibraryRequestError(response.status)
+}
+
+export async function updateBook(token: string, id: string, book: BookDraft): Promise<void> {
+  const response = await fetch(`/api/books/${encodeURIComponent(id)}`, {
+    method: 'PUT',
+    headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify(book),
+  })
+  if (!response.ok) throw new LibraryRequestError(response.status)
+}
+
+export async function deleteBook(token: string, id: string): Promise<void> {
+  const response = await fetch(`/api/books/${encodeURIComponent(id)}`, {
+    method: 'DELETE',
+    headers: { Authorization: `Bearer ${token}` },
   })
   if (!response.ok) throw new LibraryRequestError(response.status)
 }
