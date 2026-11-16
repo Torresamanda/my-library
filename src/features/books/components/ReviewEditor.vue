@@ -80,6 +80,7 @@ const editor = useEditor({
     <div v-if="editor" class="review-toolbar" role="group" aria-label="Formatação do comentário">
       <button
         type="button"
+        class="toolbar-icon"
         aria-label="Negrito"
         title="Negrito"
         :aria-pressed="editor.isActive('bold')"
@@ -89,6 +90,7 @@ const editor = useEditor({
       </button>
       <button
         type="button"
+        class="toolbar-icon"
         aria-label="Texto normal"
         title="Texto normal"
         :aria-pressed="editor.isActive('paragraph')"
@@ -100,6 +102,7 @@ const editor = useEditor({
         v-for="level in [1, 2, 3] as const"
         :key="level"
         type="button"
+        class="toolbar-icon"
         :aria-label="`Título ${level}`"
         :title="`Título ${level}`"
         :aria-pressed="editor.isActive('heading', { level })"

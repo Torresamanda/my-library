@@ -729,13 +729,17 @@ select:focus-visible {
 .review-toolbar button {
   display: inline-grid;
   place-items: center;
-  width: 44px;
-  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
   padding: 8px;
   border: 1px solid transparent;
   border-radius: var(--radius-small);
   background: var(--surface);
   color: var(--text);
+}
+.review-toolbar .toolbar-icon {
+  width: 44px;
+  height: 44px;
 }
 .review-toolbar button[aria-pressed='true'] {
   background: var(--tag);
