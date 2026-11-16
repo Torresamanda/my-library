@@ -1372,6 +1372,13 @@ select:focus-visible {
   .drawer[open]::backdrop {
     animation: drawer-backdrop-enter 320ms ease-out both;
   }
+  .drawer[open].is-closing {
+    pointer-events: none;
+    animation: drawer-exit 240ms ease-in both;
+  }
+  .drawer[open].is-closing::backdrop {
+    animation: drawer-backdrop-exit 240ms ease-in both;
+  }
   .library-filters.expanded {
     animation: content-enter 180ms ease-out both;
   }
@@ -1420,6 +1427,24 @@ select:focus-visible {
     }
     to {
       background-color: rgb(16 14 36 / 70%);
+    }
+  }
+  @keyframes drawer-exit {
+    from {
+      opacity: 1;
+      transform: none;
+    }
+    to {
+      opacity: 0;
+      transform: translateX(24px);
+    }
+  }
+  @keyframes drawer-backdrop-exit {
+    from {
+      background-color: rgb(16 14 36 / 70%);
+    }
+    to {
+      background-color: rgb(16 14 36 / 0%);
     }
   }
   @keyframes content-enter {

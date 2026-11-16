@@ -73,17 +73,28 @@ function removeGenre(index: number) {
 }
 const error = ref('')
 const saving = ref(false)
+const closing = ref(false)
+const drawer = ref<InstanceType<typeof BaseDrawer> | null>(null)
 const rating = ref<number | null>(props.book?.rating ?? null)
 const review = ref<Review | null>(props.book?.review ?? null)
 const initialValues = JSON.stringify({ form, rating: rating.value, review: review.value })
 const discardToastId = 'discard-book-changes'
 
+async function finishClose(event: 'cancel' | 'saved') {
+  if (closing.value) return
+  closing.value = true
+  toast.dismiss(discardToastId)
+  await drawer.value?.animateClose()
+  if (event === 'cancel') emit('cancel')
+  else emit('saved')
+}
+
 function requestCancel() {
-  if (saving.value) return
+  if (saving.value || closing.value) return
   const changed =
     JSON.stringify({ form, rating: rating.value, review: review.value }) !== initialValues
   if (!changed) {
-    emit('cancel')
+    void finishClose('cancel')
     return
   }
   toast('Descartar as alterações feitas neste livro?', {
@@ -95,7 +106,7 @@ function requestCancel() {
     action: {
       label: 'Descartar',
       onClick: () => {
-        if (!saving.value) emit('cancel')
+        if (!saving.value) void finishClose('cancel')
       },
     },
   })
@@ -212,6 +223,7 @@ async function lookup() {
 }
 
 async function submit() {
+  if (closing.value || saving.value) return
   scheduler.cancel()
   error.value = ''
   const genres = form.genres
@@ -290,7 +302,7 @@ async function submit() {
     const token = await props.token()
     if (props.book) await updateBook(token, props.book.id, draft)
     else await createBook(token, draft)
-    emit('saved')
+    await finishClose('saved')
   } catch (cause) {
     error.value =
       cause instanceof LibraryRequestError && cause.status === 409
@@ -307,6 +319,7 @@ async function submit() {
 
 <template>
   <BaseDrawer
+    ref="drawer"
     :title="book ? 'Editar livro' : 'Adicionar livro'"
     :close-disabled="saving"
     @close="requestCancel"
@@ -533,7 +546,7 @@ async function submit() {
         </section>
         <p v-if="error" role="alert" class="form-error">{{ error }}</p>
         <div class="form-actions">
-          <button type="submit" :disabled="saving || lookingUp">
+          <button type="submit" :disabled="saving || lookingUp || closing">
             <LoadingIndicator v-if="saving" compact text="Salvando..." /><template v-else
               >Salvar livro</template
             ></button

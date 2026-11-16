@@ -466,6 +466,7 @@ As combinações principais de texto, texto secundário e botões dos temas clar
 - [x] Exibir coração para favoritos e estrelas para a avaliação na visualização de detalhes do livro.
 - [x] Suavizar abertura e fechamento das séries, respeitando a preferência por movimento reduzido e preservando a navegação por teclado.
 - [x] Suavizar a abertura dos painéis e a troca de tema, respeitando a preferência por movimento reduzido.
+- [x] Suavizar o fechamento dos painéis após confirmação, salvamento, exclusão ou transição para edição, respeitando movimento reduzido.
 - [ ] Validar visualmente e por teclado os fluxos de cadastro e edição em ambos os temas, no celular e no computador, inclusive consulta e câmera reais.
 
 ### Contagem de exemplares próprios

@@ -6,11 +6,20 @@ import { PhX } from '../icons'
 const props = defineProps<{ title: string; closeDisabled?: boolean }>()
 const emit = defineEmits<{ close: [] }>()
 const dialog = ref<HTMLDialogElement | null>(null)
+const closing = ref(false)
 const toastTheme = document.querySelector('.app.light') ? 'light' : 'dark'
+
+async function animateClose() {
+  if (!dialog.value || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+  closing.value = true
+  await new Promise<void>((resolve) => window.setTimeout(resolve, 240))
+}
+
+defineExpose({ animateClose })
 
 function cancel(event: Event) {
   event.preventDefault()
-  if (!props.closeDisabled) emit('close')
+  if (!props.closeDisabled && !closing.value) emit('close')
 }
 
 function backdropClick(event: MouseEvent) {
@@ -22,7 +31,7 @@ function backdropClick(event: MouseEvent) {
     event.clientY < bounds.top ||
     event.clientY > bounds.bottom
   ) {
-    if (!props.closeDisabled) emit('close')
+    if (!props.closeDisabled && !closing.value) emit('close')
   }
 }
 
@@ -33,7 +42,7 @@ onBeforeUnmount(() => dialog.value?.close())
 <template>
   <dialog
     ref="dialog"
-    class="drawer"
+    :class="['drawer', { 'is-closing': closing }]"
     aria-labelledby="drawer-title"
     @cancel="cancel"
     @click="backdropClick"
@@ -43,7 +52,7 @@ onBeforeUnmount(() => dialog.value?.close())
       <button
         type="button"
         class="secondary-button"
-        :disabled="closeDisabled"
+        :disabled="closeDisabled || closing"
         aria-label="Fechar painel"
         title="Fechar painel"
         autofocus

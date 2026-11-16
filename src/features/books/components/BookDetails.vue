@@ -14,6 +14,8 @@ const confirming = ref(false)
 const cancelButton = ref<HTMLButtonElement | null>(null)
 const deleteButton = ref<HTMLButtonElement | null>(null)
 const deleting = ref(false)
+const closing = ref(false)
+const drawer = ref<InstanceType<typeof BaseDrawer> | null>(null)
 const error = ref('')
 const mediaLabels = { livro: 'Livro', quadrinho: 'Quadrinho', manga: 'Mangá', outro: 'Outro' }
 const labels = {
@@ -22,7 +24,17 @@ const labels = {
   concluido: 'Concluído',
   abandonado: 'Abandonado',
 }
+async function finishClose(event: 'close' | 'edit' | 'deleted') {
+  if (closing.value) return
+  closing.value = true
+  await drawer.value?.animateClose()
+  if (event === 'close') emit('close')
+  else if (event === 'edit') emit('edit')
+  else emit('deleted')
+}
+
 async function startConfirmation() {
+  if (closing.value) return
   confirming.value = true
   await nextTick()
   cancelButton.value?.focus()
@@ -36,11 +48,12 @@ async function cancelDeletion() {
 }
 
 async function remove() {
+  if (closing.value || deleting.value) return
   error.value = ''
   deleting.value = true
   try {
     await deleteBook(await props.token(), props.book.id)
-    emit('deleted')
+    await finishClose('deleted')
   } catch (cause) {
     error.value =
       cause instanceof LibraryRequestError && cause.status === 401
@@ -55,7 +68,12 @@ async function remove() {
 }
 </script>
 <template>
-  <BaseDrawer title="Detalhes do livro" :close-disabled="deleting" @close="emit('close')">
+  <BaseDrawer
+    ref="drawer"
+    title="Detalhes do livro"
+    :close-disabled="deleting || closing"
+    @close="finishClose('close')"
+  >
     <div class="book-details">
       <div class="detail-hero">
         <BookCover :url="book.coverUrl" :title="book.title" />
@@ -148,7 +166,7 @@ async function remove() {
       </section>
       <p v-if="error" class="form-error" role="alert">{{ error }}</p>
       <div v-if="!confirming" class="form-actions">
-        <button type="button" @click="emit('edit')">Editar livro</button>
+        <button type="button" :disabled="closing" @click="finishClose('edit')">Editar livro</button>
         <button
           ref="deleteButton"
           type="button"
