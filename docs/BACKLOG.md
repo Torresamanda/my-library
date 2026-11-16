@@ -432,6 +432,11 @@ As combinações principais de texto, texto secundário e botões dos temas clar
 - [x] Preparar ícones e metadados para atalhos na tela inicial de iPhone e Android, mantendo a abertura no navegador.
 - [ ] Validar a adição do atalho e a aparência dos ícones em celulares reais após publicação.
 
+### Preparação da versão 1.4.1
+
+- [x] Identificar por versão semântica o favicon e os ícones para atalhos em celulares.
+- [ ] Confirmar a publicação e validar os atalhos em iPhone e Android.
+
 ### Publicação da versão 1.3.0
 
 - [x] Executar lint, verificação de tipos, 53 testes e compilação; criar commit e tag, aplicar a migração remota e publicar a versão identificada.
