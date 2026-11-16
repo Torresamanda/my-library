@@ -481,5 +481,5 @@ As combinações principais de texto, texto secundário e botões dos temas clar
 
 - [x] Pesquisar o fluxo público do leitor do Skoob e preparar [esquema de câmera com linha central](WIREFRAME-CAMERA.md), inspirado na descrição da proprietária.
 - [x] Validar o esquema com a proprietária e preparar o [protótipo visual da câmera](PROTOTIPO-CAMERA.html).
-- [ ] Validar o protótipo visual com a proprietária antes de implementar a alteração no leitor.
+- [x] Validar o protótipo visual com a proprietária e implementar a linha central e a prévia ampliada no leitor.
 - [ ] Testar leitura, cancelamento, permissões e apresentação em celular e computador após a implementação.

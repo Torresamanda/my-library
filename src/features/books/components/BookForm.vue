@@ -102,6 +102,7 @@ function requestCancel() {
 }
 const reviewInvalid = ref(false)
 const lookingUp = ref(false)
+const cameraActive = ref(false)
 const lookupMessage = ref('')
 const coverUrl = ref<string | null>(props.book?.coverUrl ?? null)
 const originalIsbn = props.book?.isbn ? normalizeIsbn(props.book.isbn) : null
@@ -318,7 +319,7 @@ async function submit() {
         <section class="form-section" aria-labelledby="find-book-title">
           <h3 id="find-book-title">Encontre seu livro</h3>
           <p class="section-hint">O ISBN pode ajudar a preencher os dados da edição.</p>
-          <div class="isbn-lookup">
+          <div :class="['isbn-lookup', { 'is-scanning': cameraActive }]">
             <label
               >ISBN <span class="field-hint">Opcional</span
               ><input
@@ -328,7 +329,7 @@ async function submit() {
                 placeholder="Digite o ISBN"
                 @input="isbnChanged"
             /></label>
-            <div class="isbn-actions">
+            <div :class="['isbn-actions', { 'is-scanning': cameraActive }]">
               <button
                 type="button"
                 class="secondary-button"
@@ -339,7 +340,7 @@ async function submit() {
                   >Consultar</template
                 >
               </button>
-              <BarcodeScanner @scanned="scanned" />
+              <BarcodeScanner @scanned="scanned" @active-change="cameraActive = $event" />
             </div>
           </div>
           <p class="section-hint">

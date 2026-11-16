@@ -1472,3 +1472,65 @@ select:focus-visible {
     background: var(--support);
   }
 }
+
+.redesigned-form .isbn-lookup.is-scanning {
+  grid-template-columns: minmax(0, 1fr);
+}
+.redesigned-form .isbn-actions.is-scanning {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+.redesigned-form .isbn-actions.is-scanning > button {
+  justify-self: start;
+}
+.scanner.is-scanning {
+  width: 100%;
+}
+.scanner-viewfinder {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-medium);
+  background: #100e24;
+}
+.scanner .scanner-viewfinder video {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+  margin: 0;
+  border-radius: 0;
+  object-fit: cover;
+}
+.scanner-frame {
+  position: absolute;
+  inset: 24% 10%;
+  border: 2px solid #faf5f7;
+  border-radius: var(--radius-small);
+  opacity: 0.85;
+  pointer-events: none;
+}
+.scanner-line {
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  top: 50%;
+  height: 2px;
+  background: #dba3ed;
+  pointer-events: none;
+}
+.scanner.is-scanning > p {
+  margin: 0 0 16px;
+}
+.scanner.is-scanning .scanner-hint {
+  margin: 16px 0;
+}
+.scanner.is-scanning .scanner-manual {
+  margin: 16px 0 0;
+  font-size: 14px;
+}
+.scanner.is-scanning .feedback-message {
+  margin-top: 8px;
+}
