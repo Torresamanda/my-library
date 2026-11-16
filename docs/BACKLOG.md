@@ -429,6 +429,8 @@ As combinações principais de texto, texto secundário e botões dos temas clar
 - [x] Identificar por versão semântica as melhorias da estante, do cadastro e das interações.
 - [ ] Confirmar publicação, acesso e fluxos autenticados em dispositivos reais; verificar a configuração de compilações da integração Git com a Cloudflare.
 - [x] Adicionar favicon com o símbolo da biblioteca e as cores da identidade visual.
+- [x] Preparar ícones e metadados para atalhos na tela inicial de iPhone e Android, mantendo a abertura no navegador.
+- [ ] Validar a adição do atalho e a aparência dos ícones em celulares reais após publicação.
 
 ### Publicação da versão 1.3.0
 
