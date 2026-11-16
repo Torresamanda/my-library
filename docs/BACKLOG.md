@@ -490,3 +490,10 @@ As combinações principais de texto, texto secundário e botões dos temas clar
 
 - [x] Identificar por versão semântica os campos da coleção, a reorganização do cadastro e as melhorias de interface.
 - [ ] Aplicar a migração `0003_collection_fields.sql` ao D1 remoto e verificar a publicação e os fluxos autenticados em dispositivos reais.
+
+### Escolha de capa por pesquisa
+
+- [x] Definir busca inicial por título e autor editáveis e permitir escolher capa de outra edição quando identificada, sem alterar o cadastro da edição.
+- [x] Preparar [esquema de pesquisa e escolha de capa](WIREFRAME-PESQUISA-CAPAS.md), mantendo envio de arquivo para livros sem ISBN como alternativa.
+- [ ] Validar o fluxo e o protótipo visual; implementar pesquisa e seleção, atribuição e links exigidos pelo Google Books, configuração segura e testes.
+- [ ] Implementar envio privado ao R2 para livros sem ISBN, com limite de 2 MB e validação de tipo e conteúdo no servidor; não ativar serviços pagos.
