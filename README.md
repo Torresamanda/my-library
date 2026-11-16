@@ -7,6 +7,7 @@ A aplicação está em desenvolvimento; a tela atual é apenas uma prévia visua
 - [Backlog de tarefas](docs/BACKLOG.md)
 - [Regras de código e trabalho](docs/REGRAS.md)
 - [Cores e direção visual](docs/CORES.md)
+- [Manual visual e wireframe em HTML](docs/MANUAL-VISUAL.html)
 - [Variáveis de ambiente e locais de configuração](docs/VARIAVEIS.md)
 
 As instruções para agentes estão no [AGENTS.md](AGENTS.md), na raiz do projeto. Em caso de conflito entre decisões antigas e atualizações posteriores, siga a decisão mais recente da proprietária e registre o ajuste.

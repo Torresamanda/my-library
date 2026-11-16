@@ -2,7 +2,7 @@
 
 ## Comece por aqui
 
-Leia [docs/README.md](docs/README.md), [docs/PLANEJAMENTO.md](docs/PLANEJAMENTO.md), [docs/FLUXO-E-WIREFRAMES.md](docs/FLUXO-E-WIREFRAMES.md), [docs/REGRAS.md](docs/REGRAS.md), [docs/CORES.md](docs/CORES.md) e [docs/BACKLOG.md](docs/BACKLOG.md) antes de alterar funcionalidades. As decisões mais recentes da proprietária prevalecem sobre propostas antigas. Registre mudanças de escopo ou decisões na documentação e mantenha o backlog atualizado. Peça esclarecimento quando uma decisão essencial continuar indefinida; não trate uma sugestão como aprovada.
+Leia [README.md](README.md), [docs/PLANEJAMENTO.md](docs/PLANEJAMENTO.md), [docs/FLUXO-E-WIREFRAMES.md](docs/FLUXO-E-WIREFRAMES.md), [docs/REGRAS.md](docs/REGRAS.md), [docs/CORES.md](docs/CORES.md), [docs/MANUAL-VISUAL.html](docs/MANUAL-VISUAL.html) e [docs/BACKLOG.md](docs/BACKLOG.md) antes de alterar funcionalidades. As decisões mais recentes da proprietária prevalecem sobre propostas antigas. Registre mudanças de escopo ou decisões na documentação e mantenha o backlog atualizado. Peça esclarecimento quando uma decisão essencial continuar indefinida; não trate uma sugestão como aprovada.
 
 ## Processo
 
@@ -16,6 +16,7 @@ Leia [docs/README.md](docs/README.md), [docs/PLANEJAMENTO.md](docs/PLANEJAMENTO.
 - Utilize Vue e Tailwind, componentes pequenos e reutilizáveis, e mantenha ícones Phosphor centralizados em `src/icons`, importando apenas os necessários.
 - Priorize uso em celular e também adapte telas e interações ao computador; assegure acessibilidade, navegação por teclado, contraste e estados de carregamento, vazio, sucesso e erro, incluindo página 404.
 - Mantenha as paletas e a direção visual documentadas, com temas claro e escuro. Preserve as regras de séries, edições, quantidades, ISBN, status, avaliação e comentário descritas no planejamento atualizado.
+- Siga obrigatoriamente o manual visual em novas interfaces e alterações: espaçamentos em múltiplos de 4 px, cantos de 4 px ou 8 px e cores das paletas documentadas. Espessuras de borda e indicadores de foco são exceções à escala de espaçamento. Preserve acessibilidade e reutilize tokens e componentes compartilhados. Mudanças relevantes de aparência dependem de validação da proprietária.
 - Use ESLint, Prettier e Husky; valide mensagens de commit com Conventional Commits. O repositório precisa estar configurado para que os ganchos do Husky funcionem.
 - Faça testes úteis para regras e funções críticas, como ISBN, duplicidade, contagem, autenticação, autorização e conteúdo rico; não crie testes somente para estilização. Execute verificações adequadas às alterações e relate limites dos testes.
 

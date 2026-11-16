@@ -2,6 +2,12 @@
 
 Status inicial: planejamento. Itens são propostas, não funcionalidades já implementadas. Ajustar prioridade e escopo após as respostas e validações.
 
+## Manual visual
+
+- [x] Criar manual visual e wireframe em HTML com exemplos para celular e computador, escala de espaçamento, cantos e paletas.
+- [ ] Validar o manual visual e o tema claro com a proprietária antes de mudanças relevantes na aparência.
+- [ ] Auditar e adaptar gradualmente a interface existente aos tokens, espaçamentos, cantos e componentes do manual visual, preservando acessibilidade.
+
 ## 1. Descoberta e decisões
 
 - [ ] Definir campos obrigatórios e opcionais, incluindo status, notas, datas e avaliação, se desejados.

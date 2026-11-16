@@ -2,6 +2,8 @@
 
 As cores abaixo são a referência fornecida. A distribuição no tema claro, componentes e combinações finais dependem do protótipo e de verificação de contraste; não presumir que todas as combinações sejam acessíveis.
 
+O [manual visual em HTML](MANUAL-VISUAL.html) apresenta exemplos de aplicação das paletas e deve orientar as interfaces. O tema claro apresentado é uma proposta visual sujeita à validação da proprietária.
+
 ## Tema escuro
 
 | Uso                      | Cor       |

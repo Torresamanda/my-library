@@ -9,6 +9,7 @@
 
 ## Implementação
 
+- Consultar e seguir o [manual visual](MANUAL-VISUAL.html) em toda alteração de interface: usar espaçamentos em múltiplos de 4 px, cantos de 4 px ou 8 px e as cores documentadas. Espessura de borda e indicador de foco não são espaçamentos e podem ter outros valores. Aplicar tokens e componentes reutilizáveis, mantendo contraste e acessibilidade; validar mudanças relevantes de aparência com a proprietária.
 - Vue.js e Tailwind CSS; componentes pequenos e reutilizáveis, evitando concentrar toda a aplicação em um arquivo.
 - Separar apresentação, estado, acesso à API e regras de negócio; organizar por funcionalidade conforme o projeto crescer.
 - Priorizar tela pequena, toque confortável, teclado, nomes acessíveis, contraste e estados de carregamento, erro, vazio e sucesso.

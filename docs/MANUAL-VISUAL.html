@@ -1,0 +1,1008 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark light" />
+    <title>Manual visual · Minha biblioteca</title>
+    <style>
+      :root {
+        font-family:
+          system-ui,
+          -apple-system,
+          'Segoe UI',
+          sans-serif;
+        font-synthesis: none;
+        color-scheme: dark;
+        --bg: #100e24;
+        --surface: #1b1831;
+        --support: #211b35;
+        --text: #faf5f7;
+        --muted: #c7bdd0;
+        --accent: #dba3ed;
+        --accent-text: #20102c;
+        --tag: #413050;
+        --border: #51405e;
+        --space-1: 4px;
+        --space-2: 8px;
+        --space-3: 12px;
+        --space-4: 16px;
+        --space-5: 20px;
+        --space-6: 24px;
+        --space-8: 32px;
+        --space-10: 40px;
+        --space-12: 48px;
+        --radius-sm: 4px;
+        --radius-md: 8px;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.5;
+      }
+      body:has(#light:checked) {
+        color-scheme: light;
+        --bg: #fff9ef;
+        --surface: #fff9ef;
+        --support: #eed9f2;
+        --text: #4f215e;
+        --muted: #754080;
+        --accent: #4f215e;
+        --accent-text: #fff9ef;
+        --tag: #eed9f2;
+        --border: #9a6ca2;
+      }
+      a {
+        color: var(--accent);
+        text-underline-offset: 4px;
+      }
+      a:focus-visible,
+      button:focus-visible,
+      input:focus-visible,
+      select:focus-visible,
+      summary:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 4px;
+      }
+      button,
+      input,
+      select {
+        font: inherit;
+      }
+      button {
+        cursor: pointer;
+      }
+      .wrap {
+        width: min(100% - 32px, 1200px);
+        margin-inline: auto;
+      }
+      .top {
+        border-bottom: 1px solid var(--border);
+        background: var(--surface);
+      }
+      .top-inner {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        padding-block: 16px;
+        flex-wrap: wrap;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .brand-mark {
+        width: 40px;
+        height: 40px;
+        display: grid;
+        place-items: center;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        color: var(--accent);
+        font-family: Georgia, serif;
+        font-size: 24px;
+      }
+      .brand strong,
+      .brand span {
+        display: block;
+      }
+      .brand span {
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .theme {
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        display: flex;
+        padding: 4px;
+        gap: 4px;
+      }
+      .theme label {
+        padding: 8px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+      }
+      .theme input {
+        position: absolute;
+        opacity: 0;
+      }
+      .theme label:has(input:checked) {
+        background: var(--tag);
+        color: var(--text);
+      }
+      .theme label:has(input:focus-visible) {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+      .hero {
+        padding-block: 48px 32px;
+        max-width: 800px;
+      }
+      .eyebrow {
+        font-size: 12px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--accent);
+        font-weight: 700;
+        margin: 0 0 8px;
+      }
+      .hero h1 {
+        font:
+          600 clamp(32px, 5vw, 48px)/1.15 Georgia,
+          serif;
+        margin: 0 0 16px;
+      }
+      .hero p {
+        margin: 0;
+        color: var(--muted);
+        max-width: 680px;
+      }
+      .notice {
+        margin-top: 24px;
+        padding: 16px;
+        border-left: 4px solid var(--accent);
+        background: var(--support);
+        border-radius: 4px;
+        color: var(--text);
+      }
+      .nav {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        padding-bottom: 32px;
+      }
+      .nav a {
+        padding: 8px 12px;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        text-decoration: none;
+        font-size: 14px;
+        color: var(--text);
+      }
+      .section {
+        padding-block: 32px;
+        border-top: 1px solid var(--border);
+      }
+      .section-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        align-items: end;
+        flex-wrap: wrap;
+        margin-bottom: 24px;
+      }
+      .section h2 {
+        font:
+          600 28px/1.2 Georgia,
+          serif;
+        margin: 0 0 8px;
+      }
+      .section-head p,
+      .muted {
+        color: var(--muted);
+        margin: 0;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+      }
+      .panel {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 24px;
+      }
+      .panel h3 {
+        margin: 0 0 8px;
+        font-size: 16px;
+      }
+      .panel p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 14px;
+      }
+      .rule-list {
+        padding-left: 20px;
+        margin: 16px 0 0;
+        color: var(--muted);
+      }
+      .rule-list li + li {
+        margin-top: 8px;
+      }
+      .scale {
+        display: flex;
+        gap: 8px;
+        align-items: end;
+        flex-wrap: wrap;
+        margin-top: 24px;
+      }
+      .scale-item {
+        display: grid;
+        gap: 8px;
+        text-align: center;
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .bar {
+        background: var(--accent);
+        width: 32px;
+        border-radius: 4px;
+      }
+      .colors {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+      }
+      .color {
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        overflow: hidden;
+        background: var(--surface);
+      }
+      .swatch {
+        height: 48px;
+        border-bottom: 1px solid var(--border);
+      }
+      .color div:last-child {
+        padding: 12px;
+      }
+      .color strong,
+      .color code {
+        display: block;
+        font-size: 12px;
+      }
+      .color code {
+        color: var(--muted);
+        margin-top: 4px;
+      }
+      .example-label {
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 12px;
+      }
+      .app-frame {
+        border: 1px solid var(--border);
+        background: var(--bg);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      .mock-header {
+        padding: 20px 24px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        align-items: center;
+      }
+      .mock-title {
+        font:
+          600 24px Georgia,
+          serif;
+        margin: 0;
+      }
+      .mock-title em {
+        color: var(--accent);
+        font-weight: 400;
+      }
+      .mock-content {
+        padding: 24px;
+      }
+      .mock-stats {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 8px;
+      }
+      .mock-stat {
+        padding: 16px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+      }
+      .mock-stat span,
+      .mock-stat strong {
+        display: block;
+      }
+      .mock-stat span {
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .mock-stat strong {
+        font-size: 24px;
+        line-height: 1.2;
+        margin-top: 4px;
+      }
+      .toolbar {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 8px;
+        margin-top: 24px;
+      }
+      .field,
+      .mock-input {
+        width: 100%;
+        min-height: 44px;
+        padding: 12px;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        background: var(--support);
+        color: var(--text);
+      }
+      .field::placeholder {
+        color: var(--muted);
+      }
+      .btn {
+        min-height: 44px;
+        padding: 8px 16px;
+        border: 1px solid transparent;
+        border-radius: 8px;
+        background: var(--accent);
+        color: var(--accent-text);
+        font-weight: 700;
+      }
+      .btn-secondary {
+        background: var(--surface);
+        color: var(--text);
+        border-color: var(--border);
+      }
+      .btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+      .mock-section-title {
+        font:
+          600 20px Georgia,
+          serif;
+        margin: 24px 0 16px;
+      }
+      .mock-shelf {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+      }
+      .series {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 16px;
+        background: var(--surface);
+      }
+      .covers {
+        width: 96px;
+        min-width: 96px;
+        aspect-ratio: 1;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 4px;
+      }
+      .cover {
+        background: var(--tag);
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        display: grid;
+        place-items: center;
+        color: var(--muted);
+        font:
+          16px Georgia,
+          serif;
+      }
+      .series h4 {
+        font:
+          600 18px/1.25 Georgia,
+          serif;
+        margin: 4px 0 8px;
+      }
+      .series p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .tiny {
+        font-size: 12px;
+        color: var(--accent);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+      .single {
+        margin-top: 16px;
+        padding: 16px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--surface);
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        align-items: center;
+      }
+      .badge {
+        display: inline-flex;
+        padding: 4px 8px;
+        background: var(--tag);
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        color: var(--text);
+        font-size: 12px;
+      }
+      .mock-actions {
+        margin-top: 24px;
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .mock-actions button {
+        pointer-events: none;
+      }
+      .mock-caption {
+        margin: 12px 0 0;
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .layouts {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(280px, 380px);
+        gap: 24px;
+      }
+      .phone .mock-header,
+      .phone .mock-content {
+        padding: 16px;
+      }
+      .phone .mock-title {
+        font-size: 20px;
+      }
+      .phone .mock-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .phone .mock-stat {
+        padding: 12px;
+      }
+      .phone .mock-shelf {
+        grid-template-columns: 1fr;
+      }
+      .phone .series {
+        gap: 12px;
+        padding: 12px;
+      }
+      .phone .covers {
+        width: 80px;
+        min-width: 80px;
+      }
+      .phone .toolbar {
+        grid-template-columns: 1fr;
+      }
+      .phone .mock-actions .btn {
+        width: 100%;
+      }
+      .form {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+      }
+      .form label {
+        display: grid;
+        gap: 8px;
+        font-size: 14px;
+        font-weight: 600;
+      }
+      .full {
+        grid-column: 1/-1;
+      }
+      .help {
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 400;
+      }
+      .form .field {
+        background: var(--surface);
+      }
+      .component-row {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 16px;
+        align-items: center;
+      }
+      .footer {
+        border-top: 1px solid var(--border);
+        padding: 32px 0 48px;
+        color: var(--muted);
+        font-size: 14px;
+      }
+      .footer p {
+        margin: 0;
+      }
+      @media (max-width: 800px) {
+        .layouts {
+          grid-template-columns: 1fr;
+        }
+        .grid,
+        .colors {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        .hero {
+          padding-top: 32px;
+        }
+      }
+      @media (max-width: 520px) {
+        .wrap {
+          width: calc(100% - 32px);
+        }
+        .grid,
+        .colors,
+        .mock-shelf,
+        .form {
+          grid-template-columns: 1fr;
+        }
+        .full {
+          grid-column: auto;
+        }
+        .mock-stats {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        .mock-content,
+        .mock-header {
+          padding: 16px;
+        }
+        .series {
+          gap: 12px;
+        }
+        .covers {
+          width: 80px;
+          min-width: 80px;
+        }
+        .hero h1 {
+          font-size: 32px;
+        }
+        .panel {
+          padding: 16px;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="top">
+      <div class="wrap top-inner">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true">M</div>
+          <div>
+            <strong>Minha biblioteca</strong
+            ><span>Manual visual · referência para implementação</span>
+          </div>
+        </div>
+        <div class="theme" role="group" aria-label="Escolha do tema">
+          <label><input id="dark" type="radio" name="theme" checked /> Escuro</label
+          ><label><input id="light" type="radio" name="theme" /> Claro</label>
+        </div>
+      </div>
+    </header>
+    <main class="wrap">
+      <section class="hero">
+        <p class="eyebrow">Lilás contemporâneo · versão de referência</p>
+        <h1>Uma biblioteca com espaço para respirar.</h1>
+        <p>
+          Este manual reúne as regras visuais e os wireframes que orientam a construção da
+          biblioteca em qualquer tamanho de tela.
+        </p>
+        <div class="notice">
+          <strong>Regra para implementação:</strong> siga os tokens e padrões deste arquivo, use os
+          fluxos aprovados e mantenha a interface componentizada. Os livros e números abaixo são
+          ilustrativos.
+        </div>
+      </section>
+      <nav class="nav" aria-label="Seções do manual">
+        <a href="#regras">Fundamentos</a><a href="#cores">Cores</a><a href="#estante">Estante</a
+        ><a href="#cadastro">Cadastro</a><a href="#componentes">Componentes</a
+        ><a href="#acessibilidade">Acessibilidade</a>
+      </nav>
+      <section id="regras" class="section">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">01 · Fundamentos</p>
+            <h2>Ritmo e estrutura</h2>
+            <p>Uma base de 4 px cria consistência sem deixar a interface apertada.</p>
+          </div>
+        </div>
+        <div class="grid">
+          <article class="panel">
+            <h3>Espaçamento</h3>
+            <p>Use múltiplos de 4 px: 4, 8, 12, 16, 20, 24, 32, 40 e 48 px.</p>
+            <ul class="rule-list">
+              <li>4–8 px para elementos relacionados.</li>
+              <li>16 px entre campos e cartões.</li>
+              <li>24–32 px entre grupos e seções.</li>
+            </ul>
+          </article>
+          <article class="panel">
+            <h3>Bordas e respiro</h3>
+            <p>Raios de 4 px em campos, etiquetas e detalhes; 8 px em cartões, botões e painéis.</p>
+            <ul class="rule-list">
+              <li>Borda fina de 1 px para delimitação.</li>
+              <li>16 px de margem lateral no celular.</li>
+              <li>Alvos de toque com pelo menos 44 px.</li>
+            </ul>
+          </article>
+          <article class="panel">
+            <h3>Tipografia</h3>
+            <p>
+              Títulos literários em serifada; controles e texto em fonte sem serifa, legíveis e sem
+              depender de imagens.
+            </p>
+            <ul class="rule-list">
+              <li>Corpo sugerido de 16 px.</li>
+              <li>Rótulos e ajuda com hierarquia clara.</li>
+              <li>Não reduzir o texto para encaixar.</li>
+            </ul>
+          </article>
+        </div>
+        <div class="scale" aria-label="Escala de espaçamento em pixels">
+          <div class="scale-item">
+            <div class="bar" style="height: 4px"></div>
+            4
+          </div>
+          <div class="scale-item">
+            <div class="bar" style="height: 8px"></div>
+            8
+          </div>
+          <div class="scale-item">
+            <div class="bar" style="height: 12px"></div>
+            12
+          </div>
+          <div class="scale-item">
+            <div class="bar" style="height: 16px"></div>
+            16
+          </div>
+          <div class="scale-item">
+            <div class="bar" style="height: 24px"></div>
+            24
+          </div>
+          <div class="scale-item">
+            <div class="bar" style="height: 32px"></div>
+            32
+          </div>
+          <div class="scale-item">
+            <div class="bar" style="height: 48px"></div>
+            48
+          </div>
+        </div>
+      </section>
+      <section id="cores" class="section">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">02 · Identidade</p>
+            <h2>Cores por função</h2>
+            <p>
+              Alterne o tema no topo para ver as combinações. A paleta completa está em
+              <a href="CORES.md">cores e direção visual</a>.
+            </p>
+          </div>
+        </div>
+        <div class="colors">
+          <div class="color">
+            <div class="swatch" style="background: var(--bg)"></div>
+            <div><strong>Fundo</strong><code>#100E24 / #FFF9EF</code></div>
+          </div>
+          <div class="color">
+            <div class="swatch" style="background: var(--surface)"></div>
+            <div><strong>Superfície</strong><code>#1B1831 / #FFF9EF</code></div>
+          </div>
+          <div class="color">
+            <div class="swatch" style="background: var(--support)"></div>
+            <div><strong>Área de apoio</strong><code>#211B35 / #EED9F2</code></div>
+          </div>
+          <div class="color">
+            <div class="swatch" style="background: var(--accent)"></div>
+            <div><strong>Destaque</strong><code>#DBA3ED / #4F215E</code></div>
+          </div>
+          <div class="color">
+            <div class="swatch" style="background: var(--tag)"></div>
+            <div><strong>Tags</strong><code>#413050 / #EED9F2</code></div>
+          </div>
+          <div class="color">
+            <div class="swatch" style="background: var(--border)"></div>
+            <div><strong>Bordas</strong><code>#51405E / #9A6CA2</code></div>
+          </div>
+        </div>
+        <p class="mock-caption">
+          Texto principal: #FAF5F7 no escuro e #4F215E no claro. Texto secundário: #C7BDD0 e
+          #754080. Texto sobre destaque: #20102C e #FFF9EF.
+        </p>
+      </section>
+      <section id="estante" class="section">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">03 · Wireframe</p>
+            <h2>Estante e dashboard</h2>
+            <p>A mesma hierarquia se adapta à tela disponível. Números e livros são exemplos.</p>
+          </div>
+        </div>
+        <div class="layouts">
+          <div>
+            <div class="example-label">Computador · adaptação fluida</div>
+            <div class="app-frame">
+              <div class="mock-header">
+                <h3 class="mock-title">Minha <em>biblioteca</em></h3>
+                <span class="badge">Tema · Sair</span>
+              </div>
+              <div class="mock-content">
+                <div class="mock-stats">
+                  <div class="mock-stat"><span>Exemplares</span><strong>12</strong></div>
+                  <div class="mock-stat"><span>Lidos</span><strong>4</strong></div>
+                  <div class="mock-stat"><span>Lendo</span><strong>1</strong></div>
+                  <div class="mock-stat"><span>Abandonados</span><strong>0</strong></div>
+                </div>
+                <div class="toolbar">
+                  <input
+                    class="field"
+                    type="search"
+                    placeholder="Buscar título, autor, gênero ou série"
+                    aria-label="Exemplo de busca no computador"
+                  /><button class="btn btn-secondary" type="button" disabled>Filtros</button>
+                </div>
+                <h4 class="mock-section-title">Minhas séries</h4>
+                <div class="mock-shelf">
+                  <article class="series">
+                    <div class="covers" aria-label="Grade ilustrativa de quatro capas">
+                      <div class="cover">I</div>
+                      <div class="cover">II</div>
+                      <div class="cover">III</div>
+                      <div class="cover">IV</div>
+                    </div>
+                    <div>
+                      <span class="tiny">Série</span>
+                      <h4>Série Trono de Vidro</h4>
+                      <p>4 edições · Abrir série</p>
+                    </div>
+                  </article>
+                  <article class="series">
+                    <div class="covers" aria-hidden="true">
+                      <div class="cover">I</div>
+                      <div class="cover">II</div>
+                      <div class="cover">✦</div>
+                      <div class="cover">✦</div>
+                    </div>
+                    <div>
+                      <span class="tiny">Série</span>
+                      <h4>Outra série</h4>
+                      <p>2 edições · Abrir série</p>
+                    </div>
+                  </article>
+                </div>
+                <h4 class="mock-section-title">Livros sem série</h4>
+                <div class="single">
+                  <div>
+                    <strong>Um livro independente</strong>
+                    <p class="muted">Nome da autora</p>
+                  </div>
+                  <span class="badge">Não lido</span>
+                </div>
+                <div class="mock-actions">
+                  <button class="btn" type="button" disabled>Adicionar livro</button>
+                </div>
+              </div>
+            </div>
+            <p class="mock-caption">
+              Ações apresentadas como exemplo visual; a aplicação deve usar dados e interações
+              reais.
+            </p>
+          </div>
+          <div>
+            <div class="example-label">Celular · prioridade</div>
+            <div class="app-frame phone">
+              <div class="mock-header">
+                <h3 class="mock-title">Minha <em>biblioteca</em></h3>
+                <span class="badge">Tema</span>
+              </div>
+              <div class="mock-content">
+                <div class="mock-stats">
+                  <div class="mock-stat"><span>Exemplares</span><strong>12</strong></div>
+                  <div class="mock-stat"><span>Lidos</span><strong>4</strong></div>
+                  <div class="mock-stat"><span>Lendo</span><strong>1</strong></div>
+                  <div class="mock-stat"><span>Abandonados</span><strong>0</strong></div>
+                </div>
+                <div class="toolbar">
+                  <input
+                    class="field"
+                    type="search"
+                    placeholder="Buscar na biblioteca"
+                    aria-label="Exemplo de busca no celular"
+                  />
+                </div>
+                <h4 class="mock-section-title">Minhas séries</h4>
+                <article class="series">
+                  <div class="covers" aria-hidden="true">
+                    <div class="cover">I</div>
+                    <div class="cover">II</div>
+                    <div class="cover">III</div>
+                    <div class="cover">IV</div>
+                  </div>
+                  <div>
+                    <span class="tiny">Série</span>
+                    <h4>Série Trono de Vidro</h4>
+                    <p>4 edições · Abrir série</p>
+                  </div>
+                </article>
+                <h4 class="mock-section-title">Livros sem série</h4>
+                <div class="single"><strong>Um livro</strong><span class="badge">Lendo</span></div>
+                <div class="mock-actions">
+                  <button class="btn" type="button" disabled>Adicionar livro</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="cadastro" class="section">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">04 · Wireframe</p>
+            <h2>Adicionar ou editar livro</h2>
+            <p>Campos agrupados, instruções próximas e ações sempre identificáveis.</p>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="component-row" style="margin: 0 0 24px">
+            <button type="button" class="btn btn-secondary" disabled>Ler código de barras</button
+            ><button type="button" class="btn btn-secondary" disabled>Buscar ISBN</button>
+          </div>
+          <form class="form">
+            <label class="full"
+              >Título <span class="help">Obrigatório</span
+              ><input class="field" placeholder="Nome do livro" disabled /></label
+            ><label class="full"
+              >Autor <span class="help">Obrigatório</span
+              ><input class="field" placeholder="Nome do autor ou autora" disabled /></label
+            ><label
+              >ISBN <span class="help">Opcional</span
+              ><input class="field" placeholder="Digite o ISBN" disabled /></label
+            ><label
+              >Gêneros <span class="help">É possível selecionar mais de um</span
+              ><input class="field" placeholder="Selecione ou crie" disabled /></label
+            ><label
+              >Série <span class="help">Opcional</span
+              ><input class="field" placeholder="Nome da série" disabled /></label
+            ><label
+              >Volume <span class="help">Quando houver série</span
+              ><input class="field" type="number" placeholder="1" disabled /></label
+            ><label
+              >Quantidade <span class="help">Exemplares desta edição</span
+              ><input class="field" type="number" placeholder="1" disabled /></label
+            ><label
+              >Status de leitura <span class="help">Um status por livro cadastrado</span
+              ><select class="field" disabled>
+                <option>Não lido</option>
+                <option>Lendo</option>
+                <option>Concluído</option>
+                <option>Abandonado</option>
+              </select></label
+            >
+            <div class="full notice" style="margin: 0">
+              Envio manual de capa fora do escopo atual. Avaliação e comentário pessoal são
+              opcionais.
+            </div>
+            <div class="full mock-actions" style="margin: 0">
+              <button class="btn btn-secondary" disabled>Cancelar</button
+              ><button class="btn" disabled>Salvar livro</button>
+            </div>
+          </form>
+        </div>
+      </section>
+      <section id="componentes" class="section">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">05 · Linguagem visual</p>
+            <h2>Componentes e estados</h2>
+            <p>
+              Reutilize componentes genéricos em <code>src/ui</code> e ícones Phosphor por
+              <code>src/icons</code>.
+            </p>
+          </div>
+        </div>
+        <div class="grid">
+          <article class="panel">
+            <h3>Ações</h3>
+            <p>Um destaque principal por contexto. Ações secundárias usam superfície e borda.</p>
+            <div class="component-row">
+              <button class="btn" disabled>Salvar</button
+              ><button class="btn btn-secondary" disabled>Cancelar</button>
+            </div>
+          </article>
+          <article class="panel">
+            <h3>Estado de leitura</h3>
+            <p>Use texto, além da cor, para transmitir o estado.</p>
+            <div class="component-row">
+              <span class="badge">Não lido</span><span class="badge">Lendo</span
+              ><span class="badge">Concluído</span><span class="badge">Abandonado</span>
+            </div>
+          </article>
+          <article class="panel">
+            <h3>Feedback</h3>
+            <p>
+              Carregamento, sucesso e falhas usam notificações acessíveis. Erros de campos
+              permanecem próximos ao campo e explicam a correção.
+            </p>
+          </article>
+        </div>
+      </section>
+      <section id="acessibilidade" class="section">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">06 · Critérios obrigatórios</p>
+            <h2>Legível, acessível e responsivo</h2>
+          </div>
+        </div>
+        <div class="grid">
+          <article class="panel">
+            <h3>Contraste</h3>
+            <p>
+              Verificar pelo menos 4,5:1 para texto normal e 3:1 para texto grande, ícones e limites
+              de controles relevantes. Nunca depender somente da cor.
+            </p>
+          </article>
+          <article class="panel">
+            <h3>Interação</h3>
+            <p>
+              Suportar teclado, foco visível, leitores de tela e toque. Nomear ações e imagens
+              relevantes; ocultar decoração da leitura assistiva.
+            </p>
+          </article>
+          <article class="panel">
+            <h3>Responsividade</h3>
+            <p>
+              Priorizar celular sem rolagem horizontal; reorganizar o conteúdo no computador.
+              Preservar estados vazios, erro, carregamento e 404.
+            </p>
+          </article>
+        </div>
+      </section>
+    </main>
+    <footer class="footer">
+      <div class="wrap">
+        <p>
+          Manual de referência · A implementação deve manter os fluxos e decisões do projeto.
+          Alterações visuais relevantes precisam de validação.
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>
