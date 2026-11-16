@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import { normalizeIsbn } from '../domain/isbn'
+import BarcodeScanner from './BarcodeScanner.vue'
 import { lookupIsbn } from '../services/lookup'
 import { createBook, LibraryRequestError, type BookDraft } from '../../library/services/books'
 
@@ -28,6 +29,12 @@ function isbnChanged() {
   coverUrl.value = null
   lookupMessage.value = ''
   lookingUp.value = false
+}
+
+function scanned(isbn: string) {
+  isbnChanged()
+  form.isbn = isbn
+  void lookup()
 }
 
 async function lookup() {
@@ -127,6 +134,7 @@ async function submit() {
   <section class="book-form" aria-labelledby="form-title">
     <h2 id="form-title">Adicionar livro</h2>
     <p>Preencha os dados desta edição. Título e autor são obrigatórios.</p>
+    <BarcodeScanner @scanned="scanned" />
     <form @submit.prevent="submit">
       <div class="form-grid">
         <label

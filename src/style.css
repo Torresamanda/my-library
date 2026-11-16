@@ -424,3 +424,27 @@ summary:focus-visible {
   object-fit: contain;
   margin-top: 16px;
 }
+
+.scanner {
+  margin: 18px 0;
+}
+.scanner button {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  background: var(--surface);
+  color: inherit;
+  font: inherit;
+}
+.scanner video {
+  display: block;
+  width: min(100%, 480px);
+  max-height: 340px;
+  object-fit: contain;
+  background: #100e24;
+  border-radius: 12px;
+  margin-bottom: 10px;
+}
+.scanner p {
+  color: var(--secondary);
+}

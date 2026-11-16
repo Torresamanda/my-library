@@ -293,3 +293,10 @@ Estas decisões substituem dúvidas e propostas anteriores conflitantes neste ar
 - [x] Consultar a Open Library pelo ISBN validado, permitir revisão e preenchimento manual e preservar a capa automática encontrada para livros com ISBN.
 - [ ] Verificar visualmente e com serviços reais em celular e computador; a exibição de capas na estante, imagem padrão e envio manual continuam na tarefa de capas.
 - [ ] Avaliar integração adicional ao Google Books: sua documentação exige identificação para consultas públicas. A Open Library pode não encontrar todas as edições ou capas e está sujeita a disponibilidade e limites do serviço.
+
+### Leitura pela câmera
+
+- [x] Iniciar câmera somente por ação da usuária, reconhecer ISBN válido, consultar a fonte e permitir digitação alternativa; encerrar câmera ao cancelar, reconhecer ou sair.
+- [x] Tratar indisponibilidade, recusa de permissão e interrupção, com testes de regras e liberação após cancelamento.
+- [ ] Validar leitura e permissões em dispositivos e navegadores reais, inclusive iOS e Android, antes da publicação.
+- Auditoria npm: sete alertas moderados ligados ao `minimatch` transitivo de ferramentas de desenvolvimento; nenhum alerta atribuído à biblioteca de leitura. A correção sugerida exige avaliação de compatibilidade, sem aplicação forçada.

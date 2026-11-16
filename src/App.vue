@@ -172,7 +172,7 @@ onBeforeUnmount(() => {
         </div>
         <button class="add-book" type="button" @click="startAdding">Adicionar livro</button>
         <LibraryShelf :books="books" :search="search" />
-        <p class="notice">Consulta por ISBN, câmera e capas estão em preparação.</p></template
+        <p class="notice">A exibição de capas na estante está em preparação.</p></template
       >
     </main>
   </div>
