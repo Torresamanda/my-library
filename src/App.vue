@@ -110,7 +110,7 @@ onBeforeUnmount(() => {
     <main class="layout">
       <header class="header">
         <div class="brand">
-          <PhBookOpen :size="38" aria-hidden="true" />
+          <span class="brand-mark"><PhBookOpen :size="24" aria-hidden="true" /></span>
           <div>
             <h1>Minha <em>biblioteca</em></h1>
             <p>Seu cantinho para organizar suas leituras</p>
@@ -169,8 +169,8 @@ onBeforeUnmount(() => {
               type="search"
               placeholder="Buscar título, autor, gênero ou série..."
           /></label>
+          <button class="add-book" type="button" @click="startAdding">Adicionar livro</button>
         </div>
-        <button class="add-book" type="button" @click="startAdding">Adicionar livro</button>
         <LibraryShelf :books="books" :search="search" />
         <p class="notice">A exibição de capas na estante está em preparação.</p></template
       >

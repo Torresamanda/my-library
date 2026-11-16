@@ -6,7 +6,8 @@ Status inicial: planejamento. Itens são propostas, não funcionalidades já imp
 
 - [x] Criar manual visual e wireframe em HTML com exemplos para celular e computador, escala de espaçamento, cantos e paletas.
 - [ ] Validar o manual visual e o tema claro com a proprietária antes de mudanças relevantes na aparência.
-- [ ] Auditar e adaptar gradualmente a interface existente aos tokens, espaçamentos, cantos e componentes do manual visual, preservando acessibilidade.
+- [x] Adaptar a estante, o dashboard, o acesso e o cadastro existentes às cores, aos espaçamentos e aos cantos do manual visual.
+- [ ] Validar visualmente as telas ajustadas nos temas claro e escuro, em celular e computador, e aplicar eventuais correções.
 
 ## 1. Descoberta e decisões
 

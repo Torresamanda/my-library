@@ -163,11 +163,11 @@ async function submit() {
     <BarcodeScanner @scanned="scanned" />
     <form @submit.prevent="submit">
       <div class="form-grid">
-        <label
+        <label class="full"
           >Título <span aria-hidden="true">*</span
           ><input v-model="form.title" required maxlength="250" autocomplete="off"
         /></label>
-        <label
+        <label class="full"
           >Autor <span aria-hidden="true">*</span
           ><input v-model="form.author" required maxlength="250" autocomplete="off"
         /></label>
