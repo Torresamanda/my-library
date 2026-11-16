@@ -51,7 +51,7 @@ onBeforeUnmount(() => scanner.stop())
 </script>
 <template>
   <div class="scanner">
-    <button v-if="!active" type="button" @click="start">Ler código de barras com a câmera</button>
+    <button v-if="!active" type="button" @click="start">Ler código pela câmera</button>
     <template v-else>
       <video
         ref="video"

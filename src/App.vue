@@ -9,16 +9,18 @@ import {
   observeUser,
 } from './features/auth/firebase'
 import { loginErrorMessage } from './features/auth/loginError'
+import { isLibraryPath } from './features/navigation/path'
 import BookForm from './features/books/components/BookForm.vue'
 import LibraryStats from './features/library/components/LibraryStats.vue'
 import LibraryShelf from './features/library/components/LibraryShelf.vue'
+import LoadingIndicator from './ui/LoadingIndicator.vue'
 import { libraryStats } from './features/library/domain/libraryStats'
 import {
   fetchBooks,
   LibraryRequestError,
   type LibraryBook,
 } from './features/library/services/books'
-import { PhBookOpen, PhMagnifyingGlass, PhMoon, PhSun } from './icons'
+import { PhBookOpen, PhLockKey, PhMagnifyingGlass, PhMoon, PhSun, PhWarningCircle } from './icons'
 
 type View = 'checking' | 'signed-out' | 'loading' | 'ready' | 'denied' | 'error' | 'unconfigured'
 const view = ref<View>(firebaseConfigured ? 'checking' : 'unconfigured')
@@ -26,6 +28,8 @@ const user = ref<User | null>(null)
 const books = ref<LibraryBook[]>([])
 const search = ref('')
 const adding = ref(false)
+const loggingIn = ref(false)
+const isNotFound = !isLibraryPath(window.location.pathname)
 const success = ref('')
 const dark = ref(localStorage.getItem('biblioteca-theme') !== 'light')
 const message = ref('')
@@ -51,10 +55,13 @@ async function loadBooks(current: User) {
 
 async function enter() {
   message.value = ''
+  loggingIn.value = true
   try {
     await login()
   } catch (error) {
     message.value = loginErrorMessage(error)
+  } finally {
+    loggingIn.value = false
   }
 }
 
@@ -128,7 +135,15 @@ onBeforeUnmount(() => {
         </div>
       </header>
       <p v-if="message" role="alert" class="notice">{{ message }}</p>
-      <section v-if="view === 'unconfigured'" class="empty">
+      <section v-if="isNotFound" class="empty state-page" aria-labelledby="not-found-title">
+        <span class="state-icon"><PhBookOpen :size="40" aria-hidden="true" /></span>
+        <p class="state-kicker">Página 404</p>
+        <h2 id="not-found-title">Esta página saiu da estante</h2>
+        <p>Não encontramos este endereço. Volte para sua biblioteca para continuar.</p>
+        <a class="primary-link" href="/">Voltar à biblioteca</a>
+      </section>
+      <section v-else-if="view === 'unconfigured'" class="empty state-page">
+        <span class="state-icon"><PhWarningCircle :size="40" aria-hidden="true" /></span>
         <h2>Biblioteca em preparação</h2>
         <p>O acesso com Google ainda precisa ser configurado para abrir sua estante.</p>
       </section>
@@ -136,17 +151,24 @@ onBeforeUnmount(() => {
         <PhBookOpen :size="48" aria-hidden="true" />
         <h2>Bem-vinda à sua biblioteca</h2>
         <p>Entre com a conta Google autorizada para acessar sua estante.</p>
-        <button type="button" @click="enter">Entrar com Google</button>
+        <button type="button" :disabled="loggingIn" @click="enter">
+          <LoadingIndicator v-if="loggingIn" compact text="Abrindo o Google..." />
+          <template v-else>Entrar com Google</template>
+        </button>
       </section>
-      <section v-else-if="view === 'checking' || view === 'loading'" class="empty" role="status">
-        <p>Carregando sua biblioteca...</p>
+      <section v-else-if="view === 'checking' || view === 'loading'" class="empty">
+        <LoadingIndicator text="Preparando sua estante..." />
       </section>
-      <section v-else-if="view === 'denied'" class="empty">
+      <section v-else-if="view === 'denied'" class="empty state-page">
+        <span class="state-icon"><PhLockKey :size="40" aria-hidden="true" /></span>
+        <p class="state-kicker">Acesso não autorizado</p>
         <h2>Acesso restrito</h2>
         <p>Esta conta não tem acesso à biblioteca. Saia e entre com a conta autorizada.</p>
         <button type="button" @click="leave">Trocar de conta</button>
       </section>
-      <section v-else-if="view === 'error'" class="empty" role="alert">
+      <section v-else-if="view === 'error'" class="empty state-page" role="alert">
+        <span class="state-icon"><PhWarningCircle :size="40" aria-hidden="true" /></span>
+        <p class="state-kicker">Algo não saiu como esperado</p>
         <h2>Não foi possível carregar</h2>
         <p>Confira sua conexão e tente novamente.</p>
         <button type="button" @click="user && loadBooks(user)">Tentar novamente</button>

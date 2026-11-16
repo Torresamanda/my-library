@@ -4,6 +4,8 @@ Status inicial: planejamento. Itens são propostas, não funcionalidades já imp
 
 ## Manual visual
 
+- [x] Criar estados visuais de carregamento, página de endereço inexistente e mensagens para acesso restrito e falha de carregamento.
+- [ ] Validar os estados de erro, a página 404 e as animações em dispositivos reais e com tecnologias assistivas. A página 404 é renderizada pela aplicação; o retorno HTTP depende da configuração SPA da hospedagem.
 - [x] Abrir o cadastro em painel lateral responsivo e posicionar a câmera junto ao ISBN e os indicadores de obrigatoriedade junto aos rótulos.
 - [ ] Validar o painel, o foco e a leitura da câmera em navegadores e dispositivos reais.
 - [x] Criar manual visual e wireframe em HTML com exemplos para celular e computador, escala de espaçamento, cantos e paletas.

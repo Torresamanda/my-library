@@ -3,6 +3,7 @@ import { onBeforeUnmount, reactive, ref } from 'vue'
 import { normalizeIsbn } from '../domain/isbn'
 import BarcodeScanner from './BarcodeScanner.vue'
 import BaseDrawer from '../../../ui/BaseDrawer.vue'
+import LoadingIndicator from '../../../ui/LoadingIndicator.vue'
 import { lookupIsbn } from '../services/lookup'
 import { autofillField, createLookupScheduler } from '../services/automaticLookup'
 import { createBook, LibraryRequestError, type BookDraft } from '../../library/services/books'
@@ -177,16 +178,20 @@ async function submit() {
                 v-model="form.isbn"
                 maxlength="32"
                 inputmode="text"
-                @input="isbnChanged" /></label
-            ><button
-              type="button"
-              class="secondary-button"
-              :disabled="lookingUp || saving"
-              @click="lookup"
-            >
-              {{ lookingUp ? 'Consultando...' : 'Consultar ISBN' }}
-            </button>
-            <BarcodeScanner @scanned="scanned" />
+                @input="isbnChanged"
+            /></label>
+            <div class="isbn-actions">
+              <button
+                type="button"
+                class="secondary-button"
+                :disabled="lookingUp || saving"
+                @click="lookup"
+              >
+                <LoadingIndicator v-if="lookingUp" compact text="Consultando..." />
+                <template v-else>Consultar ISBN</template>
+              </button>
+              <BarcodeScanner @scanned="scanned" />
+            </div>
           </div>
           <label
             >Gêneros (separados por vírgula)<input
@@ -212,7 +217,7 @@ async function submit() {
               max="10000"
               step="1"
           /></label>
-          <label
+          <label class="full"
             >Status de leitura<select v-model="form.status">
               <option value="nao_lido">Não lido</option>
               <option value="lendo">Lendo</option>
@@ -233,7 +238,9 @@ async function submit() {
         <p v-if="error" role="alert" class="form-error">{{ error }}</p>
         <div class="form-actions">
           <button type="submit" :disabled="saving || lookingUp">
-            {{ saving ? 'Salvando...' : 'Salvar livro' }}</button><button
+            <LoadingIndicator v-if="saving" compact text="Salvando..." />
+            <template v-else>Salvar livro</template></button
+          ><button
             type="button"
             class="secondary-button"
             :disabled="saving"
