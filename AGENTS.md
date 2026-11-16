@@ -37,3 +37,5 @@ Leia [docs/README.md](docs/README.md), [docs/PLANEJAMENTO.md](docs/PLANEJAMENTO.
 - Organize funcionalidades em `src/features/<funcionalidade>`; componentes genéricos reutilizáveis ficam em `src/ui`. Os testes permanecem em `tests/`, separados por funcionalidade ou área. Ícones permanecem em `src/icons`; veja `docs/REGRAS.md`.
 
 - Documente toda variável de ambiente em `docs/VARIAVEIS.md`, incluindo finalidade, obrigatoriedade e local de configuração local e de produção. Atualize exemplos sem valores reais sempre que houver mudanças.
+
+- Antes de publicar uma nova versão, atualize a versão semântica no projeto, registre as alterações em commit e identifique o commit com a tag correspondente. A publicação deve ser rastreável à versão; não publique código não versionado. A integração com a Cloudflare deve criar versões sem promover automaticamente cada alteração à produção.

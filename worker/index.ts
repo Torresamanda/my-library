@@ -1,4 +1,5 @@
 import { authenticate, type AuthEnvironment } from './auth'
+import { proxyFirebaseAuth } from './authentication/proxy'
 import type { Database } from './database'
 import { deleteBook, getBook, isbnExists, listBooks, saveBook } from './books/repository'
 import { validateBook } from './books/validation'
@@ -89,6 +90,7 @@ async function books(request: Request, db: Database, id: string | null): Promise
 /** All API routes require authorization except the data-free health check. */
 export async function handleRequest(request: Request, env: Environment): Promise<Response> {
   const { pathname } = new URL(request.url)
+  if (pathname.startsWith('/__/auth/')) return proxyFirebaseAuth(request, env.FIREBASE_PROJECT_ID)
   if (pathname === '/api/health')
     return request.method === 'GET' ? health(env) : json({ error: 'Método não permitido' }, 405)
   if (!pathname.startsWith('/api/')) return json({ error: 'Não encontrado' }, 404)

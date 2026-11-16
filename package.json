@@ -1,6 +1,6 @@
 {
   "name": "biblioteca-virtual",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "scripts": {
     "dev": "vite",
@@ -12,7 +12,7 @@
     "prepare": "husky",
     "typecheck": "vue-tsc --noEmit",
     "dev:api": "wrangler dev --local --ip 127.0.0.1 --port 8787",
-    "db:migrate:local": "wrangler d1 migrations apply biblioteca-local --local"
+    "db:migrate:local": "wrangler d1 migrations apply biblioteca-virtual --local"
   },
   "keywords": [],
   "author": "",

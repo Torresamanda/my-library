@@ -248,3 +248,33 @@ Estas decisões substituem dúvidas e propostas anteriores conflitantes neste ar
 
 - [x] Validar acesso local com conta Google real, UID autorizado e API local, conforme confirmação da proprietária.
 - [ ] Validar separadamente o acesso após o deploy e em celular; o teste local não comprova o ambiente de produção.
+
+### Configuração Cloudflare
+
+- [x] Criar o D1 `biblioteca-virtual`, conectar o identificador no Wrangler e aplicar a migração inicial no banco remoto.
+- [x] Preparar o banco local separado e a compilação da interface e API no mesmo Worker.
+- [ ] Configurar os segredos do Worker e publicar a versão preparada quando autorizado.
+- [ ] Adicionar o domínio publicado aos domínios autorizados do Firebase e validar o acesso em produção e no celular.
+- [ ] Configurar variáveis públicas na compilação da Cloudflare se a publicação automática pelo GitHub for habilitada.
+
+### Publicação inicial
+
+- [x] Publicar o Worker inicial com a interface, D1 remoto e configurações privadas da API.
+- [x] Confirmar que o site e a saúde da API respondem e que a rota privada rejeita requisições sem login.
+- [ ] Adicionar o domínio do Worker ao Firebase e validar login e acesso à estante em produção e no celular.
+- [ ] Configurar a compilação automática do GitHub e suas variáveis públicas se essa opção for adotada; a publicação inicial usou compilação local.
+
+### Login em dispositivos com armazenamento particionado
+
+- [x] Preparar login por redirecionamento no endereço HTTPS publicado e encaminhar os recursos de autenticação para o Firebase pelo mesmo domínio do site.
+- [ ] Adicionar o endereço de retorno do site ao cliente OAuth Web no Google Cloud, publicar a correção e validar no dispositivo que apresentou o erro.
+- [ ] Validar também a entrada no computador e a proteção das rotas privadas após a alteração.
+
+- [x] Validar o login Google em produção no celular, após ajustar o cliente OAuth, conforme confirmação da proprietária.
+
+### Versionamento e integração Cloudflare
+
+- [x] Adotar versionamento semântico e exigir commit e tag da versão antes de novas publicações.
+- [ ] Conectar o repositório ao Worker existente, com compilação que crie versões sem publicar automaticamente.
+- [ ] Configurar as variáveis públicas `VITE_FIREBASE_*` para a compilação, sem expor segredos ou substituir os segredos existentes do Worker.
+- [ ] Confirmar a primeira compilação da integração e registrar como promover uma versão identificada à produção.

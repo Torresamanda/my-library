@@ -6,13 +6,13 @@
   "assets": {
     "directory": "./dist",
     "not_found_handling": "single-page-application",
-    "run_worker_first": ["/api/*"],
+    "run_worker_first": ["/api/*", "/__/auth/*"],
   },
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "biblioteca-local",
-      "database_id": "00000000-0000-0000-0000-000000000000",
+      "database_name": "biblioteca-virtual",
+      "database_id": "c09db83e-66d8-4741-80ec-73e0166c2ef3",
       "migrations_dir": "migrations",
     },
   ],

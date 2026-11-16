@@ -66,3 +66,9 @@
 - Manter ícones centralizados em `src/icons`, código do servidor em `worker` e migrações em `migrations`. Evitar pastas vazias e abstrações sem uso.
 
 - Manter `docs/VARIAVEIS.md` e os exemplos sem valores reais atualizados a cada variável adicionada, alterada ou removida, indicando onde configurá-la em desenvolvimento e produção.
+
+## Versionamento e publicação
+
+- Usar versionamento semântico (`MAJOR.MINOR.PATCH`) e atualizar `package.json` e `package-lock.json` na mesma alteração. Identificar cada versão com uma tag Git `vMAJOR.MINOR.PATCH` no commit correspondente.
+- Toda nova publicação deve partir de código verificado, registrado em commit e identificado por uma versão. Não publicar alterações não versionadas. A versão do código publicado deve ser rastreável ao commit e à tag correspondentes.
+- A integração Git da Cloudflare deve criar versões sem promovê-las automaticamente à produção; a publicação de cada versão segue a autorização aplicável. Manter variáveis públicas disponíveis na compilação e segredos apenas no Worker.

@@ -122,3 +122,13 @@ A API privada agora oferece operações de livros com nome, autor, ISBN, quantid
 A interface integra autenticação Firebase Google e consulta os livros autorizados para compor o dashboard e a estante agrupada. A configuração do projeto Firebase e a validação com uma conta real ainda são necessárias. Capas e interface de cadastro permanecem pendentes.
 
 O primeiro acesso local com a conta Google autorizada foi confirmado pela proprietária. A implantação e a validação em produção e no celular continuam pendentes.
+
+## Cloudflare
+
+O banco D1 `biblioteca-virtual` foi criado na conta Cloudflare e recebeu a migração inicial. O Worker está configurado para servir a interface e encaminhar `/api/*` para a API. A cópia local do banco é independente do banco remoto. A publicação e a configuração de segredos do Worker ainda estão pendentes.
+
+### Publicação inicial
+
+O Worker foi publicado com os segredos da API e o D1 remoto. O site e o endpoint de saúde foram verificados, assim como o bloqueio de acesso anônimo à coleção. O domínio precisa ser autorizado no Firebase antes do teste completo do login. A implantação atual foi feita a partir de uma compilação local, sem integração automática do GitHub.
+
+O funcionamento do login no celular em produção foi confirmado pela proprietária após ajustar o endereço de retorno no cliente OAuth. A correção publicada ainda precisa ser registrada em commit quando solicitado.

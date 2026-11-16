@@ -1,7 +1,14 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import type { User } from '@firebase/auth'
-import { firebaseConfigured, login, logout, observeUser } from './features/auth/firebase'
+import {
+  completeRedirect,
+  firebaseConfigured,
+  login,
+  logout,
+  observeUser,
+} from './features/auth/firebase'
+import { loginErrorMessage } from './features/auth/loginError'
 import LibraryStats from './features/library/components/LibraryStats.vue'
 import LibraryShelf from './features/library/components/LibraryShelf.vue'
 import { libraryStats } from './features/library/domain/libraryStats'
@@ -43,8 +50,8 @@ async function enter() {
   message.value = ''
   try {
     await login()
-  } catch {
-    message.value = 'Não foi possível entrar com o Google. Tente novamente.'
+  } catch (error) {
+    message.value = loginErrorMessage(error)
   }
 }
 
@@ -63,6 +70,9 @@ function toggleTheme() {
 }
 
 onMounted(() => {
+  void completeRedirect().catch((error: unknown) => {
+    message.value = loginErrorMessage(error)
+  })
   unsubscribe = observeUser((current) => {
     user.value = current
     if (current) {
