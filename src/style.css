@@ -961,3 +961,58 @@ select:focus-visible {
     min-width: 96px;
   }
 }
+
+/* Movimento discreto, desativado quando o dispositivo solicita menos animação. */
+@media (prefers-reduced-motion: no-preference) {
+  .drawer[open] {
+    animation: drawer-enter 220ms ease-out both;
+  }
+  .series-card[open] .book-list,
+  .library-filters.expanded {
+    animation: content-enter 180ms ease-out both;
+  }
+  .standalone-card,
+  .series-card,
+  .theme,
+  .add-book,
+  .secondary-button,
+  .active-filters button {
+    transition:
+      transform 160ms ease,
+      border-color 160ms ease,
+      background-color 160ms ease;
+  }
+  @media (hover: hover) {
+    .standalone-card:hover,
+    .series-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent);
+    }
+    .theme:hover,
+    .add-book:hover,
+    .secondary-button:hover,
+    .active-filters button:hover {
+      transform: translateY(-2px);
+    }
+  }
+  @keyframes drawer-enter {
+    from {
+      opacity: 0;
+      transform: translateX(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  @keyframes content-enter {
+    from {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}

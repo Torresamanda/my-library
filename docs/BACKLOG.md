@@ -415,6 +415,7 @@ As combinações principais de texto, texto secundário e botões dos temas clar
 - [x] Registrar aprovação da proprietária e aplicar a organização da estante, filtros, cadastro e detalhes, com ícones de saída e fechamento.
 - [x] Fechar painéis pelo fundo e confirmar descarte de alterações no formulário; manter bloqueio durante operações em andamento.
 - [ ] Validar temas, foco, toque, fechamento e fluxos autenticados em navegadores e dispositivos reais antes de publicar.
+- [x] Acrescentar movimento discreto aos painéis, à expansão de conteúdo e à interação com cartões e botões, respeitando a preferência por movimento reduzido.
 
 ### Publicação da versão 1.3.0
 
