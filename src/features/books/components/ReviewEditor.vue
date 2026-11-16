@@ -100,8 +100,7 @@ const editor = useEditor({
     </div>
     <EditorContent :editor="editor" class="review-editor" />
     <p id="review-count" :class="{ 'review-over': count > 500 }" aria-live="polite">
-      {{ count }} de 500 caracteres. Cada ponto de código Unicode conta como um caractere; alguns
-      emojis contam mais de um. Cada quebra de linha conta um.
+      {{ count }} de 500 caracteres.
     </p>
   </div>
 </template>
