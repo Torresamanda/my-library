@@ -456,7 +456,13 @@ As combinações principais de texto, texto secundário e botões dos temas clar
 - [x] Substituir as opções visíveis de empréstimo por “Não tenho”, preservando os registros anteriores até que a opção seja alterada.
 - [x] Melhorar os estados selecionado e de foco dos controles de posse, favorito e avaliação.
 - [ ] Validar visualmente os controles em dispositivos reais.
+
 ### Reorganização do cadastro
 
 - [x] Preparar [wireframe de reorganização do cadastro](WIREFRAME-CADASTRO.md), incluindo os campos e comportamentos existentes.
 - [ ] Validar sequência, escolhas visíveis e seção de dados adicionais com a proprietária; depois, preparar e validar o protótipo visual antes de implementar.
+
+### Contagem de exemplares próprios
+
+- [x] Somar no indicador de exemplares apenas as quantidades de edições marcadas como físicas ou e-books que a proprietária possui; preservar indicadores de leitura e páginas lidas para empréstimos.
+- [ ] Revisar a posse dos livros já cadastrados: registros sem essa informação ficam fora do total de exemplares até serem classificados.

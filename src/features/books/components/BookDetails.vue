@@ -2,7 +2,7 @@
 import { nextTick, ref } from 'vue'
 import { toast } from 'vue-sonner'
 import BookCover from './BookCover.vue'
-import { ownershipDescription } from '../domain/collection'
+import { hasOwned, hasUnowned, ownershipDescription } from '../domain/collection'
 import ReviewContent from './ReviewContent.vue'
 import BaseDrawer from '../../../ui/BaseDrawer.vue'
 import LoadingIndicator from '../../../ui/LoadingIndicator.vue'
@@ -106,8 +106,16 @@ async function remove() {
           <dd>{{ book.pageCount ?? 'Não informado' }}</dd>
         </div>
         <div>
-          <dt>Quantidade de exemplares</dt>
-          <dd>{{ book.quantity }}</dd>
+          <dt>Exemplares que tenho</dt>
+          <dd>
+            {{
+              hasOwned(book.ownership)
+                ? book.quantity
+                : book.ownership && hasUnowned(book.ownership)
+                  ? 'Não tenho'
+                  : 'Não informado'
+            }}
+          </dd>
         </div>
         <div>
           <dt>Status de leitura</dt>

@@ -143,3 +143,7 @@ O limite de 500 usa pontos de código Unicode: um emoji simples conta como um, m
 - É possível combinar posse física, e-book e a opção única “Não tenho” (por exemplo, leitura por empréstimo ou assinatura); não selecionar opções indica que a informação não foi registrada. Registros anteriores de empréstimo preservam seus dados e aparecem sob essa opção.
 - Tipos disponíveis: livro, quadrinho, mangá e outro; cadastros anteriores não recebem tipo presumido.
 - O paginômetro soma o número de páginas das edições concluídas, uma vez por cadastro, independentemente da quantidade. Edições sem número de páginas não contribuem para o total.
+
+### Contagem de exemplares próprios
+
+O total de exemplares do dashboard considera apenas edições marcadas como “Tenho físico” ou “Tenho e-book”, somando a quantidade informada para os exemplares que a proprietária possui. Leituras sem posse e cadastros sem informação de posse não entram nesse total. Os indicadores de leitura e o paginômetro continuam considerando as edições independentemente da posse. Essa decisão substitui regras anteriores sobre a contagem geral.

@@ -26,6 +26,10 @@ const unowned = new Set<Ownership[number]>([
   'emprestado_pessoa',
   'emprestado_assinatura',
 ])
+export function hasOwned(ownership: readonly string[] | undefined): boolean {
+  return ownership?.some((value) => value === 'fisico' || value === 'ebook') ?? false
+}
+
 export function hasUnowned(ownership: Ownership): boolean {
   return ownership.some((value) => unowned.has(value))
 }

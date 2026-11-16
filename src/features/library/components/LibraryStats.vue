@@ -8,7 +8,7 @@ defineProps<{ stats: LibraryStats }>()
     <article class="stat">
       <PhBooks :size="27" aria-hidden="true" />
       <div>
-        <span>Exemplares</span><strong>{{ stats.copies }}</strong>
+        <span>Exemplares que tenho</span><strong>{{ stats.copies }}</strong>
       </div>
     </article>
     <article class="stat">

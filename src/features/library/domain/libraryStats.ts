@@ -1,9 +1,12 @@
+import { hasOwned, type Ownership } from '../../books/domain/collection'
+
 export type ReadingStatus = 'nao_lido' | 'lendo' | 'concluido' | 'abandonado'
 
 export interface BookSummary {
   quantity: number
   status: ReadingStatus
   pageCount?: number | null
+  ownership?: Ownership
 }
 
 export interface LibraryStats {
@@ -17,7 +20,8 @@ export interface LibraryStats {
 export function libraryStats(books: readonly BookSummary[]): LibraryStats {
   return books.reduce(
     (stats, book) => {
-      if (Number.isSafeInteger(book.quantity) && book.quantity > 0) stats.copies += book.quantity
+      if (hasOwned(book.ownership) && Number.isSafeInteger(book.quantity) && book.quantity > 0)
+        stats.copies += book.quantity
       if (book.status === 'concluido') {
         stats.read += 1
         if (

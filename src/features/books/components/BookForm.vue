@@ -5,7 +5,13 @@ import { normalizeIsbn } from '../domain/isbn'
 import BarcodeScanner from './BarcodeScanner.vue'
 import BookCover from './BookCover.vue'
 import ReviewEditor from './ReviewEditor.vue'
-import { hasUnowned, setUnowned, type MediaType, type Ownership } from '../domain/collection'
+import {
+  hasOwned,
+  hasUnowned,
+  setUnowned,
+  type MediaType,
+  type Ownership,
+} from '../domain/collection'
 import { reviewLength, type Review } from '../domain/review'
 import BaseDrawer from '../../../ui/BaseDrawer.vue'
 import LoadingIndicator from '../../../ui/LoadingIndicator.vue'
@@ -36,6 +42,7 @@ const form = reactive({
   quantity: props.book?.quantity ?? 1,
   status: (props.book?.status ?? 'nao_lido') as BookDraft['status'],
 })
+const ownsCopies = computed(() => hasOwned(form.ownership))
 const unowned = computed({
   get: () => hasUnowned(form.ownership),
   set: (checked: boolean) => {
@@ -233,10 +240,10 @@ async function submit() {
     error.value = 'O número de páginas deve ser um inteiro entre 1 e 1000000.'
     return
   }
+  const quantityValid =
+    Number.isInteger(form.quantity) && form.quantity >= 1 && form.quantity <= 10000
   if (
-    !Number.isInteger(form.quantity) ||
-    form.quantity < 1 ||
-    form.quantity > 10000 ||
+    (ownsCopies.value && !quantityValid) ||
     (volume !== null && (!Number.isInteger(volume) || volume < 1 || volume > 10000))
   ) {
     error.value = 'Quantidade e volume devem ser números inteiros entre 1 e 10000.'
@@ -259,7 +266,7 @@ async function submit() {
       genres,
       seriesName: form.seriesName.trim() || null,
       seriesVolume: volume,
-      quantity: form.quantity,
+      quantity: quantityValid ? form.quantity : 1,
       status: form.status,
     }
     const token = await props.token()
@@ -390,8 +397,8 @@ async function submit() {
               max="10000"
               step="1"
           /></label>
-          <label
-            ><span>Quantidade de exemplares <span aria-hidden="true">*</span></span
+          <label v-if="ownsCopies"
+            ><span>Quantidade de exemplares que tenho <span aria-hidden="true">*</span></span
             ><input
               v-model.number="form.quantity"
               type="number"
@@ -400,6 +407,12 @@ async function submit() {
               max="10000"
               step="1"
           /></label>
+          <p v-if="ownsCopies" class="full">
+            Informe o total que você possui, somando físico e e-book.
+          </p>
+          <p v-else class="full">
+            Para contabilizar exemplares, marque “Tenho físico” ou “Tenho e-book”.
+          </p>
           <label class="full"
             >Status de leitura<select v-model="form.status">
               <option value="nao_lido">Não lido</option>
