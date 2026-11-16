@@ -5,6 +5,7 @@ import { normalizeIsbn } from '../domain/isbn'
 import BarcodeScanner from './BarcodeScanner.vue'
 import BookCover from './BookCover.vue'
 import ReviewEditor from './ReviewEditor.vue'
+import { type MediaType, type Ownership } from '../domain/collection'
 import { reviewLength, type Review } from '../domain/review'
 import BaseDrawer from '../../../ui/BaseDrawer.vue'
 import LoadingIndicator from '../../../ui/LoadingIndicator.vue'
@@ -21,6 +22,9 @@ import {
 const props = defineProps<{ token: () => Promise<string>; book?: LibraryBook }>()
 const emit = defineEmits<{ cancel: []; saved: [] }>()
 const form = reactive({
+  favorite: props.book?.favorite ?? false,
+  mediaType: (props.book?.mediaType ?? '') as MediaType | '',
+  ownership: [...(props.book?.ownership ?? [])] as Ownership,
   title: props.book?.title ?? '',
   author: props.book?.author ?? '',
   isbn: props.book?.isbn ?? '',
@@ -241,6 +245,9 @@ async function submit() {
       coverUrl: coverUrl.value,
       publisher: form.publisher.trim() || null,
       pageCount,
+      favorite: form.favorite,
+      mediaType: form.mediaType || null,
+      ownership: form.ownership,
       rating: rating.value,
       review: review.value,
       genres,
@@ -346,6 +353,29 @@ async function submit() {
               step="1"
           /></label>
           <h3 class="form-section-title full">Organização</h3>
+          <label
+            >Tipo de obra<select v-model="form.mediaType">
+              <option value="">Não informado</option>
+              <option value="livro">Livro</option>
+              <option value="quadrinho">Quadrinho</option>
+              <option value="manga">Mangá</option>
+              <option value="outro">Outro</option>
+            </select></label
+          >
+          <fieldset class="ownership-field full">
+            <legend>Formato ou origem (opcional)</legend>
+            <label
+              ><input v-model="form.ownership" type="checkbox" value="fisico" /> Tenho físico</label
+            ><label
+              ><input v-model="form.ownership" type="checkbox" value="ebook" /> Tenho e-book</label
+            ><label
+              ><input v-model="form.ownership" type="checkbox" value="emprestado_pessoa" />
+              Emprestado de alguém</label
+            ><label
+              ><input v-model="form.ownership" type="checkbox" value="emprestado_assinatura" />
+              Emprestado por assinatura (ex.: Kindle+)</label
+            >
+          </fieldset>
           <label>Série (opcional)<input v-model="form.seriesName" maxlength="200" /></label>
           <label
             >Volume (opcional)<input
@@ -375,6 +405,9 @@ async function submit() {
           >
         </div>
         <h3 class="form-section-title">Sua leitura</h3>
+        <label class="favorite-field"
+          ><input v-model="form.favorite" type="checkbox" /> Marcar como favorito</label
+        >
         <ReviewEditor
           v-model:rating="rating"
           v-model:review="review"

@@ -12,6 +12,9 @@ function createDb(): Database {
   db.exec('PRAGMA foreign_keys = ON')
   db.exec(readFileSync(new URL('../../migrations/0001_initial.sql', import.meta.url), 'utf8'))
   db.exec(readFileSync(new URL('../../migrations/0002_book_metadata.sql', import.meta.url), 'utf8'))
+  db.exec(
+    readFileSync(new URL('../../migrations/0003_collection_fields.sql', import.meta.url), 'utf8'),
+  )
   function prepare(sql: string): Statement {
     const statement = db.prepare(sql)
     let values: SQLInputValue[] = []
@@ -225,6 +228,55 @@ describe('books API', () => {
     }
     expect(
       (await send(env, 'POST', '/api/books', { ...example, isbn: null, review: malicious })).status,
+    ).toBe(400)
+  })
+  it('saves favorites as booleans and preserves them on older edits', async () => {
+    const response = await send(env, 'POST', '/api/books', { ...example, favorite: true })
+    expect(response.status).toBe(201)
+    const { book } = (await response.json()) as { book: { id: string; favorite: boolean } }
+    expect(book.favorite).toBe(true)
+    expect(await (await send(env, 'PUT', `/api/books/${book.id}`, example)).json()).toMatchObject({
+      book: { favorite: true },
+    })
+    expect(
+      await (
+        await send(env, 'PUT', `/api/books/${book.id}`, { ...example, favorite: false })
+      ).json(),
+    ).toMatchObject({ book: { favorite: false } })
+    expect(
+      (await send(env, 'POST', '/api/books', { ...example, isbn: null, favorite: 'true' })).status,
+    ).toBe(400)
+  })
+  it('validates multiple ownership options and media types', async () => {
+    const response = await send(env, 'POST', '/api/books', {
+      ...example,
+      mediaType: 'manga',
+      ownership: ['fisico', 'ebook', 'emprestado_assinatura'],
+    })
+    expect(response.status).toBe(201)
+    const { book } = (await response.json()) as { book: { id: string } }
+    expect(await (await send(env, 'GET', `/api/books/${book.id}`)).json()).toMatchObject({
+      book: { mediaType: 'manga', ownership: ['fisico', 'ebook', 'emprestado_assinatura'] },
+    })
+    expect(await (await send(env, 'PUT', `/api/books/${book.id}`, example)).json()).toMatchObject({
+      book: { mediaType: 'manga', ownership: ['fisico', 'ebook', 'emprestado_assinatura'] },
+    })
+    expect(
+      (await send(env, 'POST', '/api/books', { ...example, isbn: null, mediaType: 'invalid' }))
+        .status,
+    ).toBe(400)
+    expect(
+      (
+        await send(env, 'POST', '/api/books', {
+          ...example,
+          isbn: null,
+          ownership: ['fisico', 'fisico'],
+        })
+      ).status,
+    ).toBe(400)
+    expect(
+      (await send(env, 'POST', '/api/books', { ...example, isbn: null, ownership: ['invalid'] }))
+        .status,
     ).toBe(400)
   })
   it('does not permit unauthorized collection access', async () => {

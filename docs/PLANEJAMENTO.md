@@ -136,3 +136,10 @@ O funcionamento do login no celular em produção foi confirmado pela proprietá
 ### Contagem do comentário pessoal
 
 O limite de 500 usa pontos de código Unicode: um emoji simples conta como um, mas emojis compostos podem contar mais de um. Cada quebra de linha e cada separação entre blocos contam como um; a marcação não é contada. São aceitos parágrafos, quebras de linha, negrito e títulos de níveis 1 a 3. A mesma regra é aplicada no navegador e no servidor.
+
+### Favoritos, posse, tipo e paginômetro
+
+- O favorito é opcional e pode ser marcado ou removido no cadastro e na edição.
+- É possível combinar posse física, e-book e empréstimos de pessoa ou assinatura; não selecionar opções indica que a informação não foi registrada.
+- Tipos disponíveis: livro, quadrinho, mangá e outro; cadastros anteriores não recebem tipo presumido.
+- O paginômetro soma o número de páginas das edições concluídas, uma vez por cadastro, independentemente da quantidade. Edições sem número de páginas não contribuem para o total.

@@ -1,4 +1,10 @@
 import { z } from 'zod'
+import {
+  mediaTypeSchema,
+  ownershipSchema,
+  type MediaType,
+  type Ownership,
+} from '../../books/domain/collection'
 import { reviewSchema, type Review } from '../../books/domain/review'
 
 const bookSchema = z.object({
@@ -14,6 +20,9 @@ const bookSchema = z.object({
   coverUrl: z.string().nullable().optional(),
   publisher: z.string().nullable().optional(),
   pageCount: z.number().int().positive().nullable().optional(),
+  favorite: z.boolean().optional(),
+  mediaType: mediaTypeSchema.nullable().optional(),
+  ownership: ownershipSchema.optional(),
   rating: z.number().int().min(1).max(5).nullable().optional(),
   review: reviewSchema.nullable().optional(),
 })
@@ -42,6 +51,9 @@ export type BookDraft = {
   coverUrl?: string | null
   publisher?: string | null
   pageCount?: number | null
+  favorite?: boolean
+  mediaType?: MediaType | null
+  ownership?: Ownership
   rating?: number | null
   review?: Review | null
   quantity: number

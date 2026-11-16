@@ -46,3 +46,20 @@ it('adds optional metadata without changing existing books or genres', () => {
   expect(() => db.prepare('UPDATE books SET page_count = ? WHERE id = ?').run(0, '1')).toThrow()
   db.close()
 })
+
+it('keeps existing editions and initializes the new fields without assumptions', () => {
+  const db = database()
+  db.exec("INSERT INTO books (id, title, author, quantity) VALUES ('1', 'Livro', 'Autora', 2)")
+  db.exec(readFileSync(new URL('../../migrations/0002_book_metadata.sql', import.meta.url), 'utf8'))
+  db.exec(
+    readFileSync(new URL('../../migrations/0003_collection_fields.sql', import.meta.url), 'utf8'),
+  )
+  expect(
+    db
+      .prepare('SELECT favorite, media_type, ownership_json, quantity FROM books WHERE id = ?')
+      .get('1'),
+  ).toMatchObject({ favorite: 0, media_type: null, ownership_json: '[]', quantity: 2 })
+  expect(() => db.prepare('UPDATE books SET favorite = 2 WHERE id = ?').run('1')).toThrow()
+  expect(() => db.prepare('UPDATE books SET media_type = ? WHERE id = ?').run('x', '1')).toThrow()
+  db.close()
+})

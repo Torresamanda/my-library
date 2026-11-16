@@ -6,6 +6,7 @@ import type { LibraryBook } from '../services/books'
 const props = defineProps<{ books: LibraryBook[]; search: string; filters: LibraryFilters }>()
 const emit = defineEmits<{ select: [book: LibraryBook]; clear: []; add: [] }>()
 const groups = computed(() => groupBooks(props.books, props.search, props.filters))
+const mediaLabels = { livro: 'Livro', quadrinho: 'Quadrinho', manga: 'Mangá', outro: 'Outro' }
 const labels = {
   nao_lido: 'Não lido',
   lendo: 'Lendo',
@@ -57,7 +58,9 @@ const labels = {
                       .join(' · ')
                   }}
                 </p>
+                <p v-if="book.mediaType">{{ mediaLabels[book.mediaType] }}</p>
                 <p v-if="book.genres.length">{{ book.genres.join(' · ') }}</p>
+                <span v-if="book.favorite" class="badge">Favorito</span>
               </div>
               <span class="badge">{{ labels[book.status] }}</span>
             </li>
@@ -76,7 +79,9 @@ const labels = {
                 {{ book.title }}
               </strong>
               <p>{{ book.author }}</p>
+              <p v-if="book.mediaType">{{ mediaLabels[book.mediaType] }}</p>
               <span class="badge">{{ labels[book.status] }}</span>
+              <span v-if="book.favorite" class="badge">Favorito</span>
             </div>
           </button>
         </li>

@@ -29,5 +29,11 @@ defineProps<{ stats: LibraryStats }>()
         <span>Abandonados</span><strong>{{ stats.abandoned }}</strong>
       </div>
     </article>
+    <article class="stat">
+      <PhBookOpen :size="27" aria-hidden="true" />
+      <div>
+        <span>Páginas lidas</span><strong>{{ stats.pagesRead.toLocaleString('pt-BR') }}</strong>
+      </div>
+    </article>
   </section>
 </template>

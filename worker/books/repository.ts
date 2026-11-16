@@ -1,4 +1,5 @@
 import type { Database, Statement } from '../database'
+import { parseOwnership, type MediaType } from '../../src/features/books/domain/collection'
 import { parseStoredReview } from '../../src/features/books/domain/review'
 import type { BookInput } from './validation'
 
@@ -16,6 +17,9 @@ export interface BookRow {
   status: string
   seriesName: string | null
   seriesVolume: number | null
+  favorite: number
+  mediaType: MediaType | null
+  ownershipJson: string
   rating: number | null
   reviewJson: string | null
   createdAt: string
@@ -23,11 +27,16 @@ export interface BookRow {
 }
 
 const selectBook = `SELECT id, title, author, isbn, quantity, status, series_name AS seriesName,
-  series_volume AS seriesVolume, cover_url AS coverUrl, publisher, page_count AS pageCount, rating, review_json AS reviewJson, created_at AS createdAt, updated_at AS updatedAt FROM books`
+  series_volume AS seriesVolume, cover_url AS coverUrl, publisher, page_count AS pageCount, favorite, media_type AS mediaType, ownership_json AS ownershipJson, rating, review_json AS reviewJson, created_at AS createdAt, updated_at AS updatedAt FROM books`
 
 function publicBook(book: BookRow) {
-  const { reviewJson, ...fields } = book
-  return { ...fields, review: parseStoredReview(reviewJson) }
+  const { reviewJson, favorite, ownershipJson, ...fields } = book
+  return {
+    ...fields,
+    favorite: favorite === 1,
+    ownership: parseOwnership(ownershipJson),
+    review: parseStoredReview(reviewJson),
+  }
 }
 
 async function genresFor(db: Database, id: string): Promise<string[]> {
@@ -106,18 +115,21 @@ export async function saveBook(
     book.coverUrl,
     book.publisher,
     book.pageCount,
+    book.favorite ? 1 : 0,
+    book.mediaType,
+    JSON.stringify(book.ownership),
     book.rating,
     book.review ? JSON.stringify(book.review) : null,
   ]
   const statement = existing
     ? db
         .prepare(
-          `UPDATE books SET title = ?, author = ?, isbn = ?, quantity = ?, status = ?, series_name = ?, series_volume = ?, cover_url = ?, publisher = ?, page_count = ?, rating = ?, review_json = ?, updated_at = datetime('now') WHERE id = ?`,
+          `UPDATE books SET title = ?, author = ?, isbn = ?, quantity = ?, status = ?, series_name = ?, series_volume = ?, cover_url = ?, publisher = ?, page_count = ?, favorite = ?, media_type = ?, ownership_json = ?, rating = ?, review_json = ?, updated_at = datetime('now') WHERE id = ?`,
         )
         .bind(...values, id)
     : db
         .prepare(
-          `INSERT INTO books (title, author, isbn, quantity, status, series_name, series_volume, cover_url, publisher, page_count, rating, review_json, id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+          `INSERT INTO books (title, author, isbn, quantity, status, series_name, series_volume, cover_url, publisher, page_count, favorite, media_type, ownership_json, rating, review_json, id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         )
         .bind(...values, id)
   await db.batch([statement, ...genreStatements(db, id, book.genres)])

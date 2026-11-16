@@ -87,6 +87,9 @@ async function books(request: Request, db: Database, id: string | null): Promise
     if (existing && raw !== null && typeof raw === 'object') {
       if (!Object.hasOwn(raw, 'publisher')) book.publisher = existing.publisher
       if (!Object.hasOwn(raw, 'pageCount')) book.pageCount = existing.pageCount
+      if (!Object.hasOwn(raw, 'favorite')) book.favorite = existing.favorite
+      if (!Object.hasOwn(raw, 'mediaType')) book.mediaType = existing.mediaType
+      if (!Object.hasOwn(raw, 'ownership')) book.ownership = existing.ownership
       if (!Object.hasOwn(raw, 'rating')) book.rating = existing.rating
       if (!Object.hasOwn(raw, 'review')) book.review = existing.review
     }

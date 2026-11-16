@@ -442,3 +442,11 @@ As combinações principais de texto, texto secundário e botões dos temas clar
 - [x] Executar lint, verificação de tipos, 53 testes e compilação; criar commit e tag, aplicar a migração remota e publicar a versão identificada.
 - [x] Verificar respostas do site e da saúde da API e confirmar bloqueio da coleção sem autenticação.
 - [ ] Validar os novos fluxos autenticados em produção, em celular e computador. A integração Git da Cloudflare permanece sem verificação; não foi enviado novo código ao GitHub nesta publicação.
+
+### Favoritos, formatos e páginas lidas
+
+- [x] Registrar favoritos e indicar na estante e nos detalhes.
+- [x] Registrar múltiplas opções de posse ou origem, inclusive empréstimo de pessoa ou assinatura, sem presumir dados em cadastros antigos.
+- [x] Distinguir livro, quadrinho, mangá e outro; manter tipo opcional para edições já existentes.
+- [x] Somar páginas informadas de edições concluídas uma vez por cadastro no paginômetro, sem multiplicar por exemplares.
+- [ ] Validar os novos controles e o dashboard em dispositivos e temas reais. Antes de publicar, aplicar a migração `0003_collection_fields.sql` ao D1 remoto e identificar a versão.

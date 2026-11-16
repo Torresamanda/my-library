@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { mediaTypeSchema, ownershipSchema } from '../../src/features/books/domain/collection'
 import { reviewSchema } from '../../src/features/books/domain/review'
 import { normalizeIsbn } from '../../src/features/books/domain/isbn'
 
@@ -31,6 +32,12 @@ const bookSchema = z
       .nullable()
       .optional()
       .transform((v) => v ?? null),
+    favorite: z.boolean().optional().default(false),
+    mediaType: mediaTypeSchema
+      .nullable()
+      .optional()
+      .transform((value) => value ?? null),
+    ownership: ownershipSchema.optional().default([]),
     rating: z
       .number()
       .int()

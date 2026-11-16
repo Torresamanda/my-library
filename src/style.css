@@ -123,7 +123,7 @@ button {
 }
 .stats {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 8px;
 }
 .stat {
@@ -1147,4 +1147,33 @@ select:focus-visible {
       transform: translateY(0);
     }
   }
+}
+
+.favorite-field {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 12px 0;
+}
+.favorite-field input {
+  width: auto;
+}
+.ownership-field {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 0;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-small);
+}
+.form-grid .ownership-field label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 400;
+}
+.form-grid .ownership-field input {
+  width: auto;
+  min-height: auto;
 }

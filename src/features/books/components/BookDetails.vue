@@ -13,6 +13,13 @@ const cancelButton = ref<HTMLButtonElement | null>(null)
 const deleteButton = ref<HTMLButtonElement | null>(null)
 const deleting = ref(false)
 const error = ref('')
+const mediaLabels = { livro: 'Livro', quadrinho: 'Quadrinho', manga: 'Mangá', outro: 'Outro' }
+const ownershipLabels = {
+  fisico: 'Tenho físico',
+  ebook: 'Tenho e-book',
+  emprestado_pessoa: 'Emprestado de alguém',
+  emprestado_assinatura: 'Emprestado por assinatura',
+}
 const labels = {
   nao_lido: 'Não lido',
   lendo: 'Lendo',
@@ -60,10 +67,25 @@ async function remove() {
           <h3>{{ book.title }}</h3>
           <p>{{ book.author }}</p>
           <span class="badge">{{ labels[book.status] }}</span>
+          <span v-if="book.favorite" class="badge">Favorito</span>
         </div>
       </div>
       <h4 class="form-section-title">Sobre esta edição</h4>
       <dl>
+        <div>
+          <dt>Tipo de obra</dt>
+          <dd>{{ book.mediaType ? mediaLabels[book.mediaType] : 'Não informado' }}</dd>
+        </div>
+        <div>
+          <dt>Formato ou origem</dt>
+          <dd>
+            {{
+              book.ownership?.length
+                ? book.ownership.map((value) => ownershipLabels[value]).join(', ')
+                : 'Não informado'
+            }}
+          </dd>
+        </div>
         <div>
           <dt>ISBN</dt>
           <dd>{{ book.isbn || 'Não informado' }}</dd>
