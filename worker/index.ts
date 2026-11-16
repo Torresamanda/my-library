@@ -2,10 +2,12 @@ import { authenticate, type AuthEnvironment } from './auth'
 import { proxyFirebaseAuth } from './authentication/proxy'
 import type { Database } from './database'
 import { deleteBook, getBook, isbnExists, listBooks, saveBook } from './books/repository'
+import { searchGoogleBooks } from './books/googleBooks'
 import { validateBook } from './books/validation'
 
 export interface Environment extends AuthEnvironment {
   DB: Database
+  GOOGLE_BOOKS_API_KEY?: string
 }
 
 function json(body: object, status: number): Response {
@@ -117,6 +119,15 @@ export async function handleRequest(request: Request, env: Environment): Promise
     return request.method === 'GET'
       ? json({ authenticated: true }, 200)
       : json({ error: 'Método não permitido' }, 405)
+  if (pathname === '/api/covers/search') {
+    if (request.method !== 'POST') return json({ error: 'Método não permitido' }, 405)
+    try {
+      const result = await searchGoogleBooks(await readJson(request), env.GOOGLE_BOOKS_API_KEY)
+      return json(result.body, result.status)
+    } catch {
+      return json({ error: 'Dados inválidos' }, 400)
+    }
+  }
   if (pathname === '/api/books') return books(request, env.DB, null)
   const match =
     /^\/api\/books\/([0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})$/i.exec(

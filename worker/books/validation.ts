@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { isOpenLibraryCover, validCoverUrl } from '../../src/features/books/domain/cover'
 import { mediaTypeSchema, ownershipSchema } from '../../src/features/books/domain/collection'
 import { reviewSchema } from '../../src/features/books/domain/review'
 import { normalizeIsbn } from '../../src/features/books/domain/isbn'
@@ -19,7 +20,7 @@ const bookSchema = z
     isbn: z.string().trim().max(32).nullable().optional(),
     coverUrl: z
       .string()
-      .regex(/^https:\/\/covers\.openlibrary\.org\/b\/id\/[1-9][0-9]{0,15}-M\.jpg$/)
+      .refine(validCoverUrl)
       .nullable()
       .optional()
       .transform((v) => v ?? null),
@@ -65,7 +66,7 @@ const bookSchema = z
   })
   .strict()
   .superRefine((book, ctx) => {
-    if (book.coverUrl && !book.isbn)
+    if (book.coverUrl && isOpenLibraryCover(book.coverUrl) && !book.isbn)
       ctx.addIssue({ code: 'custom', message: 'Capa automática exige ISBN', path: ['coverUrl'] })
     if (book.isbn && !normalizeIsbn(book.isbn))
       ctx.addIssue({ code: 'custom', message: 'ISBN inválido', path: ['isbn'] })

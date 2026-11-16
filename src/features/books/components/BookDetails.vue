@@ -2,6 +2,7 @@
 import { nextTick, ref } from 'vue'
 import { toast } from 'vue-sonner'
 import BookCover from './BookCover.vue'
+import { googleCoverId } from '../domain/cover'
 import { hasOwned, hasUnowned, ownershipDescription } from '../domain/collection'
 import ReviewContent from './ReviewContent.vue'
 import BaseDrawer from '../../../ui/BaseDrawer.vue'
@@ -88,6 +89,14 @@ async function remove() {
           </div>
         </div>
       </div>
+      <p v-if="book.coverUrl && googleCoverId(book.coverUrl)" class="cover-source-link">
+        <a
+          :href="`https://books.google.com/books?id=${googleCoverId(book.coverUrl)}`"
+          target="_blank"
+          rel="noopener noreferrer"
+          >Ver capa no Google Books</a
+        >
+      </p>
       <h4 class="form-section-title">Sobre esta edição</h4>
       <dl>
         <div>

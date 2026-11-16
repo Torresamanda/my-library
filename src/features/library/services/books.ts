@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { googleCoverId, validCoverUrl } from '../../books/domain/cover'
 import {
   mediaTypeSchema,
   ownershipSchema,
@@ -87,4 +88,34 @@ export async function deleteBook(token: string, id: string): Promise<void> {
     headers: { Authorization: `Bearer ${token}` },
   })
   if (!response.ok) throw new LibraryRequestError(response.status)
+}
+
+const coverSearchResultSchema = z
+  .object({
+    id: z.string().regex(/^[A-Za-z0-9_-]{1,100}$/),
+    title: z.string(),
+    authors: z.array(z.string()),
+    publisher: z.string(),
+    publishedDate: z.string(),
+    isbns: z.array(z.string()),
+    coverUrl: z.string().refine(validCoverUrl).nullable(),
+  })
+  .refine((item) => !item.coverUrl || googleCoverId(item.coverUrl) === item.id)
+export type CoverSearchResult = z.infer<typeof coverSearchResultSchema>
+
+export async function searchCovers(
+  token: string,
+  title: string,
+  author: string,
+  signal?: AbortSignal,
+): Promise<CoverSearchResult[]> {
+  const response = await fetch('/api/covers/search', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ title, author }),
+    signal,
+  })
+  if (!response.ok) throw new LibraryRequestError(response.status)
+  const raw: unknown = await response.json()
+  return z.object({ results: z.array(coverSearchResultSchema).max(10) }).parse(raw).results
 }

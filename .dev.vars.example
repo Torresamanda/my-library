@@ -1,3 +1,4 @@
 # IDs de exemplo vazios: preencha somente em .dev.vars, nunca neste arquivo.
 FIREBASE_PROJECT_ID=""
 ALLOWED_FIREBASE_UID=""
+GOOGLE_BOOKS_API_KEY=""

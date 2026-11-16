@@ -50,7 +50,7 @@ describe('private API routes', () => {
   it('rejects requests without authorization, even for unrecognized API paths', async () => {
     vi.mocked(authenticate).mockResolvedValue(false)
     const env = database({ total: 0 })
-    for (const path of ['/api/session', '/api/books']) {
+    for (const path of ['/api/session', '/api/books', '/api/covers/search']) {
       const response = await handleRequest(new Request(`http://localhost${path}`), env)
       expect(response.status).toBe(401)
       expect(response.headers.get('cache-control')).toBe('no-store')

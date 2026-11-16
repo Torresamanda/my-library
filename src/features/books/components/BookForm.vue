@@ -4,6 +4,7 @@ import { toast } from 'vue-sonner'
 import { normalizeIsbn } from '../domain/isbn'
 import BarcodeScanner from './BarcodeScanner.vue'
 import BookCover from './BookCover.vue'
+import CoverSearch from './CoverSearch.vue'
 import ReviewEditor from './ReviewEditor.vue'
 import {
   hasOwned,
@@ -92,7 +93,8 @@ async function finishClose(event: 'cancel' | 'saved') {
 function requestCancel() {
   if (saving.value || closing.value) return
   const changed =
-    JSON.stringify({ form, rating: rating.value, review: review.value }) !== initialValues
+    JSON.stringify({ form, rating: rating.value, review: review.value }) !== initialValues ||
+    coverUrl.value !== (props.book?.coverUrl ?? null)
   if (!changed) {
     void finishClose('cancel')
     return
@@ -116,6 +118,13 @@ const lookingUp = ref(false)
 const cameraActive = ref(false)
 const lookupMessage = ref('')
 const coverUrl = ref<string | null>(props.book?.coverUrl ?? null)
+const coverSearchOpen = ref(false)
+let coverChoiceVersion = 0
+function chooseCover(url: string) {
+  coverChoiceVersion++
+  coverUrl.value = url
+  coverSearchOpen.value = false
+}
 const originalIsbn = props.book?.isbn ? normalizeIsbn(props.book.isbn) : null
 let lookupVersion = 0
 let automaticTitle = ''
@@ -169,6 +178,7 @@ async function lookup() {
     return
   }
   const version = ++lookupVersion
+  const initialCoverChoiceVersion = coverChoiceVersion
   const initialTitle = form.title
   const initialAuthor = form.author
   const initialPublisher = form.publisher
@@ -208,8 +218,9 @@ async function lookup() {
     automaticIsbn = isbn
     form.title = title
     form.author = author
-    coverUrl.value =
-      result.coverUrl ?? (originalIsbn === isbn ? (props.book?.coverUrl ?? null) : null)
+    if (initialCoverChoiceVersion === coverChoiceVersion)
+      coverUrl.value =
+        result.coverUrl ?? (originalIsbn === isbn ? (props.book?.coverUrl ?? null) : null)
     lookupMessage.value = result.author
       ? 'Encontramos dados para este ISBN. Confira as informações e complete o que faltar antes de salvar.'
       : 'Encontramos a edição, mas a fonte não informou a autoria. Preencha o campo Autor antes de salvar.'
@@ -379,6 +390,22 @@ async function submit() {
               /></label>
             </div>
           </div>
+          <button
+            type="button"
+            class="secondary-button field-block"
+            @click="coverSearchOpen = !coverSearchOpen"
+          >
+            Pesquisar capa
+          </button>
+          <CoverSearch
+            v-if="coverSearchOpen"
+            :title="form.title"
+            :author="form.author"
+            :isbn="form.isbn"
+            :token="token"
+            @close="coverSearchOpen = false"
+            @choose="chooseCover"
+          />
           <fieldset class="form-choice-group field-block">
             <legend>Tipo de obra <span class="field-hint">· opcional</span></legend>
             <div class="form-choices">

@@ -27,3 +27,7 @@ Copie `.env.example` para `.env` e preencha a configuração pública do aplicat
 Mantenha `ALLOWED_FIREBASE_UID` e qualquer segredo exclusivamente no Worker; não os adicione com prefixo `VITE_`. Quando `.dev.vars` estiver presente, o Wrangler usa esse arquivo para a API e não carrega `.env` nele; o Vite continua usando `.env` para a interface.
 
 Os arquivos locais `.dev.vars` e `.env` são ignorados pelo Git. Reinicie o servidor apropriado após alterar a configuração local.
+
+## Pesquisa de capas — Google Books
+
+`GOOGLE_BOOKS_API_KEY` identifica a consulta à API do Google Books. É opcional para os demais recursos e necessária para pesquisar capas nessa fonte. Em desenvolvimento, configure somente em `.dev.vars`; em produção, configure como segredo do Worker. Use uma chave própria restrita à API necessária, sem incluí-la em URLs, interface, exemplos ou registros. A pesquisa falha de forma recuperável se a chave não estiver configurada. Respeite cotas e não ative serviços pagos sem autorização.

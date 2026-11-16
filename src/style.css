@@ -720,6 +720,71 @@ select:focus-visible {
   height: 100%;
   object-fit: cover;
 }
+.google-cover img {
+  height: calc(100% - 20px);
+  object-fit: contain;
+}
+.cover-source {
+  display: block;
+  height: 20px;
+  text-align: center;
+  font-size: 10px;
+  line-height: 20px;
+}
+.cover-search {
+  margin-top: 16px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-small);
+}
+.cover-search-fields {
+  display: grid;
+  gap: 12px;
+  margin: 12px 0;
+}
+.cover-search-fields label {
+  display: grid;
+  gap: 6px;
+}
+.cover-provider {
+  margin: 12px 0;
+}
+.cover-provider img {
+  max-width: 150px;
+  background: white;
+  padding: 4px;
+}
+.cover-results {
+  display: grid;
+  gap: 12px;
+}
+.cover-result {
+  display: grid;
+  grid-template-columns: 70px minmax(0, 1fr);
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-small);
+  overflow-wrap: anywhere;
+}
+.cover-result > img,
+.cover-result-placeholder {
+  width: 70px;
+  height: 105px;
+  object-fit: contain;
+}
+.cover-result p {
+  margin: 4px 0;
+}
+.cover-result > label {
+  grid-column: 2;
+}
+.cover-search-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
 .cover-placeholder {
   place-items: center;
   color: var(--text);
