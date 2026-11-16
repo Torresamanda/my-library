@@ -404,6 +404,12 @@ As combinações principais de texto, texto secundário e botões dos temas clar
 - [ ] Validar com a proprietária a organização proposta e a confirmação ao descartar alterações; ajustar os wireframes conforme as decisões.
 - [ ] Após validação dos wireframes, preparar e validar protótipo visual nos dois temas antes de implementar mudanças.
 
+### Protótipo visual da evolução
+
+- [x] Registrar aprovação dos wireframes e preparar [protótipo visual responsivo](PROTOTIPO-ESTANTE.html), com temas e dados fictícios.
+- [x] Propor ícones acessíveis para fechar e sair e fechamento dos painéis ao clicar fora; preservar confirmação ao descartar formulário alterado.
+- [ ] Validar o protótipo, os dois temas e as interações com a proprietária antes de alterar o site. O protótipo não salva dados nem representa funcionalidades concluídas.
+
 ### Publicação da versão 1.3.0
 
 - [x] Executar lint, verificação de tipos, 53 testes e compilação; criar commit e tag, aplicar a migração remota e publicar a versão identificada.
