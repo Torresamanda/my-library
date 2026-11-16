@@ -62,10 +62,12 @@ async function remove() {
         <div>
           <h3>{{ book.title }}</h3>
           <p>{{ book.author }}</p>
-          <span class="badge">{{ labels[book.status] }}</span>
-          <span v-if="book.favorite" class="badge favorite-badge"
-            ><PhHeart :size="18" weight="fill" aria-hidden="true" /> Favorito</span
-          >
+          <div class="detail-badges">
+            <span class="badge">{{ labels[book.status] }}</span>
+            <span v-if="book.favorite" class="badge favorite-badge"
+              ><PhHeart :size="16" weight="fill" aria-hidden="true" /> Favorito</span
+            >
+          </div>
         </div>
       </div>
       <h4 class="form-section-title">Sobre esta edição</h4>

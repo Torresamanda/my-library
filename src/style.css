@@ -781,11 +781,21 @@ select:focus-visible {
 .personal-review h4 {
   margin: 0 0 8px;
 }
+.detail-badges {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.detail-badges .badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+}
 .favorite-badge {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  margin-left: 8px;
 }
 .favorite-badge svg {
   color: var(--accent);
