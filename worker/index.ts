@@ -84,6 +84,10 @@ async function books(request: Request, db: Database, id: string | null): Promise
       !Object.hasOwn(raw, 'coverUrl')
     )
       book.coverUrl = existing.coverUrl
+    if (existing && raw !== null && typeof raw === 'object') {
+      if (!Object.hasOwn(raw, 'publisher')) book.publisher = existing.publisher
+      if (!Object.hasOwn(raw, 'pageCount')) book.pageCount = existing.pageCount
+    }
     const bookId = id ?? crypto.randomUUID()
     if (book.isbn && (await isbnExists(db, book.isbn, bookId)))
       return json({ error: 'Este livro já está na biblioteca' }, 409)

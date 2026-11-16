@@ -16,6 +16,9 @@ const resultSchema = z.object({
 
 const editionSchema = z.object({
   title: z.string().optional(),
+  publishers: z.array(z.string()).optional(),
+  number_of_pages: z.unknown().optional(),
+  subjects: z.array(z.string()).optional(),
   covers: z
     .array(z.unknown())
     .optional()
@@ -73,7 +76,14 @@ async function editionAuthors(edition: Edition, signal?: AbortSignal): Promise<s
   return names.filter(Boolean).join(', ').slice(0, 250)
 }
 
-export type LookupResult = { title: string; author: string; coverUrl: string | null }
+export type LookupResult = {
+  title: string
+  author: string
+  coverUrl: string | null
+  publisher: string
+  pageCount: number | null
+  genres: string[]
+}
 
 export async function lookupIsbn(isbn: string, signal?: AbortSignal): Promise<LookupResult | null> {
   const normalized = normalizeIsbn(isbn)
@@ -98,9 +108,27 @@ export async function lookupIsbn(isbn: string, signal?: AbortSignal): Promise<Lo
   const edition = await fetchEdition(normalized, signal)
   const author = authors || (edition ? await editionAuthors(edition, signal) : '')
   const coverId = edition?.covers?.[0] ?? result.cover_i
+  const pages = edition?.number_of_pages
+  const pageCount =
+    typeof pages === 'number' && Number.isInteger(pages) && pages > 0 && pages <= 1000000
+      ? pages
+      : null
+  const seen = new Set<string>()
+  const genres = (edition?.subjects ?? [])
+    .map((subject) => subject.trim())
+    .filter((subject) => {
+      const key = subject.toLocaleLowerCase('pt-BR')
+      if (!subject || subject.length > 80 || subject.includes(',') || seen.has(key)) return false
+      seen.add(key)
+      return true
+    })
+    .slice(0, 4)
   return {
     title: (edition?.title?.trim() || result.title?.trim() || '').slice(0, 250),
     author,
+    publisher: (edition?.publishers?.[0] ?? '').trim().slice(0, 250),
+    pageCount,
+    genres,
     coverUrl: coverId ? `https://covers.openlibrary.org/b/id/${coverId}-M.jpg` : null,
   }
 }

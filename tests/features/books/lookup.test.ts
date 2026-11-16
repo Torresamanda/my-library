@@ -23,7 +23,7 @@ describe('ISBN lookup', () => {
         ),
       ),
     )
-    expect(await lookupIsbn('9780306406157')).toEqual({
+    expect(await lookupIsbn('9780306406157')).toMatchObject({
       title: 'Livro',
       author: 'Autora, Outro autor',
       coverUrl: 'https://covers.openlibrary.org/b/id/123-M.jpg',
@@ -66,7 +66,7 @@ it('retrieves edition author names when the search result omits them', async () 
     .mockResolvedValueOnce(new Response(JSON.stringify({ name: 'Autora' }), { status: 200 }))
     .mockResolvedValueOnce(new Response(JSON.stringify({ name: 'Outro autor' }), { status: 200 }))
   vi.stubGlobal('fetch', fetchMock)
-  expect(await lookupIsbn('9780306406157')).toEqual({
+  expect(await lookupIsbn('9780306406157')).toMatchObject({
     title: 'Livro',
     author: 'Autora, Outro autor',
     coverUrl: null,
@@ -86,7 +86,11 @@ it('keeps the title if the edition author lookup fails', async () => {
       )
       .mockRejectedValueOnce(new Error('offline')),
   )
-  expect(await lookupIsbn('9780306406157')).toEqual({ title: 'Livro', author: '', coverUrl: null })
+  expect(await lookupIsbn('9780306406157')).toMatchObject({
+    title: 'Livro',
+    author: '',
+    coverUrl: null,
+  })
 })
 
 it('prefers the title and cover for the ISBN edition and requests Portuguese results', async () => {
@@ -113,7 +117,7 @@ it('prefers the title and cover for the ISBN edition and requests Portuguese res
       }),
     )
   vi.stubGlobal('fetch', fetchMock)
-  expect(await lookupIsbn('9780306406157')).toEqual({
+  expect(await lookupIsbn('9780306406157')).toMatchObject({
     title: 'Título da edição brasileira',
     author: 'Autora',
     coverUrl: 'https://covers.openlibrary.org/b/id/22-M.jpg',
@@ -147,9 +151,38 @@ it('falls back to work data when the edition has no usable title or cover', asyn
         new Response(JSON.stringify({ title: ' ', covers: [-1, 'invalid'] }), { status: 200 }),
       ),
   )
-  expect(await lookupIsbn('9780306406157')).toEqual({
+  expect(await lookupIsbn('9780306406157')).toMatchObject({
     title: 'Título disponível',
     author: 'Autora',
     coverUrl: 'https://covers.openlibrary.org/b/id/11-M.jpg',
+  })
+})
+
+it('extracts up to four distinct edition subjects and validates optional metadata', async () => {
+  const fetchMock = vi
+    .fn()
+    .mockResolvedValueOnce(
+      new Response(
+        JSON.stringify({
+          docs: [{ title: 'Livro', author_name: ['Autora'], isbn: ['9780306406157'] }],
+        }),
+        { status: 200 },
+      ),
+    )
+    .mockResolvedValueOnce(
+      new Response(
+        JSON.stringify({
+          publishers: ['Editora'],
+          number_of_pages: 320,
+          subjects: ['Fantasia', 'fantasia', 'Romance', 'Comédia', 'Aventura', 'Outro', 'A, B'],
+        }),
+        { status: 200 },
+      ),
+    )
+  vi.stubGlobal('fetch', fetchMock)
+  expect(await lookupIsbn('9780306406157')).toMatchObject({
+    publisher: 'Editora',
+    pageCount: 320,
+    genres: ['Fantasia', 'Romance', 'Comédia', 'Aventura'],
   })
 })

@@ -40,6 +40,14 @@ const labels = {
                   {{ book.author
                   }}<template v-if="book.seriesVolume"> · Volume {{ book.seriesVolume }}</template>
                 </p>
+                <p v-if="book.publisher || book.pageCount">
+                  {{
+                    [book.publisher, book.pageCount ? `${book.pageCount} páginas` : null]
+                      .filter(Boolean)
+                      .join(' · ')
+                  }}
+                </p>
+                <p v-if="book.genres.length">{{ book.genres.join(' · ') }}</p>
               </div>
               <span class="badge">{{ labels[book.status] }}</span>
             </li>
@@ -54,6 +62,14 @@ const labels = {
           <div>
             <strong>{{ book.title }}</strong>
             <p>{{ book.author }}</p>
+            <p v-if="book.publisher || book.pageCount">
+              {{
+                [book.publisher, book.pageCount ? `${book.pageCount} páginas` : null]
+                  .filter(Boolean)
+                  .join(' · ')
+              }}
+            </p>
+            <p v-if="book.genres.length">{{ book.genres.join(' · ') }}</p>
           </div>
           <span class="badge">{{ labels[book.status] }}</span>
         </li>

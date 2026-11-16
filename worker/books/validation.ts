@@ -21,6 +21,15 @@ const bookSchema = z
       .nullable()
       .optional()
       .transform((v) => v ?? null),
+    publisher: optionalText(250),
+    pageCount: z
+      .number()
+      .int()
+      .min(1)
+      .max(1000000)
+      .nullable()
+      .optional()
+      .transform((v) => v ?? null),
     quantity: z.number().int().min(1).max(10000),
     status: z.enum(['nao_lido', 'lendo', 'concluido', 'abandonado']),
     seriesName: optionalText(200),
@@ -32,7 +41,7 @@ const bookSchema = z
       .nullable()
       .optional()
       .transform((v) => v ?? null),
-    genres: z.array(z.string().trim().min(1).max(80)).max(20).default([]),
+    genres: z.array(z.string().trim().min(1).max(80)).max(4).default([]),
   })
   .strict()
   .superRefine((book, ctx) => {

@@ -32,3 +32,17 @@ describe('database migration', () => {
     db.close()
   })
 })
+
+it('adds optional metadata without changing existing books or genres', () => {
+  const db = database()
+  db.exec(
+    "INSERT INTO books (id, title, author) VALUES ('1', 'Livro', 'Autora'); INSERT INTO genres (id, name) VALUES ('g', 'Romance'); INSERT INTO book_genres VALUES ('1', 'g');",
+  )
+  db.exec(readFileSync(new URL('../../migrations/0002_book_metadata.sql', import.meta.url), 'utf8'))
+  expect(
+    db.prepare('SELECT title, publisher, page_count FROM books WHERE id = ?').get('1'),
+  ).toMatchObject({ title: 'Livro', publisher: null, page_count: null })
+  expect(db.prepare('SELECT count(*) AS count FROM book_genres').get()).toMatchObject({ count: 1 })
+  expect(() => db.prepare('UPDATE books SET page_count = ? WHERE id = ?').run(0, '1')).toThrow()
+  db.close()
+})

@@ -15,6 +15,8 @@ const form = reactive({
   author: '',
   isbn: '',
   genres: '',
+  publisher: '',
+  pageCount: '',
   seriesName: '',
   seriesVolume: '',
   quantity: 1,
@@ -28,6 +30,9 @@ const coverUrl = ref<string | null>(null)
 let lookupVersion = 0
 let automaticTitle = ''
 let automaticAuthor = ''
+let automaticPublisher = ''
+let automaticPageCount = ''
+let automaticGenres = ''
 let automaticIsbn: string | null = null
 const scheduler = createLookupScheduler(() => void lookup())
 onBeforeUnmount(() => {
@@ -39,8 +44,14 @@ function isbnChanged() {
   if (automaticIsbn && normalizeIsbn(form.isbn) !== automaticIsbn) {
     if (automaticTitle && form.title === automaticTitle) form.title = ''
     if (automaticAuthor && form.author === automaticAuthor) form.author = ''
+    if (automaticPublisher && form.publisher === automaticPublisher) form.publisher = ''
+    if (automaticPageCount && form.pageCount === automaticPageCount) form.pageCount = ''
+    if (automaticGenres && form.genres === automaticGenres) form.genres = ''
     automaticTitle = ''
     automaticAuthor = ''
+    automaticPublisher = ''
+    automaticPageCount = ''
+    automaticGenres = ''
     automaticIsbn = null
   }
   lookupVersion++
@@ -66,6 +77,9 @@ async function lookup() {
   const version = ++lookupVersion
   const initialTitle = form.title
   const initialAuthor = form.author
+  const initialPublisher = form.publisher
+  const initialPageCount = form.pageCount
+  const initialGenres = form.genres
   lookingUp.value = true
   lookupMessage.value = ''
   coverUrl.value = null
@@ -80,6 +94,22 @@ async function lookup() {
     const author = autofillField(form.author, initialAuthor, automaticAuthor, result.author)
     automaticTitle = title === result.title ? title : ''
     automaticAuthor = author === result.author ? author : ''
+    const publisher = autofillField(
+      form.publisher,
+      initialPublisher,
+      automaticPublisher,
+      result.publisher,
+    )
+    const pages = result.pageCount?.toString() ?? ''
+    const pageCount = autofillField(form.pageCount, initialPageCount, automaticPageCount, pages)
+    const foundGenres = result.genres.join(', ')
+    const genres = autofillField(form.genres, initialGenres, automaticGenres, foundGenres)
+    automaticPublisher = publisher === result.publisher ? publisher : ''
+    automaticPageCount = pageCount === pages ? pageCount : ''
+    automaticGenres = genres === foundGenres ? genres : ''
+    form.publisher = publisher
+    form.pageCount = pageCount
+    form.genres = genres
     automaticIsbn = isbn
     form.title = title
     form.author = author
@@ -116,14 +146,22 @@ async function submit() {
     return
   }
   if (
-    genres.length > 20 ||
+    genres.length > 4 ||
     genres.some((genre) => genre.length > 80) ||
     new Set(genres.map((genre) => genre.toLowerCase())).size !== genres.length
   ) {
-    error.value = 'Informe até 20 gêneros diferentes, com até 80 caracteres cada.'
+    error.value = 'Informe até 4 gêneros diferentes, com até 80 caracteres cada.'
     return
   }
   const volume = form.seriesVolume ? Number(form.seriesVolume) : null
+  const pageCount = form.pageCount ? Number(form.pageCount) : null
+  if (
+    pageCount !== null &&
+    (!Number.isInteger(pageCount) || pageCount < 1 || pageCount > 1000000)
+  ) {
+    error.value = 'O número de páginas deve ser um inteiro entre 1 e 1000000.'
+    return
+  }
   if (
     !Number.isInteger(form.quantity) ||
     form.quantity < 1 ||
@@ -140,6 +178,8 @@ async function submit() {
       author: form.author.trim(),
       isbn: form.isbn.trim() || null,
       coverUrl: coverUrl.value,
+      publisher: form.publisher.trim() || null,
+      pageCount,
       genres,
       seriesName: form.seriesName.trim() || null,
       seriesVolume: volume,
@@ -196,9 +236,18 @@ async function submit() {
             </div>
           </div>
           <label
-            >Gêneros (separados por vírgula)<input
+            >Gêneros (até 4, separados por vírgula)<input
               v-model="form.genres"
               placeholder="Ex.: Fantasia, Romance"
+          /></label>
+          <label>Editora (opcional)<input v-model="form.publisher" maxlength="250" /></label>
+          <label
+            >Número de páginas (opcional)<input
+              v-model="form.pageCount"
+              type="number"
+              min="1"
+              max="1000000"
+              step="1"
           /></label>
           <label>Série (opcional)<input v-model="form.seriesName" maxlength="200" /></label>
           <label

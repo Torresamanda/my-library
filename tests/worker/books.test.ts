@@ -11,6 +11,7 @@ function createDb(): Database {
   const db = new DatabaseSync(':memory:')
   db.exec('PRAGMA foreign_keys = ON')
   db.exec(readFileSync(new URL('../../migrations/0001_initial.sql', import.meta.url), 'utf8'))
+  db.exec(readFileSync(new URL('../../migrations/0002_book_metadata.sql', import.meta.url), 'utf8'))
   function prepare(sql: string): Statement {
     const statement = db.prepare(sql)
     let values: SQLInputValue[] = []
@@ -140,6 +141,34 @@ describe('books API', () => {
         })
       ).status,
     ).toBe(400)
+  })
+  it('validates and stores edition metadata and limits genres', async () => {
+    const response = await send(env, 'POST', '/api/books', {
+      ...example,
+      publisher: 'Editora',
+      pageCount: 320,
+      genres: ['A', 'B', 'C', 'D'],
+    })
+    expect(response.status).toBe(201)
+    const { book } = (await response.json()) as { book: { id: string } }
+    expect(await (await send(env, 'GET', `/api/books/${book.id}`)).json()).toMatchObject({
+      book: { publisher: 'Editora', pageCount: 320, genres: ['A', 'B', 'C', 'D'] },
+    })
+    const edited = await send(env, 'PUT', `/api/books/${book.id}`, { ...example, quantity: 3 })
+    expect(await edited.json()).toMatchObject({ book: { publisher: 'Editora', pageCount: 320 } })
+    expect(
+      (
+        await send(env, 'POST', '/api/books', {
+          ...example,
+          isbn: null,
+          genres: ['A', 'B', 'C', 'D', 'E'],
+        })
+      ).status,
+    ).toBe(400)
+    for (const pageCount of [0, -1, 1.5, 1000001, '320'])
+      expect(
+        (await send(env, 'POST', '/api/books', { ...example, isbn: null, pageCount })).status,
+      ).toBe(400)
   })
   it('does not permit unauthorized collection access', async () => {
     vi.mocked(authenticate).mockResolvedValue(false)

@@ -331,3 +331,9 @@ Estas decisões substituem dúvidas e propostas anteriores conflitantes neste ar
 
 - [x] Priorizar o título e a capa da edição correspondente ao ISBN e solicitar resultados em português à Open Library; usar os dados disponíveis quando a edição não trouxer esses campos.
 - [ ] Validar com ISBNs brasileiros reais. A fonte não distingue necessariamente português do Brasil de outras variantes e pode não ter os dados da edição.
+
+### Dados adicionais da edição
+
+- [x] Limitar novos salvamentos a quatro gêneros e sugerir até quatro assuntos retornados pela edição, sempre editáveis; fontes externas podem fornecer assuntos em outros idiomas ou pouco precisos.
+- [x] Permitir consultar e salvar editora e número de páginas opcionais, com preenchimento automático quando disponíveis; preservar alterações manuais e registros existentes.
+- [ ] Antes de publicar, aplicar a migração `0002_book_metadata.sql` ao D1 remoto com autorização e conferir a versão; validar o cadastro em dispositivos reais. Livros existentes com mais de quatro gêneros são preservados, mas precisam ser ajustados a quatro para um novo salvamento.
