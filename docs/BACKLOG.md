@@ -520,3 +520,5 @@ As combinações principais de texto, texto secundário e botões dos temas clar
 
 - [x] Registrar preferência por permitir salvar após os dados principais e preparar [wireframe do cadastro em etapas](WIREFRAME-CADASTRO-ETAPAS.md).
 - [ ] Validar divisão das etapas, ações de salvamento e acesso direto na edição; após aprovação, preparar protótipo visual antes de implementar.
+- [x] Preparar [três alternativas visuais de cadastro](PROTOTIPOS-CADASTRO-3-VERSOES.html), a pedido da proprietária, para comparação no celular e no computador.
+- [ ] Escolher e validar uma alternativa e seu fluxo antes de implementar a mudança no aplicativo.

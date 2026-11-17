@@ -1,0 +1,853 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Três propostas · Cadastro de livro</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      :root {
+        color-scheme: dark;
+        font-family:
+          system-ui,
+          -apple-system,
+          sans-serif;
+        --bg: #100e24;
+        --surface: #1b1831;
+        --support: #211b35;
+        --text: #faf5f7;
+        --muted: #c7bdd0;
+        --accent: #dba3ed;
+        --on: #20102c;
+        --border: #51405e;
+        --tag: #413050;
+      }
+      body.light {
+        color-scheme: light;
+        --bg: #fff9ef;
+        --surface: #fff9ef;
+        --support: #eed9f2;
+        --text: #4f215e;
+        --muted: #754080;
+        --accent: #4f215e;
+        --on: #fff9ef;
+        --border: #9a6ca2;
+        --tag: #eed9f2;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.5;
+      }
+      button,
+      input,
+      textarea {
+        font: inherit;
+      }
+      button {
+        cursor: pointer;
+      }
+      button:disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
+      }
+      button:focus-visible,
+      input:focus-visible,
+      textarea:focus-visible,
+      summary:focus-visible,
+      label:has(input:focus-visible) {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+      .notice {
+        text-align: center;
+        padding: 12px 16px;
+        background: var(--support);
+        font-size: 14px;
+      }
+      .page {
+        width: min(100% - 32px, 1120px);
+        margin: 32px auto 48px;
+      }
+      .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      h1,
+      h2,
+      h3 {
+        font-family: Georgia, serif;
+      }
+      h1 {
+        font-size: clamp(28px, 5vw, 40px);
+        line-height: 1.15;
+        margin: 0 0 8px;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.2;
+        margin: 0;
+      }
+      h3 {
+        font-size: 20px;
+        line-height: 1.2;
+        margin: 0 0 4px;
+      }
+      p {
+        margin: 0;
+      }
+      .muted {
+        color: var(--muted);
+      }
+      .intro {
+        max-width: 680px;
+      }
+      .button {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        min-height: 44px;
+        padding: 8px 16px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--surface);
+        color: var(--text);
+        font-weight: 600;
+      }
+      .button.primary {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: var(--on);
+      }
+      .button.icon {
+        width: 44px;
+        padding: 8px;
+        font-size: 20px;
+      }
+      .options {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+        margin: 24px 0;
+      }
+      .option {
+        display: block;
+        min-height: 88px;
+        padding: 16px;
+        text-align: left;
+        color: var(--text);
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+      }
+      .option[aria-pressed='true'] {
+        border-color: var(--accent);
+        box-shadow: inset 0 0 0 1px var(--accent);
+        background: var(--support);
+      }
+      .option strong,
+      .option span {
+        display: block;
+      }
+      .option span {
+        margin-top: 4px;
+        color: var(--muted);
+        font-size: 13px;
+      }
+      .stage {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(260px, 320px);
+        gap: 24px;
+        align-items: start;
+      }
+      .canvas {
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--surface);
+        overflow: hidden;
+      }
+      .canvas-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 24px 24px 16px;
+      }
+      .canvas-head .subtitle {
+        margin-top: 4px;
+        color: var(--muted);
+        font-size: 14px;
+      }
+      .note {
+        padding: 20px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--support);
+      }
+      .note h2 {
+        font-size: 20px;
+      }
+      .note p,
+      .note li {
+        color: var(--muted);
+        font-size: 14px;
+      }
+      .note p {
+        margin-top: 8px;
+      }
+      .note ul {
+        padding-left: 20px;
+        margin: 12px 0 0;
+      }
+      .note li {
+        margin-top: 8px;
+      }
+      .canvas-body {
+        padding: 0 24px 24px;
+      }
+      .steps {
+        display: flex;
+        gap: 8px;
+        margin: 8px 0 24px;
+      }
+      .step {
+        display: flex;
+        flex: 1;
+        min-width: 0;
+        align-items: center;
+        gap: 8px;
+        padding: 8px;
+        border: 0;
+        border-bottom: 2px solid var(--border);
+        background: transparent;
+        color: var(--muted);
+        font-size: 13px;
+        text-align: left;
+      }
+      .step[aria-current='step'] {
+        border-color: var(--accent);
+        color: var(--text);
+        font-weight: 700;
+      }
+      .step-number {
+        display: grid;
+        place-items: center;
+        flex: none;
+        width: 28px;
+        height: 28px;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        font-size: 12px;
+      }
+      .step[aria-current='step'] .step-number {
+        background: var(--tag);
+        border-color: var(--accent);
+      }
+      .eyebrow {
+        color: var(--accent);
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+      .section-intro {
+        color: var(--muted);
+        font-size: 14px;
+        margin: 4px 0 20px;
+      }
+      .field {
+        display: grid;
+        gap: 8px;
+        min-width: 0;
+        font-size: 14px;
+        font-weight: 600;
+      }
+      .field input,
+      .field textarea {
+        width: 100%;
+        min-width: 0;
+        min-height: 44px;
+        padding: 8px 12px;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        background: var(--bg);
+        color: var(--text);
+        font-weight: 400;
+      }
+      .field textarea {
+        min-height: 104px;
+        resize: vertical;
+      }
+      .field-hint {
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 400;
+      }
+      .isbn-row {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto auto;
+        gap: 8px;
+        align-items: end;
+      }
+      .book-preview {
+        display: grid;
+        grid-template-columns: 96px minmax(0, 1fr);
+        gap: 16px;
+        margin-top: 20px;
+      }
+      .cover {
+        display: grid;
+        place-items: center;
+        aspect-ratio: 2/3;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        background: var(--tag);
+        color: var(--accent);
+      }
+      .cover svg {
+        width: 36px;
+        height: 36px;
+      }
+      .cover-text {
+        color: var(--muted);
+        font-size: 12px;
+        margin-top: 8px;
+      }
+      .book-fields {
+        display: grid;
+        gap: 12px;
+        align-content: start;
+      }
+      .spaced {
+        margin-top: 20px;
+      }
+      fieldset {
+        padding: 0;
+        margin: 0;
+        min-width: 0;
+        border: 0;
+      }
+      legend {
+        font-size: 14px;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+      .choices {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .choice {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+        padding: 8px 12px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--bg);
+        font-size: 14px;
+        cursor: pointer;
+      }
+      .choice:has(input:checked) {
+        border-color: var(--accent);
+        background: var(--tag);
+        font-weight: 700;
+      }
+      .choice:has(input:checked) span::before {
+        content: '✓ ';
+      }
+      .choice input {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        opacity: 0;
+      }
+      .data-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      .full {
+        grid-column: 1/-1;
+      }
+      details.extra {
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--bg);
+        margin-top: 16px;
+      }
+      details.extra summary {
+        padding: 12px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .extra-fields {
+        padding: 0 12px 12px;
+      }
+      .stars {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 4px;
+      }
+      .star {
+        display: grid;
+        place-items: center;
+        min-width: 44px;
+        height: 44px;
+        border: 0;
+        background: transparent;
+        color: #e8bb55;
+        font-size: 28px;
+      }
+      .light .star {
+        color: #805600;
+      }
+      .favorite {
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .favorite input {
+        width: 20px;
+        height: 20px;
+        accent-color: var(--accent);
+      }
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-top: 24px;
+        padding-top: 16px;
+        border-top: 1px solid var(--border);
+      }
+      .actions .save {
+        margin-left: auto;
+      }
+      .error {
+        margin-top: 16px;
+        padding: 12px;
+        border-left: 4px solid var(--accent);
+        background: var(--support);
+        border-radius: 4px;
+      }
+      .text-button {
+        border: 0;
+        padding: 8px;
+        min-height: 44px;
+        background: transparent;
+        color: var(--accent);
+        text-decoration: underline;
+        text-underline-offset: 4px;
+      }
+      .variant-2 .canvas-head {
+        border-bottom: 1px solid var(--border);
+      }
+      .variant-2 .canvas-body {
+        padding-top: 20px;
+      }
+      .variant-2 .quick-card {
+        padding: 16px;
+        background: var(--support);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+      }
+      .variant-2 .fold {
+        margin-top: 12px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--bg);
+      }
+      .variant-2 .fold summary {
+        padding: 16px;
+        cursor: pointer;
+        font-weight: 700;
+      }
+      .fold-inner {
+        padding: 0 16px 16px;
+      }
+      .variant-3 .canvas-head {
+        background: var(--support);
+      }
+      .variant-3 .canvas-body {
+        display: grid;
+        grid-template-columns: 180px minmax(0, 1fr);
+        gap: 20px;
+        padding-top: 20px;
+      }
+      .variant-3 .steps {
+        display: flex;
+        flex-direction: column;
+        margin: 0;
+        align-self: start;
+      }
+      .variant-3 .step {
+        flex: auto;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+      }
+      .variant-3 .step[aria-current='step'] {
+        background: var(--tag);
+        border-color: var(--accent);
+      }
+      .variant-3 .content-card {
+        padding: 16px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--bg);
+      }
+      .variant-3 .actions {
+        grid-column: 1/-1;
+      }
+      @media (max-width: 760px) {
+        .stage {
+          grid-template-columns: 1fr;
+        }
+        .note {
+          order: 2;
+        }
+        .options {
+          grid-template-columns: 1fr;
+        }
+        .option {
+          min-height: 0;
+        }
+        .variant-3 .canvas-body {
+          grid-template-columns: 1fr;
+        }
+        .variant-3 .steps {
+          flex-direction: row;
+          overflow-x: auto;
+        }
+        .variant-3 .step {
+          white-space: nowrap;
+        }
+      }
+      @media (max-width: 520px) {
+        .page {
+          margin-top: 16px;
+        }
+        .canvas-head {
+          padding: 16px 16px 12px;
+        }
+        .canvas-body {
+          padding: 0 16px 16px;
+        }
+        .isbn-row {
+          grid-template-columns: 1fr 1fr;
+        }
+        .isbn-row .field {
+          grid-column: 1/-1;
+        }
+        .book-preview {
+          grid-template-columns: 80px minmax(0, 1fr);
+        }
+        .data-grid {
+          grid-template-columns: 1fr;
+        }
+        .full {
+          grid-column: auto;
+        }
+        .step {
+          padding: 8px 4px;
+          font-size: 12px;
+        }
+        .step-number {
+          display: none;
+        }
+        .actions .button.primary {
+          width: 100%;
+          order: -1;
+        }
+        .actions .save {
+          margin-left: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="notice">Protótipos para comparação · Dados fictícios · Nenhum livro é salvo</div>
+    <main class="page">
+      <header class="page-header">
+        <div>
+          <h1>Um cadastro mais leve</h1>
+          <p class="muted intro">
+            Três caminhos para adicionar livros com menos rolagem. Escolha uma proposta e
+            experimente as interações.
+          </p>
+        </div>
+        <button
+          id="theme"
+          class="button icon"
+          type="button"
+          aria-label="Ativar tema claro"
+          title="Alternar tema"
+        >
+          ☼
+        </button>
+      </header>
+      <nav class="options" aria-label="Escolher proposta visual">
+        <button class="option" type="button" data-variant="1" aria-pressed="true">
+          <strong>01 · Passos suaves</strong><span>Uma coisa de cada vez</span></button
+        ><button class="option" type="button" data-variant="2" aria-pressed="false">
+          <strong>02 · Ficha compacta</strong
+          ><span>Essencial primeiro, detalhes sob demanda</span></button
+        ><button class="option" type="button" data-variant="3" aria-pressed="false">
+          <strong>03 · Meu livro</strong><span>Áreas acessíveis a qualquer momento</span>
+        </button>
+      </nav>
+      <div class="stage">
+        <div id="canvas" class="canvas variant-1"></div>
+        <aside class="note" id="explanation"></aside>
+      </div>
+    </main>
+    <script>
+      const state = {
+        variant: 1,
+        step: 0,
+        title: '',
+        author: '',
+        isbn: '',
+        media: '',
+        genres: '',
+        publisher: '',
+        pages: '',
+        series: '',
+        volume: '',
+        ownership: [],
+        quantity: '1',
+        status: 'nao_lido',
+        favorite: false,
+        rating: 0,
+        comment: '',
+        notice: '',
+        error: '',
+        folds: { organization: false, reading: false },
+      }
+      const canvas = document.querySelector('#canvas'),
+        explanation = document.querySelector('#explanation')
+      const descriptions = {
+        1: {
+          title: '01 · Passos suaves',
+          text: 'O cadastro é dividido em três telas curtas, com progresso visível e uma decisão por vez.',
+          bullets: [
+            'Título e autor são suficientes para salvar.',
+            'Avance para organização e leitura apenas se quiser.',
+            'Voltar preserva o preenchimento.',
+          ],
+        },
+        2: {
+          title: '02 · Ficha compacta',
+          text: 'O essencial fica disponível imediatamente. Os detalhes aparecem somente quando você abre cada seção.',
+          bullets: [
+            'Uma única tela, com áreas opcionais recolhidas.',
+            'Ação de salvar fica próxima dos campos principais.',
+            'Indicada para quem prefere não passar por etapas.',
+          ],
+        },
+        3: {
+          title: '03 · Meu livro',
+          text: 'Um painel com áreas independentes, destacando a capa e permitindo navegar diretamente entre os assuntos.',
+          bullets: [
+            'Acesso direto a Livro, Organização e Leitura.',
+            'No computador, as áreas ficam ao lado do conteúdo.',
+            'No celular, a navegação aparece no topo.',
+          ],
+        },
+      }
+      const esc = (value) =>
+        String(value).replace(
+          /[&<>"']/g,
+          (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char],
+        )
+      const cover =
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 6c-3-2-6-2-9-1v13c3-1 6-1 9 1m0-13c3-2 6-2 9-1v13c-3-1-6-1-9 1m0-13v13"/></svg>'
+      const labels = ['Livro', 'Organização', 'Leitura']
+      function field(name, label, placeholder = '', type = 'text') {
+        return `<label class="field">${label}<input data-field="${name}" type="${type}" value="${esc(state[name])}" placeholder="${placeholder}" ${type === 'number' ? 'min="1"' : ''}></label>`
+      }
+      function choices(name, options, multiple = false) {
+        return `<div class="choices">${options.map(([value, label]) => `<label class="choice"><input type="${multiple ? 'checkbox' : 'radio'}" name="${name}" data-field="${name}" value="${value}" ${(multiple ? state[name].includes(value) : state[name] === value) ? 'checked' : ''}><span>${label}</span></label>`).join('')}</div>`
+      }
+      function book() {
+        return `<div class="isbn-row">${field('isbn', 'ISBN <span class="field-hint">Opcional</span>', 'Digite o ISBN')}<button class="button" type="button" data-demo="consulta">Consultar</button><button class="button" type="button" data-demo="câmera">Ler com câmera</button></div><p class="field-hint spaced">Sem ISBN? Preencha os dados abaixo. A consulta real continua disponível no site.</p><div class="book-preview"><div><div class="cover">${cover}</div><p class="cover-text">Prévia da capa</p></div><div class="book-fields">${field('title', 'Título *', 'Nome do livro')}${field('author', 'Autor *', 'Nome da autoria')}</div></div><button class="text-button" type="button" data-demo="pesquisa de capas">Pesquisar capa</button>`
+      }
+      function organization() {
+        return `<fieldset><legend>Tipo de obra <span class="field-hint">· opcional</span></legend>${choices(
+          'media',
+          [
+            ['livro', 'Livro'],
+            ['quadrinho', 'Quadrinho'],
+            ['manga', 'Mangá'],
+            ['outro', 'Outro'],
+          ],
+        )}<button class="text-button" type="button" data-clear="media">Limpar tipo</button></fieldset><fieldset class="spaced"><legend>Formato ou origem <span class="field-hint">· escolha quantos se aplicarem</span></legend>${choices(
+          'ownership',
+          [
+            ['fisico', 'Tenho físico'],
+            ['ebook', 'Tenho e-book'],
+            ['nao_tenho', 'Não tenho'],
+          ],
+          true,
+        )}</fieldset>${state.ownership.some((value) => value === 'fisico' || value === 'ebook') ? `<div class="spaced">${field('quantity', 'Exemplares *', '', 'number')}</div>` : ''}<div class="spaced">${field('genres', 'Gêneros <span class="field-hint">· até 4, separados por vírgula</span>', 'Fantasia, Romance')}</div><details class="extra" ${state.publisher || state.pages || state.series || state.volume ? 'open' : ''}><summary>Mais dados da edição <span class="field-hint">· editora, páginas e série</span></summary><div class="extra-fields data-grid">${field('publisher', 'Editora <span class="field-hint">Opcional</span>')}${field('pages', 'Páginas <span class="field-hint">Opcional</span>', '', 'number')}${field('series', 'Série <span class="field-hint">Opcional</span>')}${field('volume', 'Volume <span class="field-hint">Opcional</span>', '', 'number')}</div></details>`
+      }
+      function reading() {
+        return `<fieldset><legend>Status de leitura</legend>${choices('status', [
+          ['nao_lido', 'Não lido'],
+          ['lendo', 'Lendo'],
+          ['concluido', 'Concluído'],
+          ['abandonado', 'Abandonado'],
+        ])}</fieldset><label class="favorite spaced"><input type="checkbox" data-field="favorite" ${state.favorite ? 'checked' : ''}> <span>${state.favorite ? '♥' : '♡'} Marcar como favorito</span></label><fieldset class="spaced"><legend>Avaliação <span class="field-hint">· opcional</span></legend><div class="stars">${[1, 2, 3, 4, 5].map((n) => `<button class="star" type="button" data-rating="${n}" aria-label="${n} ${n === 1 ? 'estrela' : 'estrelas'}" aria-pressed="${state.rating === n}">${n <= state.rating ? '★' : '☆'}</button>`).join('')}<button class="text-button" type="button" data-rating="0">Limpar</button></div></fieldset><label class="field spaced">Comentário pessoal <span class="field-hint">Opcional · até 500 caracteres</span><textarea data-field="comment" placeholder="O que achou desta leitura?">${esc(state.comment)}</textarea></label><p class="field-hint">A barra de formatação real será preservada na implementação.</p>`
+      }
+      function nav() {
+        return `<nav class="steps" aria-label="Seções do cadastro">${labels.map((label, index) => `<button type="button" class="step" data-step="${index}" ${index === state.step ? 'aria-current="step"' : ''}><span class="step-number">${index + 1}</span><span>${label}</span></button>`).join('')}</nav>`
+      }
+      function actions(includeContinue) {
+        return `<div class="actions">${state.step > 0 && state.variant !== 2 ? '<button type="button" class="button" data-back>Voltar</button>' : ''}${includeContinue && state.step < 2 ? '<button type="button" class="button" data-next>Continuar</button>' : ''}<button type="button" class="button primary save" data-save>Salvar livro</button></div>`
+      }
+      function render() {
+        document
+          .querySelectorAll('[data-variant]')
+          .forEach((button) =>
+            button.setAttribute(
+              'aria-pressed',
+              String(Number(button.dataset.variant) === state.variant),
+            ),
+          )
+        const d = descriptions[state.variant]
+        explanation.innerHTML = `<h2>${d.title}</h2><p>${d.text}</p><ul>${d.bullets.map((item) => `<li>${item}</li>`).join('')}</ul><p>Esta prévia usa somente dados fictícios. Não consulta serviços nem salva livros.</p>`
+        canvas.className = `canvas variant-${state.variant}`
+        const head =
+          '<header class="canvas-head"><div><h2>Adicionar livro</h2><p class="subtitle">Seu livro, do seu jeito.</p></div><button class="button icon" type="button" data-demo="fechamento" aria-label="Fechar prévia">×</button></header>'
+        const error = state.error ? `<p class="error" role="alert">${esc(state.error)}</p>` : ''
+        const notice = state.notice ? `<p class="error" role="status">${esc(state.notice)}</p>` : ''
+        if (state.variant === 2) {
+          canvas.innerHTML =
+            head +
+            `<div class="canvas-body"><div class="quick-card"><p class="eyebrow">Comece por aqui</p><h3>Qual livro você quer adicionar?</h3><p class="section-intro">Título e autor são obrigatórios; o restante pode ficar para depois.</p>${book()}</div>${error}${notice}${actions(false)}<details class="fold" data-fold="organization" ${state.folds.organization ? 'open' : ''}><summary>Organização <span class="field-hint">· tipo, formato, gêneros e edição</span></summary><div class="fold-inner">${organization()}</div></details><details class="fold" data-fold="reading" ${state.folds.reading ? 'open' : ''}><summary>Minha leitura <span class="field-hint">· status, favorito e comentário</span></summary><div class="fold-inner">${reading()}</div></details></div>`
+        } else {
+          const content = [book, organization, reading][state.step]()
+          const heading = [
+            'Qual livro vamos adicionar?',
+            'Como organizar esta edição?',
+            'Como está sua leitura?',
+          ][state.step]
+          const subtitle = [
+            'Use o ISBN ou preencha manualmente.',
+            'Tudo aqui é opcional e pode ser preenchido depois.',
+            'Você pode preencher esta parte depois.',
+          ][state.step]
+          const card = `<div class="${state.variant === 3 ? 'content-card' : ''}"><p class="eyebrow">${state.variant === 1 ? `Etapa ${state.step + 1} de 3` : 'Sua biblioteca'}</p><h3 tabindex="-1" id="step-heading">${heading}</h3><p class="section-intro">${subtitle}</p>${content}${error}${notice}</div>`
+          canvas.innerHTML = head + `<div class="canvas-body">${nav()}${card}${actions(true)}</div>`
+        }
+      }
+      function updateInput(target) {
+        const key = target.dataset.field
+        if (!key) return
+        if (key === 'ownership') {
+          state.ownership = target.checked
+            ? [...state.ownership, target.value]
+            : state.ownership.filter((value) => value !== target.value)
+          render()
+          return
+        }
+        state[key] = target.type === 'checkbox' ? target.checked : target.value
+        if (key === 'favorite')
+          target.nextElementSibling.textContent = `${state.favorite ? '♥' : '♡'} Marcar como favorito`
+      }
+      canvas.addEventListener(
+        'toggle',
+        (event) => {
+          if (event.target.dataset.fold) state.folds[event.target.dataset.fold] = event.target.open
+        },
+        true,
+      )
+      document.addEventListener('input', (event) => {
+        if (event.target.matches('[data-field]')) updateInput(event.target)
+      })
+      document.addEventListener('click', (event) => {
+        const button = event.target.closest('button')
+        if (!button) return
+        if (button.dataset.variant) {
+          state.variant = Number(button.dataset.variant)
+          state.step = 0
+          state.error = ''
+          state.notice = ''
+          render()
+          return
+        }
+        if (button.dataset.step !== undefined) {
+          state.step = Number(button.dataset.step)
+          state.error = ''
+          render()
+          document.querySelector('#step-heading')?.focus()
+          return
+        }
+        if (button.hasAttribute('data-next') || button.hasAttribute('data-back')) {
+          if (
+            button.hasAttribute('data-next') &&
+            state.step === 0 &&
+            (!state.title.trim() || !state.author.trim())
+          ) {
+            state.error = 'Preencha título e autor para continuar.'
+            render()
+            return
+          }
+          state.step = Math.max(
+            0,
+            Math.min(2, state.step + (button.hasAttribute('data-next') ? 1 : -1)),
+          )
+          state.error = ''
+          render()
+          document.querySelector('#step-heading')?.focus()
+          return
+        }
+        if (button.dataset.clear === 'media') {
+          state.media = ''
+          render()
+          return
+        }
+        if (button.dataset.rating !== undefined) {
+          state.rating = Number(button.dataset.rating)
+          render()
+          return
+        }
+        if (button.dataset.demo) {
+          state.notice = `Prévia ilustrativa: ${button.dataset.demo} não é executada aqui.`
+          render()
+          return
+        }
+        if (button.hasAttribute('data-save')) {
+          if (!state.title.trim() || !state.author.trim()) {
+            state.step = 0
+            state.error = 'Preencha título e autor para salvar.'
+            state.notice = ''
+          } else {
+            state.error = ''
+            state.notice = 'Prévia concluída: nenhum livro foi salvo.'
+          }
+          render()
+        }
+      })
+      document.querySelector('#theme').addEventListener('click', (event) => {
+        const light = document.body.classList.toggle('light')
+        event.currentTarget.textContent = light ? '☾' : '☼'
+        event.currentTarget.setAttribute(
+          'aria-label',
+          light ? 'Ativar tema escuro' : 'Ativar tema claro',
+        )
+      })
+      render()
+    </script>
+  </body>
+</html>
