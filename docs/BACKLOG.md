@@ -504,4 +504,5 @@ As combinações principais de texto, texto secundário e botões dos temas clar
 
 - [x] Preparar [wireframe da pesquisa visual de capas](WIREFRAME-MELHORIA-PESQUISA-CAPAS.md), com seleção, identificação da edição e estados.
 - [x] Validar o wireframe com a proprietária e preparar [protótipo visual](PROTOTIPO-MELHORIA-PESQUISA-CAPAS.html).
-- [ ] Validar o protótipo visual, incluindo ações fixas e estados, antes de alterar a interface.
+- [x] Validar o protótipo visual e implementar a grade de capas, seleção, estados e ações acessíveis durante a rolagem.
+- [ ] Validar pesquisa real, rolagem, foco e seleção nos dois temas e em dispositivos reais, após configurar o serviço.
