@@ -489,7 +489,8 @@ As combinações principais de texto, texto secundário e botões dos temas clar
 ### Preparação da versão 1.5.0
 
 - [x] Identificar por versão semântica os campos da coleção, a reorganização do cadastro e as melhorias de interface.
-- [ ] Aplicar a migração `0003_collection_fields.sql` ao D1 remoto e verificar a publicação e os fluxos autenticados em dispositivos reais.
+- [x] Aplicar a migração `0003_collection_fields.sql` ao D1 remoto na publicação da versão 1.5.0.
+- [ ] Validar os fluxos autenticados em dispositivos reais.
 
 ### Escolha de capa por pesquisa
 
@@ -497,7 +498,8 @@ As combinações principais de texto, texto secundário e botões dos temas clar
 - [x] Preparar [esquema de pesquisa e escolha de capa](WIREFRAME-PESQUISA-CAPAS.md), mantendo envio de arquivo para livros sem ISBN como alternativa.
 - [x] Validar o fluxo e preparar o [protótipo visual da pesquisa](PROTOTIPO-PESQUISA-CAPAS.html).
 - [x] Validar o protótipo visual e implementar pesquisa e seleção, atribuição e links do Google Books, configuração segura e testes.
-- [ ] Configurar a chave privada do Google Books e validar a pesquisa com o serviço real, nos temas e dispositivos suportados.
+- [x] Configurar a chave privada do Google Books na versão 1.6.0 de produção.
+- [ ] Validar a pesquisa autenticada com o serviço real, nos temas e dispositivos suportados.
 - [ ] Implementar envio privado ao R2 para livros sem ISBN, com limite de 2 MB e validação de tipo e conteúdo no servidor; não ativar serviços pagos.
 
 ### Melhoria da pesquisa de capas
@@ -529,3 +531,8 @@ As combinações principais de texto, texto secundário e botões dos temas clar
 - [x] Incluir atalho no cartão de série e preencher nome, editora e gêneros comuns, considerando a série completa mesmo com filtros.
 - [x] Preencher também a autoria quando for comum a todas as edições da série.
 - [ ] Validar o atalho e os dados sugeridos em dispositivos reais, inclusive quando houver dados divergentes ou ausentes.
+
+### Preparação da versão 1.7.0
+
+- [x] Identificar por versão semântica o cadastro em etapas, a atribuição na pesquisa e o atalho para adicionar livros às séries.
+- [ ] Validar em produção os fluxos autenticados de cadastro, câmera, pesquisa de capas e inclusão em série, em dispositivos reais.
