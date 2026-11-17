@@ -1,11 +1,16 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import BookCover from '../../books/components/BookCover.vue'
-import { PhHeart } from '../../../icons'
+import { PhHeart, PhPlus } from '../../../icons'
 import { groupBooks, type LibraryFilters } from '../domain/groupBooks'
 import type { LibraryBook } from '../services/books'
 const props = defineProps<{ books: LibraryBook[]; search: string; filters: LibraryFilters }>()
-const emit = defineEmits<{ select: [book: LibraryBook]; clear: []; add: [] }>()
+const emit = defineEmits<{
+  select: [book: LibraryBook]
+  clear: []
+  add: []
+  addSeries: [seriesName: string]
+}>()
 const groups = computed(() => groupBooks(props.books, props.search, props.filters))
 const openSeries = ref(new Set<string>())
 
@@ -29,6 +34,15 @@ const labels = {
       <h2>Minhas séries</h2>
       <div class="series-grid">
         <div v-for="(series, index) in groups.series" :key="series.name" class="series-card">
+          <button
+            type="button"
+            class="series-add secondary-button"
+            :aria-label="`Adicionar livro à série ${series.name}`"
+            :title="`Adicionar livro à série ${series.name}`"
+            @click="emit('addSeries', series.name)"
+          >
+            <PhPlus :size="20" aria-hidden="true" />
+          </button>
           <button
             type="button"
             class="series-toggle"

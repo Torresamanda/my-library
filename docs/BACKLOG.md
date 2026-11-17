@@ -523,3 +523,8 @@ As combinações principais de texto, texto secundário e botões dos temas clar
 - [x] Preparar [três alternativas visuais de cadastro](PROTOTIPOS-CADASTRO-3-VERSOES.html), a pedido da proprietária, para comparação no celular e no computador.
 - [x] Validar a alternativa “Passos suaves” e implementar o cadastro em etapas com salvamento antecipado e acesso direto às seções na edição.
 - [ ] Validar em dispositivos reais a navegação entre etapas, o foco, a câmera, a pesquisa de capa e a recuperação de erros nos dois temas.
+
+### Adicionar livro a uma série
+
+- [x] Incluir atalho no cartão de série e preencher nome, editora e gêneros comuns, considerando a série completa mesmo com filtros.
+- [ ] Validar o atalho e os dados sugeridos em dispositivos reais, inclusive quando houver dados divergentes ou ausentes.

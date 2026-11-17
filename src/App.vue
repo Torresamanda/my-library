@@ -16,6 +16,7 @@ import BookForm from './features/books/components/BookForm.vue'
 import BookDetails from './features/books/components/BookDetails.vue'
 import LibraryFilters from './features/library/components/LibraryFilters.vue'
 import { defaultFilters, groupBooks } from './features/library/domain/groupBooks'
+import { seriesDefaults, type SeriesDefaults } from './features/library/domain/seriesDefaults'
 import LibraryStats from './features/library/components/LibraryStats.vue'
 import LibraryShelf from './features/library/components/LibraryShelf.vue'
 import LoadingIndicator from './ui/LoadingIndicator.vue'
@@ -43,6 +44,7 @@ const books = ref<LibraryBook[]>([])
 const search = ref('')
 const filters = ref(defaultFilters())
 const adding = ref(false)
+const initialSeries = ref<SeriesDefaults | null>(null)
 const selectedBook = ref<LibraryBook | null>(null)
 const editingBook = ref<LibraryBook | null>(null)
 const loggingIn = ref(false)
@@ -116,6 +118,7 @@ async function bookSaved() {
     ? 'Livro atualizado na biblioteca.'
     : 'Livro adicionado à biblioteca.'
   adding.value = false
+  initialSeries.value = null
   editingBook.value = null
   selectedBook.value = null
   toast.success(success.value)
@@ -150,6 +153,18 @@ function selectBook(book: LibraryBook) {
 }
 
 function startAdding() {
+  initialSeries.value = null
+  adding.value = true
+  success.value = ''
+}
+
+function cancelAdding() {
+  adding.value = false
+  initialSeries.value = null
+}
+
+function addToSeries(name: string) {
+  initialSeries.value = seriesDefaults(books.value, name)
   adding.value = true
   success.value = ''
 }
@@ -172,6 +187,7 @@ onMounted(() => {
     requestVersion++
     books.value = []
     adding.value = false
+    initialSeries.value = null
     selectedBook.value = null
     editingBook.value = null
     success.value = ''
@@ -287,6 +303,7 @@ onBeforeUnmount(() => {
           @select="selectBook"
           @clear="clearFilters"
           @add="startAdding"
+          @add-series="addToSeries"
         />
       </template>
       <BookDetails
@@ -306,8 +323,9 @@ onBeforeUnmount(() => {
       />
       <BookForm
         v-if="adding && user && view === 'ready'"
+        :initial-series="initialSeries"
         :token="() => user!.getIdToken()"
-        @cancel="adding = false"
+        @cancel="cancelAdding"
         @saved="bookSaved"
       />
     </main>

@@ -1,5 +1,9 @@
 # Biblioteca virtual — planejamento
 
+## Atualização: adicionar livro a uma série
+
+A proprietária solicitou um atalho “+” no cartão da série. Ao abrir o cadastro por ele, preencher o nome da série e, quando houver concordância entre todos os livros da série, a editora e os gêneros comuns. Dados ausentes ou divergentes não são presumidos; considerar todos os livros da série, mesmo sob filtros. As informações permanecem editáveis e o cadastro continua exigindo título e autor.
+
 ## Atualização: cadastro em etapas
 
 A proprietária escolheu a proposta “Passos suaves”: Livro, Organização e Leitura. É possível salvar após informar título e autor, mantendo ISBN opcional; os demais dados podem ser preenchidos depois. Na edição, as seções podem ser acessadas diretamente. Todos os dados informados continuam sujeitos à validação antes do salvamento, e o preenchimento é preservado ao navegar entre etapas.

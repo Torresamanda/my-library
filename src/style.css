@@ -271,12 +271,24 @@ select:focus-visible {
   border: 1px solid var(--border);
   border-radius: var(--radius-medium);
 }
+.series-card {
+  position: relative;
+}
+.series-add {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 1;
+  width: 44px;
+  min-width: 44px;
+  padding: 8px;
+}
 .series-card .series-toggle {
   display: flex;
   align-items: center;
   gap: 16px;
   width: 100%;
-  padding: 16px;
+  padding: 16px 64px 16px 16px;
   border: 0;
   border-radius: var(--radius-medium);
   background: transparent;
@@ -1619,6 +1631,15 @@ select:focus-visible {
   .detail-hero .book-cover {
     width: 96px;
     min-width: 96px;
+  }
+}
+@media (max-width: 420px) {
+  .series-card .cover-grid {
+    width: 88px;
+    min-width: 88px;
+  }
+  .series-card .series-toggle {
+    padding-right: 56px;
   }
 }
 

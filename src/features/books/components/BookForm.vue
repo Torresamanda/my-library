@@ -16,6 +16,7 @@ import {
 import { reviewLength, type Review } from '../domain/review'
 import { prefillFromCover } from '../domain/coverPrefill'
 import { validateBookFields, type BookFormStep, type FormIssue } from '../domain/bookFormValidation'
+import type { SeriesDefaults } from '../../library/domain/seriesDefaults'
 import BaseDrawer from '../../../ui/BaseDrawer.vue'
 import LoadingIndicator from '../../../ui/LoadingIndicator.vue'
 import { PhArrowLeft, PhArrowRight, PhHeart } from '../../../icons'
@@ -30,7 +31,11 @@ import {
   type CoverSearchResult,
 } from '../../library/services/books'
 
-const props = defineProps<{ token: () => Promise<string>; book?: LibraryBook }>()
+const props = defineProps<{
+  token: () => Promise<string>
+  book?: LibraryBook
+  initialSeries?: SeriesDefaults | null
+}>()
 const emit = defineEmits<{ cancel: []; saved: [] }>()
 const form = reactive({
   favorite: props.book?.favorite ?? false,
@@ -39,10 +44,10 @@ const form = reactive({
   title: props.book?.title ?? '',
   author: props.book?.author ?? '',
   isbn: props.book?.isbn ?? '',
-  genres: props.book?.genres.join(', ') ?? '',
-  publisher: props.book?.publisher ?? '',
+  genres: props.book?.genres.join(', ') ?? props.initialSeries?.genres.join(', ') ?? '',
+  publisher: props.book?.publisher ?? props.initialSeries?.publisher ?? '',
   pageCount: props.book?.pageCount?.toString() ?? '',
-  seriesName: props.book?.seriesName ?? '',
+  seriesName: props.book?.seriesName ?? props.initialSeries?.seriesName ?? '',
   seriesVolume: props.book?.seriesVolume?.toString() ?? '',
   quantity: props.book?.quantity ?? 1,
   status: (props.book?.status ?? 'nao_lido') as BookDraft['status'],
@@ -375,8 +380,9 @@ async function submit() {
     @close="requestCancel"
   >
     <div class="book-form redesigned-form">
-      <p>
-        Comece pelo ISBN ou preencha os dados manualmente. Apenas título e autor são obrigatórios.
+      <p v-if="initialSeries" class="feedback-message" role="status">
+        Novo livro da série {{ initialSeries.seriesName }}. Confira os dados preenchidos na etapa
+        Organização.
       </p>
       <form novalidate @submit.prevent="submit">
         <nav class="book-steps" aria-label="Etapas do cadastro">
