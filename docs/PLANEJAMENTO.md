@@ -2,7 +2,7 @@
 
 ## Atualização: adicionar livro a uma série
 
-A proprietária solicitou um atalho “+” no cartão da série. Ao abrir o cadastro por ele, preencher o nome da série e, quando houver concordância entre todos os livros da série, a editora e os gêneros comuns. Dados ausentes ou divergentes não são presumidos; considerar todos os livros da série, mesmo sob filtros. As informações permanecem editáveis e o cadastro continua exigindo título e autor.
+A proprietária solicitou um atalho “+” no cartão da série. Ao abrir o cadastro por ele, preencher o nome da série e, quando houver concordância entre todos os livros da série, a autoria, a editora e os gêneros comuns. Dados ausentes ou divergentes não são presumidos; considerar todos os livros da série, mesmo sob filtros. As informações permanecem editáveis e o cadastro continua exigindo título e autor.
 
 ## Atualização: cadastro em etapas
 

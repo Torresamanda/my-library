@@ -42,7 +42,7 @@ const form = reactive({
   mediaType: (props.book?.mediaType ?? '') as MediaType | '',
   ownership: [...(props.book?.ownership ?? [])] as Ownership,
   title: props.book?.title ?? '',
-  author: props.book?.author ?? '',
+  author: props.book?.author ?? props.initialSeries?.author ?? '',
   isbn: props.book?.isbn ?? '',
   genres: props.book?.genres.join(', ') ?? props.initialSeries?.genres.join(', ') ?? '',
   publisher: props.book?.publisher ?? props.initialSeries?.publisher ?? '',
@@ -381,8 +381,8 @@ async function submit() {
   >
     <div class="book-form redesigned-form">
       <p v-if="initialSeries" class="feedback-message" role="status">
-        Novo livro da série {{ initialSeries.seriesName }}. Confira os dados preenchidos na etapa
-        Organização.
+        Novo livro da série {{ initialSeries.seriesName }}. Confira os dados preenchidos antes de
+        salvar.
       </p>
       <form novalidate @submit.prevent="submit">
         <nav class="book-steps" aria-label="Etapas do cadastro">

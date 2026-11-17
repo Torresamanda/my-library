@@ -1,13 +1,21 @@
 import type { LibraryBook } from '../services/books'
 
-export type SeriesDefaults = { seriesName: string; publisher: string; genres: string[] }
+export type SeriesDefaults = {
+  seriesName: string
+  author: string
+  publisher: string
+  genres: string[]
+}
 
 export function seriesDefaults(books: readonly LibraryBook[], seriesName: string): SeriesDefaults {
   const normalize = (value: string) => value.trim().toLocaleLowerCase('pt-BR')
   const members = books.filter(
     (book) => book.seriesName && normalize(book.seriesName) === normalize(seriesName),
   )
-  if (!members.length) return { seriesName, publisher: '', genres: [] }
+  if (!members.length) return { seriesName, author: '', publisher: '', genres: [] }
+  const author = members[0]?.author.trim() ?? ''
+  const commonAuthor =
+    author && members.every((book) => normalize(book.author) === normalize(author)) ? author : ''
   const publisher = members[0]?.publisher?.trim() ?? ''
   const commonPublisher =
     publisher && members.every((book) => normalize(book.publisher ?? '') === normalize(publisher))
@@ -24,5 +32,5 @@ export function seriesDefaults(books: readonly LibraryBook[], seriesName: string
     )
     .map(([, value]) => value)
     .slice(0, 4)
-  return { seriesName, publisher: commonPublisher, genres }
+  return { seriesName, author: commonAuthor, publisher: commonPublisher, genres }
 }

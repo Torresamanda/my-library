@@ -527,4 +527,5 @@ As combinações principais de texto, texto secundário e botões dos temas clar
 ### Adicionar livro a uma série
 
 - [x] Incluir atalho no cartão de série e preencher nome, editora e gêneros comuns, considerando a série completa mesmo com filtros.
+- [x] Preencher também a autoria quando for comum a todas as edições da série.
 - [ ] Validar o atalho e os dados sugeridos em dispositivos reais, inclusive quando houver dados divergentes ou ausentes.

@@ -24,6 +24,7 @@ describe('series defaults', () => {
     ]
     expect(seriesDefaults(books, 'Série A')).toEqual({
       seriesName: 'Série A',
+      author: 'Autora',
       publisher: 'Editora',
       genres: ['Fantasia'],
     })
@@ -35,19 +36,29 @@ describe('series defaults', () => {
     ).toBe('')
     expect(
       seriesDefaults([book('Saga', 'Uma', ['Drama']), book('Saga', null, [])], 'Saga'),
-    ).toEqual({ seriesName: 'Saga', publisher: '', genres: [] })
+    ).toEqual({ seriesName: 'Saga', author: 'Autora', publisher: '', genres: [] })
   })
   it('handles a single edition, deduplicates and limits genres, and handles an empty series', () => {
     const items = [book('Saga', 'Editora', ['A', 'a', 'B', 'C', 'D', 'E'])]
     expect(seriesDefaults(items, 'Saga')).toEqual({
       seriesName: 'Saga',
+      author: 'Autora',
       publisher: 'Editora',
       genres: ['A', 'B', 'C', 'D'],
     })
     expect(seriesDefaults(items, 'Outra')).toEqual({
       seriesName: 'Outra',
+      author: '',
       publisher: '',
       genres: [],
     })
+  })
+  it('prefills only an author shared by all editions', () => {
+    const first = book('Saga', 'Editora', [])
+    const same = { ...book('Saga', 'Editora', []), author: ' autora ' }
+    const different = { ...same, author: 'Outra pessoa' }
+    expect(seriesDefaults([first, same], 'Saga').author).toBe('Autora')
+    expect(seriesDefaults([first, different], 'Saga').author).toBe('')
+    expect(seriesDefaults([first, { ...same, author: '' }], 'Saga').author).toBe('')
   })
 })
