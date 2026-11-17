@@ -852,8 +852,6 @@ select:focus-visible {
 .cover-source-link {
   display: inline-flex;
   align-items: center;
-  min-height: 44px;
-  padding: 8px 12px;
   color: var(--accent);
   font-size: 14px;
   text-underline-offset: 4px;

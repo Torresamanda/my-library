@@ -90,8 +90,9 @@ const labels = {
                       {{ book.genres.join(' · ') }}
                     </p>
                     <div class="series-book-badges">
-                      <span class="badge">{{ labels[book.status] }}</span
-                      ><span v-if="book.favorite" class="badge favorite-badge"
+                      <span class="badge">{{ labels[book.status] }}</span><span
+                        v-if="book.favorite"
+                        class="badge favorite-badge"
                         ><PhHeart :size="16" weight="fill" aria-hidden="true" /> Favorito</span
                       >
                     </div>

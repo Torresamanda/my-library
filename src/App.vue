@@ -257,9 +257,6 @@ onBeforeUnmount(() => {
       <template v-else
         ><p v-if="success" role="status">{{ success }}</p>
         <LibraryStats :stats="stats" />
-        <p class="stats-caption">
-          Exemplares somam quantidades; status contam edições e páginas somam edições concluídas.
-        </p>
         <div class="tools">
           <label class="search"
             ><PhMagnifyingGlass :size="22" aria-hidden="true" /><span class="sr-only"
