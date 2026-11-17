@@ -114,6 +114,12 @@ function confirm() {
         <h5>Resultados da pesquisa</h5>
         <p>Fornecidos pelo Google Books</p>
       </div>
+      <img
+        class="cover-attribution"
+        src="https://storage.googleapis.com/geo-devrel-public-buckets/powered_by_google_on_white.png"
+        alt="Powered by Google"
+        referrerpolicy="no-referrer"
+      />
     </div>
     <p v-if="error" class="form-error" role="alert">{{ error }}</p>
     <p v-else-if="loading" class="feedback-message" role="status">Pesquisando capas…</p>

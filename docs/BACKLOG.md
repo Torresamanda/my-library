@@ -507,7 +507,8 @@ As combinações principais de texto, texto secundário e botões dos temas clar
 - [x] Validar o protótipo visual e implementar a grade de capas, seleção, estados e ações acessíveis durante a rolagem.
 - [ ] Validar pesquisa real, rolagem, foco e seleção nos dois temas e em dispositivos reais, após configurar o serviço.
 - [x] Sincronizar título e autor com o cadastro até que sejam alterados na pesquisa e remover a indicação sobreposta à prévia, conforme solicitado.
-- [ ] Resolver a atribuição visual antes de publicar: a proprietária pediu a remoção da imagem, mas as diretrizes do Google Books exigem a marca “Powered by Google” junto à pesquisa e aos resultados; apenas o texto não atende à orientação publicada.
+- [x] Restabelecer a marca “Powered by Google” junto à pesquisa e aos resultados, conforme autorização da proprietária.
+- [ ] Validar a apresentação da atribuição e a pesquisa real em ambos os temas e em dispositivos reais.
 - [x] Ao escolher uma capa, preencher campos vazios com dados disponíveis quando o ISBN coincidir ou não houver ISBN no cadastro; não preencher automaticamente se a edição for diferente ou não puder ser confirmada com ISBN informado. Esta decisão atualiza o fluxo anterior que aplicava apenas a capa.
 
 ### Preparação da versão 1.6.0

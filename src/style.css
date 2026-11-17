@@ -774,6 +774,14 @@ select:focus-visible {
   color: var(--secondary);
   font-size: 12px;
 }
+.cover-attribution {
+  display: block;
+  max-width: 144px;
+  height: auto;
+  padding: 4px;
+  background: #fff;
+  border-radius: var(--radius-small);
+}
 .cover-results {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
