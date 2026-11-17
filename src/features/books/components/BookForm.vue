@@ -387,7 +387,7 @@ async function submit() {
           <p class="section-hint">Confira ou complete as informações principais.</p>
           <div class="form-book-preview">
             <div class="form-cover">
-              <BookCover :url="coverUrl" :title="form.title || 'livro'" hide-source /><span
+              <BookCover :url="coverUrl" :title="form.title || 'livro'" /><span
                 >Prévia da capa</span
               >
             </div>

@@ -2,7 +2,7 @@
 import { computed, ref, watch } from 'vue'
 import { validCoverUrl, googleCoverId } from '../domain/cover'
 import { PhBookOpen } from '../../../icons'
-const props = defineProps<{ url?: string | null; title: string; hideSource?: boolean }>()
+const props = defineProps<{ url?: string | null; title: string }>()
 const failed = ref(false)
 watch(
   () => props.url,
@@ -14,7 +14,7 @@ const safeUrl = computed(() => (props.url && validCoverUrl(props.url) ? props.ur
 const googleSource = computed(() => (safeUrl.value ? googleCoverId(safeUrl.value) : null))
 </script>
 <template>
-  <div :class="['book-cover', { 'google-cover': googleSource && !failed && !hideSource }]">
+  <div :class="['book-cover', { 'google-cover': googleSource && !failed }]">
     <img
       v-if="safeUrl && !failed"
       :src="safeUrl"
@@ -23,9 +23,8 @@ const googleSource = computed(() => (safeUrl.value ? googleCoverId(safeUrl.value
       loading="lazy"
       @error="failed = true"
     />
-    <span v-if="googleSource && !failed && !hideSource" class="cover-source">Google Books</span>
     <span
-      v-else-if="!safeUrl || failed"
+      v-if="!safeUrl || failed"
       class="cover-placeholder"
       role="img"
       :aria-label="`Capa indisponível para ${title}`"

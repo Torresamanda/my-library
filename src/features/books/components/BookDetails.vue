@@ -94,7 +94,7 @@ async function remove() {
           :href="`https://books.google.com/books?id=${googleCoverId(book.coverUrl)}`"
           target="_blank"
           rel="noopener noreferrer"
-          >Ver capa no Google Books</a
+          >Ver fonte da capa</a
         >
       </p>
       <h4 class="form-section-title">Sobre esta edição</h4>

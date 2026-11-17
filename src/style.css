@@ -721,15 +721,7 @@ select:focus-visible {
   object-fit: cover;
 }
 .google-cover img {
-  height: calc(100% - 20px);
   object-fit: contain;
-}
-.cover-source {
-  display: block;
-  height: 20px;
-  text-align: center;
-  font-size: 10px;
-  line-height: 20px;
 }
 .cover-search {
   margin-top: 16px;
