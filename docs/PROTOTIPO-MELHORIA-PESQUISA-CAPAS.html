@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Prévia · Pesquisa de capas</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      :root {
+        color-scheme: dark;
+        font-family: system-ui, sans-serif;
+        --bg: #100e24;
+        --surface: #1b1831;
+        --support: #211b35;
+        --text: #faf5f7;
+        --muted: #c7bdd0;
+        --accent: #dba3ed;
+        --on: #20102c;
+        --tag: #413050;
+        --border: #51405e;
+      }
+      body.light {
+        color-scheme: light;
+        --bg: #fff9ef;
+        --surface: #fff9ef;
+        --support: #eed9f2;
+        --text: #4f215e;
+        --muted: #754080;
+        --accent: #4f215e;
+        --on: #fff9ef;
+        --tag: #eed9f2;
+        --border: #9a6ca2;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.5;
+      }
+      button,
+      input {
+        font: inherit;
+      }
+      button {
+        cursor: pointer;
+      }
+      button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+      button:focus-visible,
+      input:focus-visible,
+      a:focus-visible,
+      .cover-choice:has(input:focus-visible) {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+      .banner {
+        padding: 8px 16px;
+        background: var(--support);
+        text-align: center;
+        font-size: 14px;
+      }
+      .page {
+        width: min(100% - 32px, 960px);
+        margin: 24px auto 48px;
+      }
+      .page-head,
+      .dialog-head,
+      .results-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+      }
+      .page-head {
+        margin-bottom: 16px;
+      }
+      .page-head p,
+      .muted {
+        color: var(--muted);
+      }
+      .page-head p {
+        margin: 0;
+        font-size: 14px;
+      }
+      .icon-button {
+        width: 44px;
+        height: 44px;
+        padding: 8px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--surface);
+        color: var(--text);
+      }
+      .panel {
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--surface);
+      }
+      .panel-content {
+        padding: 24px;
+      }
+      h1 {
+        margin: 0 0 4px;
+        font:
+          600 28px Georgia,
+          serif;
+      }
+      h2 {
+        margin: 0;
+        font:
+          600 20px Georgia,
+          serif;
+      }
+      p {
+        margin: 0;
+      }
+      .search-form {
+        display: grid;
+        grid-template-columns: 1fr 1fr auto;
+        gap: 12px;
+        align-items: end;
+        margin-top: 24px;
+      }
+      .search-form label {
+        display: grid;
+        gap: 8px;
+        font-weight: 600;
+        font-size: 14px;
+        min-width: 0;
+      }
+      .search-form input {
+        width: 100%;
+        min-width: 0;
+        min-height: 44px;
+        padding: 8px 12px;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        background: var(--bg);
+        color: var(--text);
+      }
+      .button {
+        min-height: 44px;
+        padding: 8px 16px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--surface);
+        color: var(--text);
+        font-weight: 600;
+      }
+      .primary {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: var(--on);
+      }
+      .results-head {
+        margin: 32px 0 16px;
+        flex-wrap: wrap;
+      }
+      .source {
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .attribution {
+        border: 1px dashed var(--border);
+        border-radius: 4px;
+        padding: 8px 12px;
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .states {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 12px;
+        background: var(--support);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        margin: 16px 0;
+      }
+      .states span {
+        font-size: 12px;
+        color: var(--muted);
+        margin-right: 4px;
+      }
+      .states button {
+        min-height: 36px;
+        padding: 4px 8px;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        background: var(--surface);
+        color: var(--text);
+        font-size: 12px;
+      }
+      .message {
+        padding: 16px;
+        margin: 16px 0;
+        background: var(--support);
+        border-left: 4px solid var(--accent);
+        border-radius: 4px;
+      }
+      .results {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+      }
+      .result {
+        min-width: 0;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--bg);
+        overflow: hidden;
+      }
+      .result:has(input:checked) {
+        border: 2px solid var(--accent);
+      }
+      .cover-choice {
+        display: block;
+        padding: 12px;
+        cursor: pointer;
+      }
+      .cover-choice input {
+        position: absolute;
+        opacity: 0;
+        width: 1px;
+        height: 1px;
+      }
+      .art {
+        aspect-ratio: 2/3;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        background: var(--tag);
+        color: var(--text);
+        text-align: center;
+      }
+      .art.alt {
+        background: var(--support);
+      }
+      .art strong {
+        font:
+          600 20px/1.2 Georgia,
+          serif;
+      }
+      .art small {
+        margin-top: 12px;
+        font-size: 12px;
+      }
+      .result-title {
+        display: block;
+        margin-top: 12px;
+        font-weight: 700;
+        overflow-wrap: anywhere;
+      }
+      .result p {
+        color: var(--muted);
+        font-size: 14px;
+        margin-top: 4px;
+        overflow-wrap: anywhere;
+      }
+      .edition {
+        display: inline-block;
+        padding: 4px 8px;
+        margin-top: 8px;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        background: var(--tag);
+        font-size: 12px;
+      }
+      .choice-state {
+        display: block;
+        color: var(--accent);
+        font-size: 14px;
+        font-weight: 700;
+        margin-top: 8px;
+      }
+      .cover-choice input:checked ~ .choice-state::before {
+        content: '✓ ';
+      }
+      .source-link {
+        display: inline-flex;
+        min-height: 44px;
+        align-items: center;
+        padding: 8px 12px;
+        color: var(--accent);
+        font-size: 14px;
+        text-decoration: underline;
+        text-underline-offset: 4px;
+        border: 0;
+        background: transparent;
+      }
+      .result.unavailable .cover-choice {
+        cursor: default;
+      }
+      .result.unavailable .art {
+        color: var(--muted);
+      }
+      .footer {
+        position: sticky;
+        bottom: 0;
+        display: grid;
+        grid-template-columns: 1fr auto auto;
+        align-items: center;
+        gap: 12px;
+        padding: 16px 24px calc(16px + env(safe-area-inset-bottom));
+        background: var(--surface);
+        border-top: 1px solid var(--border);
+      }
+      .footer p {
+        font-size: 14px;
+      }
+      .footer .warning {
+        color: var(--muted);
+        font-size: 12px;
+        margin-top: 4px;
+      }
+      @media (max-width: 640px) {
+        .page {
+          margin: 16px auto 32px;
+        }
+        .panel-content {
+          padding: 16px;
+        }
+        .search-form {
+          grid-template-columns: 1fr;
+        }
+        .results {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 8px;
+        }
+        .art strong {
+          font-size: 16px;
+        }
+        .footer {
+          padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+          grid-template-columns: 1fr 1fr;
+        }
+        .footer .selection {
+          grid-column: 1/-1;
+        }
+        .footer .primary {
+          grid-column: 1/-1;
+          grid-row: 2;
+        }
+        .footer .cancel {
+          grid-column: 1/-1;
+        }
+      }
+      @media (max-width: 340px) {
+        .results {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="banner">
+      Protótipo para validação · Resultados fictícios · Nenhuma busca real é feita
+    </div>
+    <main class="page">
+      <div class="page-head">
+        <p>Minha biblioteca · Prévia da pesquisa de capas</p>
+        <button
+          id="theme"
+          class="icon-button"
+          type="button"
+          aria-label="Ativar tema claro"
+          title="Alternar tema"
+        >
+          ☼
+        </button>
+      </div>
+      <div class="panel">
+        <div class="panel-content">
+          <div class="dialog-head">
+            <div>
+              <h1>Escolher capa</h1>
+              <p class="muted">Pesquise pelo título e autor e confira a edição.</p>
+            </div>
+          </div>
+          <form class="search-form" id="search">
+            <label>Título<input id="title" value="O jardim das estrelas" /></label
+            ><label>Autor<input id="author" value="Autora Exemplo" /></label
+            ><button class="button primary" type="submit">Pesquisar</button>
+          </form>
+          <div class="states" aria-label="Estados de demonstração">
+            <span>Ver prévia:</span><button type="button" data-state="results">Resultados</button
+            ><button type="button" data-state="loading">Carregando</button
+            ><button type="button" data-state="empty">Sem resultados</button
+            ><button type="button" data-state="error">Erro</button>
+          </div>
+          <p id="message" class="message" role="status" hidden></p>
+          <div id="result-area">
+            <div class="results-head">
+              <div>
+                <h2>Resultados da pesquisa</h2>
+                <p class="source">Exemplo de apresentação · Google Books</p>
+              </div>
+              <div class="attribution">Espaço reservado para atribuição oficial</div>
+            </div>
+            <div class="results" role="radiogroup" aria-label="Escolha uma capa">
+              <article class="result">
+                <label class="cover-choice"
+                  ><input
+                    type="radio"
+                    name="cover"
+                    value="1"
+                    data-edition="same"
+                    data-title="O jardim das estrelas"
+                  /><span class="art"
+                    ><strong>O jardim<br />das estrelas</strong><small>Autora Exemplo</small></span
+                  ><span class="result-title">O jardim das estrelas</span>
+                  <p>Autora Exemplo</p>
+                  <p>Editora Exemplo · 2024</p>
+                  <span class="edition">Mesmo ISBN</span
+                  ><span class="choice-state">Selecionar capa</span></label
+                ><button type="button" class="source-link" data-source>Ver fonte ↗</button>
+              </article>
+              <article class="result">
+                <label class="cover-choice"
+                  ><input
+                    type="radio"
+                    name="cover"
+                    value="2"
+                    data-edition="other"
+                    data-title="O jardim das estrelas — outra edição"
+                  /><span class="art alt"
+                    ><strong>O jardim<br />das estrelas</strong><small>Outra edição</small></span
+                  ><span class="result-title">O jardim das estrelas</span>
+                  <p>Autora Exemplo</p>
+                  <p>Outra Editora · 2021</p>
+                  <span class="edition">Outra edição</span
+                  ><span class="choice-state">Selecionar capa</span></label
+                ><button type="button" class="source-link" data-source>Ver fonte ↗</button>
+              </article>
+              <article class="result">
+                <label class="cover-choice"
+                  ><input
+                    type="radio"
+                    name="cover"
+                    value="3"
+                    data-edition="unknown"
+                    data-title="O jardim das estrelas — edição sem ISBN"
+                  /><span class="art"
+                    ><strong>Jardim<br />de estrelas</strong><small>Edição ilustrativa</small></span
+                  ><span class="result-title">Jardim de estrelas</span>
+                  <p>Autora Exemplo</p>
+                  <p>Editora Exemplo</p>
+                  <span class="edition">ISBN não comparável</span
+                  ><span class="choice-state">Selecionar capa</span></label
+                ><button type="button" class="source-link" data-source>Ver fonte ↗</button>
+              </article>
+              <article class="result unavailable">
+                <div class="cover-choice">
+                  <span class="art"><strong>Sem capa</strong></span
+                  ><span class="result-title">O jardim das estrelas</span>
+                  <p>Autora Exemplo</p>
+                  <p>Dados da edição indisponíveis</p>
+                  <span class="edition">ISBN não informado</span
+                  ><span class="choice-state">Capa indisponível</span>
+                </div>
+                <button type="button" class="source-link" data-source>Ver fonte ↗</button>
+              </article>
+            </div>
+          </div>
+        </div>
+        <div class="footer">
+          <div class="selection">
+            <p id="selection" aria-live="polite">Nenhuma capa selecionada</p>
+            <p id="warning" class="warning" hidden>
+              Esta capa é de outra edição. O ISBN e os demais dados do livro não serão alterados.
+            </p>
+          </div>
+          <button class="button cancel" id="cancel" type="button">Cancelar pesquisa</button
+          ><button class="button primary" id="use" type="button" disabled>Usar esta capa</button>
+        </div>
+      </div>
+    </main>
+    <script>
+      const theme = document.querySelector('#theme')
+      theme.addEventListener('click', () => {
+        const light = document.body.classList.toggle('light')
+        theme.textContent = light ? '☾' : '☼'
+        theme.setAttribute('aria-label', light ? 'Ativar tema escuro' : 'Ativar tema claro')
+      })
+      const message = document.querySelector('#message'),
+        results = document.querySelector('#result-area'),
+        use = document.querySelector('#use'),
+        selection = document.querySelector('#selection'),
+        warning = document.querySelector('#warning')
+      function resetSelection() {
+        document.querySelectorAll('[name=cover]').forEach((input) => {
+          input.checked = false
+          input.closest('.cover-choice').querySelector('.choice-state').textContent =
+            'Selecionar capa'
+        })
+        selection.textContent = 'Nenhuma capa selecionada'
+        warning.hidden = true
+        use.disabled = true
+      }
+      function setState(state) {
+        resetSelection()
+        results.hidden = state !== 'results'
+        message.hidden = state === 'results'
+        message.textContent =
+          {
+            loading: 'Pesquisando capas…',
+            empty: 'Não encontramos resultados. Confira o título ou o autor e pesquise novamente.',
+            error: 'Não foi possível pesquisar agora. Confira sua conexão e tente novamente.',
+          }[state] || ''
+      }
+      document
+        .querySelectorAll('[data-state]')
+        .forEach((button) => button.addEventListener('click', () => setState(button.dataset.state)))
+      document.querySelector('#search').addEventListener('submit', (event) => {
+        event.preventDefault()
+        if (
+          !document.querySelector('#title').value.trim() &&
+          !document.querySelector('#author').value.trim()
+        ) {
+          setState('error')
+          message.textContent = 'Informe o título ou o autor para pesquisar.'
+          return
+        }
+        setState('results')
+      })
+      document.querySelectorAll('[name=cover]').forEach((input) =>
+        input.addEventListener('change', () => {
+          document
+            .querySelectorAll('[name=cover]')
+            .forEach(
+              (other) =>
+                (other.closest('.cover-choice').querySelector('.choice-state').textContent =
+                  other.checked ? 'Selecionada' : 'Selecionar capa'),
+            )
+          selection.textContent = 'Selecionada: ' + input.dataset.title
+          warning.hidden = input.dataset.edition !== 'other'
+          use.disabled = false
+        }),
+      )
+      document.querySelectorAll('[data-source]').forEach((button) =>
+        button.addEventListener('click', () => {
+          message.hidden = false
+          message.textContent =
+            'Prévia ilustrativa: no site, este link abrirá a página da edição na fonte.'
+        }),
+      )
+      use.addEventListener('click', () => {
+        message.hidden = false
+        message.textContent =
+          'Prévia ilustrativa: no site, a capa escolhida voltará ao formulário e será salva somente ao salvar o livro.'
+        message.scrollIntoView({ block: 'nearest' })
+      })
+      document.querySelector('#cancel').addEventListener('click', () => {
+        resetSelection()
+        message.hidden = false
+        message.textContent = 'Prévia ilustrativa: cancelar mantém a capa anterior no formulário.'
+        message.scrollIntoView({ block: 'nearest' })
+      })
+    </script>
+  </body>
+</html>

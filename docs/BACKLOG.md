@@ -503,4 +503,5 @@ As combinações principais de texto, texto secundário e botões dos temas clar
 ### Melhoria da pesquisa de capas
 
 - [x] Preparar [wireframe da pesquisa visual de capas](WIREFRAME-MELHORIA-PESQUISA-CAPAS.md), com seleção, identificação da edição e estados.
-- [ ] Validar o wireframe com a proprietária; após aprovação, preparar e validar protótipo visual antes de alterar a interface.
+- [x] Validar o wireframe com a proprietária e preparar [protótipo visual](PROTOTIPO-MELHORIA-PESQUISA-CAPAS.html).
+- [ ] Validar o protótipo visual, incluindo ações fixas e estados, antes de alterar a interface.
