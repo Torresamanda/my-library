@@ -515,3 +515,8 @@ As combinações principais de texto, texto secundário e botões dos temas clar
 
 - [x] Identificar a pesquisa de capas e o preenchimento opcional de dados por versão semântica.
 - [ ] Validar pesquisa autenticada, seleção de capas e atribuição da fonte em produção e em dispositivos reais.
+
+### Cadastro em etapas — proposta
+
+- [x] Registrar preferência por permitir salvar após os dados principais e preparar [wireframe do cadastro em etapas](WIREFRAME-CADASTRO-ETAPAS.md).
+- [ ] Validar divisão das etapas, ações de salvamento e acesso direto na edição; após aprovação, preparar protótipo visual antes de implementar.
