@@ -527,7 +527,6 @@ async function submit() {
                 ><input v-model="unowned" type="checkbox" /><span>Não tenho</span></label
               >
             </div>
-            <p class="section-hint">Por exemplo, uma leitura por empréstimo ou assinatura.</p>
           </fieldset>
           <label v-if="ownsCopies" class="quantity-field field-block"
             >Exemplares *<input
@@ -542,9 +541,6 @@ async function submit() {
               do formato.</span
             ></label
           >
-          <p v-else class="section-hint field-block">
-            Para contabilizar exemplares, marque “Tenho físico” ou “Tenho e-book”.
-          </p>
         </section>
         <section class="form-section" aria-labelledby="reading-title">
           <h3 id="reading-title">Minha leitura</h3>
