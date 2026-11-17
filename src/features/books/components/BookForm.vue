@@ -661,6 +661,15 @@ async function submit() {
         </section>
         <p v-if="error" role="alert" class="form-error">{{ error }}</p>
         <div class="form-actions">
+          <button type="submit" :disabled="saving || lookingUp || closing">
+            <LoadingIndicator v-if="saving" compact text="Salvando..." /><template v-else
+              >Salvar livro</template
+            ></button
+          ><button type="button" class="secondary-button" :disabled="saving" @click="requestCancel">
+            Cancelar
+          </button>
+        </div>
+        <div class="step-navigation" aria-label="Navegação entre etapas">
           <button
             v-if="step > 0"
             type="button"
@@ -675,20 +684,13 @@ async function submit() {
           <button
             v-if="step < 2"
             type="button"
-            class="secondary-button step-nav-icon"
+            class="secondary-button step-nav-icon next-step"
             :disabled="saving || closing || lookingUp"
             :aria-label="`Continuar para ${stepNames[step + 1]}`"
             :title="`Continuar para ${stepNames[step + 1]}`"
             @click="goToStep((step + 1) as BookFormStep)"
           >
             <PhArrowRight :size="20" aria-hidden="true" />
-          </button>
-          <button type="submit" :disabled="saving || lookingUp || closing">
-            <LoadingIndicator v-if="saving" compact text="Salvando..." /><template v-else
-              >Salvar livro</template
-            ></button
-          ><button type="button" class="secondary-button" :disabled="saving" @click="requestCancel">
-            Cancelar
           </button>
         </div>
       </form>

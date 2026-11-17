@@ -456,7 +456,16 @@ select:focus-visible {
   gap: 8px;
   margin-top: 24px;
 }
-.form-actions .step-nav-icon {
+.step-navigation {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+}
+.step-navigation .next-step {
+  margin-left: auto;
+}
+.step-navigation .step-nav-icon {
   width: 44px;
   min-width: 44px;
   padding: 8px;
