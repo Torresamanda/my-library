@@ -14,6 +14,7 @@ import {
   type Ownership,
 } from '../domain/collection'
 import { reviewLength, type Review } from '../domain/review'
+import { prefillFromCover } from '../domain/coverPrefill'
 import BaseDrawer from '../../../ui/BaseDrawer.vue'
 import LoadingIndicator from '../../../ui/LoadingIndicator.vue'
 import { PhHeart } from '../../../icons'
@@ -25,6 +26,7 @@ import {
   LibraryRequestError,
   type BookDraft,
   type LibraryBook,
+  type CoverSearchResult,
 } from '../../library/services/books'
 
 const props = defineProps<{ token: () => Promise<string>; book?: LibraryBook }>()
@@ -120,9 +122,17 @@ const lookupMessage = ref('')
 const coverUrl = ref<string | null>(props.book?.coverUrl ?? null)
 const coverSearchOpen = ref(false)
 let coverChoiceVersion = 0
-function chooseCover(url: string) {
+function chooseCover(result: CoverSearchResult) {
+  if (!result.coverUrl) return
   coverChoiceVersion++
-  coverUrl.value = url
+  coverUrl.value = result.coverUrl
+  const fields = prefillFromCover(form, result)
+  form.title = fields.title
+  form.author = fields.author
+  form.publisher = fields.publisher
+  form.pageCount = fields.pageCount
+  form.genres = fields.genres
+  if (form.publisher || form.pageCount) extraOpen.value = true
   coverSearchOpen.value = false
 }
 const originalIsbn = props.book?.isbn ? normalizeIsbn(props.book.isbn) : null

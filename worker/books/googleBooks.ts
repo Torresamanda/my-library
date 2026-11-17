@@ -12,6 +12,8 @@ const itemSchema = z.object({
       title: z.string().optional(),
       authors: z.array(z.string()).optional(),
       publisher: z.string().optional(),
+      pageCount: z.unknown().optional(),
+      categories: z.array(z.string()).optional(),
       publishedDate: z.string().optional(),
       industryIdentifiers: z
         .array(z.object({ type: z.string(), identifier: z.string() }))
@@ -47,6 +49,7 @@ export async function searchGoogleBooks(
     if (!parsed.success)
       return { status: 502, body: { error: 'Não foi possível interpretar os resultados.' } }
     const results = (parsed.data.items ?? []).map(({ id, volumeInfo: info }) => {
+      const seenGenres = new Set<string>()
       const candidate = (
         info?.imageLinks?.thumbnail ??
         info?.imageLinks?.smallThumbnail ??
@@ -54,9 +57,26 @@ export async function searchGoogleBooks(
       ).replace(/^http:\/\//, 'https://')
       return {
         id,
-        title: (info?.title ?? 'Título não informado').slice(0, 250),
+        title: (info?.title ?? '').trim().slice(0, 250),
         authors: (info?.authors ?? []).slice(0, 10).map((value) => value.slice(0, 250)),
         publisher: (info?.publisher ?? '').slice(0, 250),
+        pageCount:
+          typeof info?.pageCount === 'number' &&
+          Number.isInteger(info.pageCount) &&
+          info.pageCount > 0 &&
+          info.pageCount <= 1000000
+            ? info.pageCount
+            : null,
+        genres: (info?.categories ?? [])
+          .map((value) => value.trim())
+          .filter((value) => {
+            const key = value.toLocaleLowerCase('pt-BR')
+            if (!value || value.length > 80 || value.includes(',') || seenGenres.has(key))
+              return false
+            seenGenres.add(key)
+            return true
+          })
+          .slice(0, 4),
         publishedDate: (info?.publishedDate ?? '').slice(0, 40),
         isbns: (info?.industryIdentifiers ?? [])
           .filter((value) => value.type === 'ISBN_10' || value.type === 'ISBN_13')

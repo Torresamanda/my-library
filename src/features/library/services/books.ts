@@ -96,6 +96,8 @@ const coverSearchResultSchema = z
     title: z.string(),
     authors: z.array(z.string()),
     publisher: z.string(),
+    pageCount: z.number().int().positive().max(1000000).nullable(),
+    genres: z.array(z.string().min(1).max(80)).max(4),
     publishedDate: z.string(),
     isbns: z.array(z.string()),
     coverUrl: z.string().refine(validCoverUrl).nullable(),

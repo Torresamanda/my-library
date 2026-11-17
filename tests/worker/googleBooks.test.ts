@@ -19,6 +19,9 @@ describe('Google Books cover search', () => {
               id: 'first',
               volumeInfo: {
                 title: 'Livro',
+                publisher: 'Editora',
+                pageCount: 320,
+                categories: ['Fantasia', 'fantasia', 'Romance'],
                 imageLinks: {
                   thumbnail:
                     'http://books.google.com/books/content?id=first&printsec=frontcover&img=1&zoom=1',
@@ -41,12 +44,33 @@ describe('Google Books cover search', () => {
     expect(result.status).toBe(200)
     expect(result.body).toMatchObject({
       results: [
-        { id: 'first', coverUrl: expect.stringContaining('https://books.google.com/') },
+        {
+          id: 'first',
+          publisher: 'Editora',
+          pageCount: 320,
+          genres: ['Fantasia', 'Romance'],
+          coverUrl: expect.stringContaining('https://books.google.com/'),
+        },
         { id: 'second', coverUrl: null },
       ],
     })
     expect(String(fetcher.mock.calls[0]![0])).not.toContain('example-key')
     expect(fetcher.mock.calls[0]![1].headers['X-Goog-Api-Key']).toBe('example-key')
+  })
+
+  it('ignores invalid page counts and unavailable metadata', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi
+        .fn()
+        .mockResolvedValue(
+          new Response(
+            JSON.stringify({ items: [{ id: 'example', volumeInfo: { pageCount: -1 } }] }),
+          ),
+        ),
+    )
+    const result = await searchGoogleBooks({ title: 'Livro', author: '' }, 'example')
+    expect(result.body).toMatchObject({ results: [{ title: '', pageCount: null, genres: [] }] })
   })
 
   it('handles provider failures without exposing details', async () => {

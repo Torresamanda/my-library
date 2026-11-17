@@ -15,7 +15,7 @@ const props = defineProps<{
   isbn: string
   token: () => Promise<string>
 }>()
-const emit = defineEmits<{ close: []; choose: [url: string] }>()
+const emit = defineEmits<{ close: []; choose: [result: CoverSearchResult] }>()
 const { title, author, titleEdited, authorEdited } = useCoverSearchFields(props)
 const loading = ref(false)
 const searched = ref(false)
@@ -79,7 +79,7 @@ async function search() {
 
 function confirm() {
   if (chosen.value?.coverUrl && !failedImages.value.has(chosen.value.id))
-    emit('choose', chosen.value.coverUrl)
+    emit('choose', chosen.value)
 }
 </script>
 <template>
@@ -157,7 +157,7 @@ function confirm() {
             @error="imageFailed(result.id)"
           />
           <span v-else class="cover-result-placeholder">Capa indisponível</span>
-          <strong>{{ result.title }}</strong>
+          <strong>{{ result.title || 'Título não informado' }}</strong>
           <span class="cover-result-meta">{{
             result.authors.join(', ') || 'Autoria não informada'
           }}</span>
@@ -185,9 +185,22 @@ function confirm() {
     </div>
     <div class="cover-search-footer">
       <div class="cover-selection" aria-live="polite">
-        <p>{{ chosen ? `Selecionada: ${chosen.title}` : 'Nenhuma capa selecionada' }}</p>
+        <p>
+          {{
+            chosen
+              ? `Selecionada: ${chosen.title || 'Título não informado'}`
+              : 'Nenhuma capa selecionada'
+          }}
+        </p>
         <p v-if="chosen && comparison(chosen) === 'different'" class="cover-warning">
-          Esta capa é de outra edição. O ISBN e os demais dados do cadastro não serão alterados.
+          Esta capa é de outra edição. Os dados do cadastro não serão preenchidos automaticamente.
+        </p>
+        <p
+          v-else-if="chosen && isbn.trim() && comparison(chosen) === 'unknown'"
+          class="cover-warning"
+        >
+          Não foi possível confirmar a edição. Os dados do cadastro não serão preenchidos
+          automaticamente.
         </p>
       </div>
       <div class="cover-search-actions">

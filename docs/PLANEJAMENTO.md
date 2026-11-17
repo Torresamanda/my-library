@@ -1,5 +1,9 @@
 # Biblioteca virtual — planejamento
 
+## Atualização: dados ao escolher capa
+
+Ao escolher uma capa na pesquisa, preencher título, autor, editora, páginas e gêneros disponíveis somente nos campos vazios. Se o cadastro tiver ISBN, preencher apenas quando o ISBN da edição encontrada coincidir; para uma edição diferente ou não comparável, aplicar somente a capa. Sem ISBN no cadastro, permitir o preenchimento dos campos vazios. Não alterar o ISBN nem sobrescrever dados já preenchidos. Esta decisão substitui a proposta anterior de que a escolha alteraria somente a capa.
+
 ## Objetivo
 
 Criar uma biblioteca pessoal, agradável e fácil de usar no celular, para organizar livros, quantidades, sagas e gêneros. O acesso será por conta Google; não haverá página ou funcionalidade de perfil.
