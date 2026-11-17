@@ -456,6 +456,11 @@ select:focus-visible {
   gap: 8px;
   margin-top: 24px;
 }
+.form-actions .step-nav-icon {
+  width: 44px;
+  min-width: 44px;
+  padding: 8px;
+}
 .form-error,
 .feedback-message {
   padding: 12px;

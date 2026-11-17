@@ -1,4 +1,6 @@
 export {
+  PhArrowLeft,
+  PhArrowRight,
   PhBookOpen,
   PhBooks,
   PhCheckCircle,

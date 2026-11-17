@@ -18,7 +18,7 @@ import { prefillFromCover } from '../domain/coverPrefill'
 import { validateBookFields, type BookFormStep, type FormIssue } from '../domain/bookFormValidation'
 import BaseDrawer from '../../../ui/BaseDrawer.vue'
 import LoadingIndicator from '../../../ui/LoadingIndicator.vue'
-import { PhHeart } from '../../../icons'
+import { PhArrowLeft, PhArrowRight, PhHeart } from '../../../icons'
 import { lookupIsbn } from '../services/lookup'
 import { autofillField, createLookupScheduler } from '../services/automaticLookup'
 import {
@@ -664,20 +664,24 @@ async function submit() {
           <button
             v-if="step > 0"
             type="button"
-            class="secondary-button"
+            class="secondary-button step-nav-icon"
             :disabled="saving || closing || lookingUp"
+            :aria-label="`Voltar para ${stepNames[step - 1]}`"
+            :title="`Voltar para ${stepNames[step - 1]}`"
             @click="goToStep((step - 1) as BookFormStep)"
           >
-            Voltar
+            <PhArrowLeft :size="20" aria-hidden="true" />
           </button>
           <button
             v-if="step < 2"
             type="button"
-            class="secondary-button"
+            class="secondary-button step-nav-icon"
             :disabled="saving || closing || lookingUp"
+            :aria-label="`Continuar para ${stepNames[step + 1]}`"
+            :title="`Continuar para ${stepNames[step + 1]}`"
             @click="goToStep((step + 1) as BookFormStep)"
           >
-            Continuar
+            <PhArrowRight :size="20" aria-hidden="true" />
           </button>
           <button type="submit" :disabled="saving || lookingUp || closing">
             <LoadingIndicator v-if="saving" compact text="Salvando..." /><template v-else
