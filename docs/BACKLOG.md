@@ -509,3 +509,8 @@ As combinações principais de texto, texto secundário e botões dos temas clar
 - [x] Sincronizar título e autor com o cadastro até que sejam alterados na pesquisa e remover a indicação sobreposta à prévia, conforme solicitado.
 - [ ] Resolver a atribuição visual antes de publicar: a proprietária pediu a remoção da imagem, mas as diretrizes do Google Books exigem a marca “Powered by Google” junto à pesquisa e aos resultados; apenas o texto não atende à orientação publicada.
 - [x] Ao escolher uma capa, preencher campos vazios com dados disponíveis quando o ISBN coincidir ou não houver ISBN no cadastro; não preencher automaticamente se a edição for diferente ou não puder ser confirmada com ISBN informado. Esta decisão atualiza o fluxo anterior que aplicava apenas a capa.
+
+### Preparação da versão 1.6.0
+
+- [x] Identificar a pesquisa de capas e o preenchimento opcional de dados por versão semântica.
+- [ ] Validar pesquisa autenticada, seleção de capas e atribuição da fonte em produção e em dispositivos reais.
