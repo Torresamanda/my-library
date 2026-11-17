@@ -58,6 +58,12 @@ async function stop() {
   await nextTick()
   startButton.value?.focus()
 }
+
+function stopForNavigation() {
+  scanner.stop()
+  active.value = false
+}
+defineExpose({ stopForNavigation })
 onBeforeUnmount(() => scanner.stop())
 </script>
 <template>

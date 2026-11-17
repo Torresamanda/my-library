@@ -39,6 +39,7 @@ const editor = useEditor({
       'aria-describedby': 'review-count',
       role: 'textbox',
       'aria-multiline': 'true',
+      id: 'review-editor',
     },
   },
   onUpdate: ({ editor: instance }) => {

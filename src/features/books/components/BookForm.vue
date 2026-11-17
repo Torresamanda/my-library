@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, reactive, ref } from 'vue'
+import { computed, nextTick, onBeforeUnmount, reactive, ref } from 'vue'
 import { toast } from 'vue-sonner'
 import { normalizeIsbn } from '../domain/isbn'
 import BarcodeScanner from './BarcodeScanner.vue'
@@ -15,6 +15,7 @@ import {
 } from '../domain/collection'
 import { reviewLength, type Review } from '../domain/review'
 import { prefillFromCover } from '../domain/coverPrefill'
+import { validateBookFields, type BookFormStep, type FormIssue } from '../domain/bookFormValidation'
 import BaseDrawer from '../../../ui/BaseDrawer.vue'
 import LoadingIndicator from '../../../ui/LoadingIndicator.vue'
 import { PhHeart } from '../../../icons'
@@ -54,9 +55,59 @@ const hasExtra = computed(() =>
   Boolean(form.publisher || form.pageCount || form.seriesName || form.seriesVolume),
 )
 
-function revealInvalid(event: Event) {
-  if (event.target instanceof HTMLElement && event.target.closest('.edition-details'))
-    extraOpen.value = true
+const step = ref<BookFormStep>(0)
+const stepNames = ['Livro', 'Organização', 'Leitura'] as const
+const scanner = ref<InstanceType<typeof BarcodeScanner> | null>(null)
+
+async function showIssue(issue: FormIssue) {
+  scanner.value?.stopForNavigation()
+  step.value = issue.step
+  cameraActive.value = false
+  if (issue.expandEdition) extraOpen.value = true
+  error.value = issue.message
+  await nextTick()
+  const target = document.getElementById(issue.field)
+  target?.focus()
+  target?.scrollIntoView({ block: 'nearest' })
+}
+
+async function goToStep(next: BookFormStep) {
+  if (saving.value || closing.value || lookingUp.value || next === step.value) return
+  if (!props.book && step.value === 0 && next > 0) {
+    const issue = validateBookFields(form, ownsCopies.value, false, true)
+    if (issue) {
+      await showIssue(issue)
+      return
+    }
+  }
+  error.value = ''
+  scanner.value?.stopForNavigation()
+  cameraActive.value = false
+  step.value = next
+  await nextTick()
+  const heading = document.getElementById(`book-step-heading-${next}`)
+  heading?.focus()
+  heading?.scrollIntoView({ block: 'start' })
+}
+
+function invalidNumberInput(): FormIssue | null {
+  const fields = [
+    { id: 'book-pages', label: 'páginas', expandEdition: true },
+    { id: 'book-volume', label: 'volume', expandEdition: true },
+    { id: 'book-quantity', label: 'quantidade', expandEdition: false },
+  ]
+  for (const field of fields) {
+    const input = document.getElementById(field.id)
+    if (input instanceof HTMLInputElement && !input.validity.valid) {
+      return {
+        step: 1,
+        field: field.id,
+        expandEdition: field.expandEdition,
+        message: `Confira o valor de ${field.label} e informe um número inteiro válido.`,
+      }
+    }
+  }
+  return null
 }
 const unowned = computed({
   get: () => hasUnowned(form.ownership),
@@ -119,6 +170,8 @@ const reviewInvalid = ref(false)
 const lookingUp = ref(false)
 const cameraActive = ref(false)
 const lookupMessage = ref('')
+const lookupScheduled = ref(false)
+let disposed = false
 const coverUrl = ref<string | null>(props.book?.coverUrl ?? null)
 const coverSearchOpen = ref(false)
 let coverChoiceVersion = 0
@@ -143,8 +196,12 @@ let automaticPublisher = ''
 let automaticPageCount = ''
 let automaticGenres = ''
 let automaticIsbn: string | null = null
-const scheduler = createLookupScheduler(() => void lookup())
+const scheduler = createLookupScheduler(() => {
+  lookupScheduled.value = false
+  void lookup()
+})
 onBeforeUnmount(() => {
+  disposed = true
   toast.dismiss(discardToastId)
   scheduler.cancel()
   lookupVersion++
@@ -172,6 +229,7 @@ function isbnChanged() {
   lookupMessage.value = ''
   lookingUp.value = false
   scheduler.schedule(form.isbn)
+  lookupScheduled.value = Boolean(normalizeIsbn(form.isbn))
 }
 
 function scanned(isbn: string) {
@@ -182,6 +240,7 @@ function scanned(isbn: string) {
 
 async function lookup() {
   scheduler.cancel()
+  lookupScheduled.value = false
   const isbn = normalizeIsbn(form.isbn)
   if (!isbn) {
     lookupMessage.value = 'Confira o ISBN e tente novamente. Ele deve ter 10 ou 13 dígitos válidos.'
@@ -244,62 +303,32 @@ async function lookup() {
 }
 
 async function submit() {
-  if (closing.value || saving.value) return
+  if (closing.value || saving.value || lookingUp.value) return
+  if (lookupScheduled.value) {
+    await lookup()
+    if (disposed || closing.value || saving.value || lookingUp.value || lookupScheduled.value)
+      return
+  }
   scheduler.cancel()
   error.value = ''
   const genres = form.genres
     .split(',')
     .map((genre) => genre.trim())
     .filter(Boolean)
-  if (reviewInvalid.value || (review.value && reviewLength(review.value) > 500)) {
-    error.value =
-      'O comentário deve ter no máximo 500 caracteres e usar apenas as formatações permitidas.'
-    return
-  }
-  if (!form.title.trim() || !form.author.trim()) {
-    error.value = 'Preencha o título e o autor para salvar o livro.'
-    return
-  }
-  if (form.isbn && !normalizeIsbn(form.isbn)) {
-    error.value =
-      'Confira o ISBN: informe um número válido de 10 ou 13 dígitos, ou deixe o campo vazio.'
-    return
-  }
-  if (form.seriesVolume && !form.seriesName.trim()) {
-    extraOpen.value = true
-    error.value = 'Para informar o volume, preencha também o nome da série.'
-    return
-  }
-  if (
-    genres.length > 4 ||
-    genres.some((genre) => genre.length > 80) ||
-    new Set(genres.map((genre) => genre.toLowerCase())).size !== genres.length
-  ) {
-    error.value =
-      'Use até 4 gêneros diferentes, separados por vírgula. Cada gênero pode ter até 80 caracteres.'
+  const issue = validateBookFields(
+    form,
+    ownsCopies.value,
+    reviewInvalid.value || Boolean(review.value && reviewLength(review.value) > 500),
+  )
+  const numericIssue = issue ? null : invalidNumberInput()
+  if (issue || numericIssue) {
+    await showIssue((issue ?? numericIssue)!)
     return
   }
   const volume = form.seriesVolume ? Number(form.seriesVolume) : null
   const pageCount = form.pageCount ? Number(form.pageCount) : null
-  if (
-    pageCount !== null &&
-    (!Number.isInteger(pageCount) || pageCount < 1 || pageCount > 1000000)
-  ) {
-    extraOpen.value = true
-    error.value = 'O número de páginas deve ser um inteiro entre 1 e 1000000.'
-    return
-  }
   const quantityValid =
     Number.isInteger(form.quantity) && form.quantity >= 1 && form.quantity <= 10000
-  if (
-    (ownsCopies.value && !quantityValid) ||
-    (volume !== null && (!Number.isInteger(volume) || volume < 1 || volume > 10000))
-  ) {
-    if (volume !== null && (!Number.isInteger(volume) || volume < 1 || volume > 10000))
-      extraOpen.value = true
-    error.value = 'Quantidade e volume devem ser números inteiros entre 1 e 10000.'
-    return
-  }
   saving.value = true
   try {
     const draft: BookDraft = {
@@ -349,14 +378,31 @@ async function submit() {
       <p>
         Comece pelo ISBN ou preencha os dados manualmente. Apenas título e autor são obrigatórios.
       </p>
-      <form @submit.prevent="submit" @invalid.capture="revealInvalid">
-        <section class="form-section" aria-labelledby="find-book-title">
-          <h3 id="find-book-title">Encontre seu livro</h3>
+      <form novalidate @submit.prevent="submit">
+        <nav class="book-steps" aria-label="Etapas do cadastro">
+          <button
+            v-for="(name, index) in stepNames"
+            :key="name"
+            type="button"
+            class="book-step"
+            :aria-current="step === index ? 'step' : undefined"
+            :disabled="saving || closing || lookingUp"
+            @click="goToStep(index as BookFormStep)"
+          >
+            <span class="book-step-number" aria-hidden="true">{{ index + 1 }}</span><span>{{
+              name
+            }}</span>
+          </button>
+        </nav>
+        <section v-show="step === 0" class="form-section" aria-labelledby="book-step-heading-0">
+          <p class="book-step-caption">Etapa 1 de 3</p>
+          <h3 id="book-step-heading-0" tabindex="-1">Qual livro vamos adicionar?</h3>
           <p class="section-hint">O ISBN pode ajudar a preencher os dados da edição.</p>
           <div :class="['isbn-lookup', { 'is-scanning': cameraActive }]">
             <label
               >ISBN <span class="field-hint">Opcional</span
               ><input
+                id="book-isbn"
                 v-model="form.isbn"
                 maxlength="32"
                 inputmode="text"
@@ -374,7 +420,11 @@ async function submit() {
                   >Consultar</template
                 >
               </button>
-              <BarcodeScanner @scanned="scanned" @active-change="cameraActive = $event" />
+              <BarcodeScanner
+                ref="scanner"
+                @scanned="scanned"
+                @active-change="cameraActive = $event"
+              />
             </div>
           </div>
           <p class="section-hint">
@@ -382,7 +432,7 @@ async function submit() {
           </p>
           <p v-if="lookupMessage" class="feedback-message" role="status">{{ lookupMessage }}</p>
         </section>
-        <section class="form-section" aria-labelledby="book-info-title">
+        <section v-show="step === 0" class="form-section" aria-labelledby="book-info-title">
           <h3 id="book-info-title">Sobre o livro</h3>
           <p class="section-hint">Confira ou complete as informações principais.</p>
           <div class="form-book-preview">
@@ -393,10 +443,20 @@ async function submit() {
             </div>
             <div class="form-book-fields">
               <label
-                >Título *<input v-model="form.title" required maxlength="250" autocomplete="off"
+                >Título *<input
+                  id="book-title"
+                  v-model="form.title"
+                  required
+                  maxlength="250"
+                  autocomplete="off"
               /></label>
               <label
-                >Autor *<input v-model="form.author" required maxlength="250" autocomplete="off"
+                >Autor *<input
+                  id="book-author"
+                  v-model="form.author"
+                  required
+                  maxlength="250"
+                  autocomplete="off"
               /></label>
             </div>
           </div>
@@ -416,6 +476,13 @@ async function submit() {
             @close="coverSearchOpen = false"
             @choose="chooseCover"
           />
+        </section>
+        <section v-show="step === 1" class="form-section" aria-labelledby="book-step-heading-1">
+          <p class="book-step-caption">Etapa 2 de 3</p>
+          <h3 id="book-step-heading-1" tabindex="-1">Como organizar esta edição?</h3>
+          <p class="section-hint">
+            Estas informações são opcionais e podem ser preenchidas depois.
+          </p>
           <fieldset class="form-choice-group field-block">
             <legend>Tipo de obra <span class="field-hint">· opcional</span></legend>
             <div class="form-choices">
@@ -479,11 +546,18 @@ async function submit() {
               /></label>
               <label
                 >Páginas <span class="field-hint">Opcional</span
-                ><input v-model="form.pageCount" type="number" min="1" max="1000000" step="1"
+                ><input
+                  id="book-pages"
+                  v-model="form.pageCount"
+                  type="number"
+                  min="1"
+                  max="1000000"
+                  step="1"
               /></label>
               <label
                 >Série <span class="field-hint">Opcional</span
                 ><input
+                  id="book-series"
                   v-model="form.seriesName"
                   maxlength="200"
                   :aria-invalid="Boolean(form.seriesVolume && !form.seriesName.trim())"
@@ -499,12 +573,18 @@ async function submit() {
               >
               <label
                 >Volume <span class="field-hint">Opcional</span
-                ><input v-model="form.seriesVolume" type="number" min="1" max="10000" step="1"
+                ><input
+                  id="book-volume"
+                  v-model="form.seriesVolume"
+                  type="number"
+                  min="1"
+                  max="10000"
+                  step="1"
               /></label>
             </div>
           </details>
         </section>
-        <section class="form-section" aria-labelledby="collection-title">
+        <section v-show="step === 1" class="form-section" aria-labelledby="collection-title">
           <h3 id="collection-title">Na minha biblioteca</h3>
           <p class="section-hint">Conte como você tem acesso a esta edição.</p>
           <fieldset class="form-choice-group">
@@ -530,6 +610,7 @@ async function submit() {
           </fieldset>
           <label v-if="ownsCopies" class="quantity-field field-block"
             >Exemplares *<input
+              id="book-quantity"
               v-model.number="form.quantity"
               type="number"
               required
@@ -542,8 +623,9 @@ async function submit() {
             ></label
           >
         </section>
-        <section class="form-section" aria-labelledby="reading-title">
-          <h3 id="reading-title">Minha leitura</h3>
+        <section v-show="step === 2" class="form-section" aria-labelledby="book-step-heading-2">
+          <p class="book-step-caption">Etapa 3 de 3</p>
+          <h3 id="book-step-heading-2" tabindex="-1">Como está sua leitura?</h3>
           <p class="section-hint">Você pode preencher esta parte depois.</p>
           <fieldset class="form-choice-group">
             <legend>Status de leitura</legend>
@@ -579,6 +661,24 @@ async function submit() {
         </section>
         <p v-if="error" role="alert" class="form-error">{{ error }}</p>
         <div class="form-actions">
+          <button
+            v-if="step > 0"
+            type="button"
+            class="secondary-button"
+            :disabled="saving || closing || lookingUp"
+            @click="goToStep((step - 1) as BookFormStep)"
+          >
+            Voltar
+          </button>
+          <button
+            v-if="step < 2"
+            type="button"
+            class="secondary-button"
+            :disabled="saving || closing || lookingUp"
+            @click="goToStep((step + 1) as BookFormStep)"
+          >
+            Continuar
+          </button>
           <button type="submit" :disabled="saving || lookingUp || closing">
             <LoadingIndicator v-if="saving" compact text="Salvando..." /><template v-else
               >Salvar livro</template

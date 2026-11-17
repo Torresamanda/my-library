@@ -1,5 +1,9 @@
 # Biblioteca virtual — planejamento
 
+## Atualização: cadastro em etapas
+
+A proprietária escolheu a proposta “Passos suaves”: Livro, Organização e Leitura. É possível salvar após informar título e autor, mantendo ISBN opcional; os demais dados podem ser preenchidos depois. Na edição, as seções podem ser acessadas diretamente. Todos os dados informados continuam sujeitos à validação antes do salvamento, e o preenchimento é preservado ao navegar entre etapas.
+
 ## Atualização: dados ao escolher capa
 
 Ao escolher uma capa na pesquisa, preencher título, autor, editora, páginas e gêneros disponíveis somente nos campos vazios. Se o cadastro tiver ISBN, preencher apenas quando o ISBN da edição encontrada coincidir; para uma edição diferente ou não comparável, aplicar somente a capa. Sem ISBN no cadastro, permitir o preenchimento dos campos vazios. Não alterar o ISBN nem sobrescrever dados já preenchidos. Esta decisão substitui a proposta anterior de que a escolha alteraria somente a capa.
