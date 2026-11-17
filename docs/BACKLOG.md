@@ -506,3 +506,5 @@ As combinações principais de texto, texto secundário e botões dos temas clar
 - [x] Validar o wireframe com a proprietária e preparar [protótipo visual](PROTOTIPO-MELHORIA-PESQUISA-CAPAS.html).
 - [x] Validar o protótipo visual e implementar a grade de capas, seleção, estados e ações acessíveis durante a rolagem.
 - [ ] Validar pesquisa real, rolagem, foco e seleção nos dois temas e em dispositivos reais, após configurar o serviço.
+- [x] Sincronizar título e autor com o cadastro até que sejam alterados na pesquisa e remover a indicação sobreposta à prévia, conforme solicitado.
+- [ ] Resolver a atribuição visual antes de publicar: a proprietária pediu a remoção da imagem, mas as diretrizes do Google Books exigem a marca “Powered by Google” junto à pesquisa e aos resultados; apenas o texto não atende à orientação publicada.

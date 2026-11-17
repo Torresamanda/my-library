@@ -782,12 +782,6 @@ select:focus-visible {
   color: var(--secondary);
   font-size: 12px;
 }
-.cover-provider img {
-  display: block;
-  max-width: 150px;
-  background: white;
-  padding: 4px;
-}
 .cover-results {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

@@ -7,6 +7,7 @@ import {
   LibraryRequestError,
 } from '../../library/services/books'
 import LoadingIndicator from '../../../ui/LoadingIndicator.vue'
+import { useCoverSearchFields } from '../services/coverSearchFields'
 
 const props = defineProps<{
   title: string
@@ -15,8 +16,7 @@ const props = defineProps<{
   token: () => Promise<string>
 }>()
 const emit = defineEmits<{ close: []; choose: [url: string] }>()
-const title = ref(props.title)
-const author = ref(props.author)
+const { title, author, titleEdited, authorEdited } = useCoverSearchFields(props)
 const loading = ref(false)
 const searched = ref(false)
 const error = ref('')
@@ -89,8 +89,20 @@ function confirm() {
       Pesquise pelo título e autor e confira a edição antes de escolher.
     </p>
     <div class="cover-search-fields">
-      <label>Título<input v-model="title" maxlength="250" @keydown.enter.prevent="search" /></label>
-      <label>Autor<input v-model="author" maxlength="250" @keydown.enter.prevent="search" /></label>
+      <label
+        >Título<input
+          v-model="title"
+          maxlength="250"
+          @input="titleEdited = true"
+          @keydown.enter.prevent="search"
+      /></label>
+      <label
+        >Autor<input
+          v-model="author"
+          maxlength="250"
+          @input="authorEdited = true"
+          @keydown.enter.prevent="search"
+      /></label>
       <button type="button" class="secondary-button" :disabled="loading" @click="search">
         <LoadingIndicator v-if="loading" compact text="Pesquisando..." /><template v-else
           >Pesquisar</template
@@ -101,13 +113,6 @@ function confirm() {
       <div>
         <h5>Resultados da pesquisa</h5>
         <p>Fornecidos pelo Google Books</p>
-      </div>
-      <div class="cover-provider">
-        <img
-          src="https://storage.googleapis.com/geo-devrel-public-buckets/powered_by_google_on_white.png"
-          alt="Powered by Google"
-          referrerpolicy="no-referrer"
-        />
       </div>
     </div>
     <p v-if="error" class="form-error" role="alert">{{ error }}</p>
